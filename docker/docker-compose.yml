@@ -10,9 +10,10 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
-      - .:/var/www/html
+      - ./proyecto:/var/www/html
     ports:
-      - "8000:80"
+      - "5081:80"
+      - "5173:5173"
     networks:
       - laravel_network
 

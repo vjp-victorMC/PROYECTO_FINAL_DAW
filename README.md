@@ -3,3 +3,14 @@ Repositorio para el proyecto final de grado de DAW, realizado por Aitor, Ismael,
 hola :)
 Esto es una mierda que lo flipas
 Me fio mas de la mierda de las islas canarias que de este huevada
+
+
+docker-compose up -d --build
+
+docker exect -it laravel_server bash
+
+cd proyecto
+
+npm install
+
+composer install
