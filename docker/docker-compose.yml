@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Servidor Laravel (PHP + Node + Composer)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_server
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8000:80"
+    networks:
+      - laravel_network
+
+  # Base de Datos
+  db:
+    image: mysql:8.0
+    container_name: laravel_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel_db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - laravel_network
+
+networks:
+  laravel_network:
+    driver: bridge
