@@ -3,19 +3,19 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('usuario.welcome');
 });
 
 Route::get('/servicios', function () {
-    return view('servicios');
+    return view('usuario.servicios');
 });
 
 Route::get('/segunda-mano', function () {
-    return view('segunda-mano');
+    return view('usuario.segunda-mano');
 });
 
 Route::get('/nosotros', function () {
-    return view('nosotros');
+    return view('usuario.nosotros');
 });
 
 Route::get('/login', function () {
