@@ -17,3 +17,8 @@ Route::get('/segunda-mano', function () {
 Route::get('/nosotros', function () {
     return view('nosotros');
 });
+
+Route::get('/login', function () {
+    return view('login');
+});
+

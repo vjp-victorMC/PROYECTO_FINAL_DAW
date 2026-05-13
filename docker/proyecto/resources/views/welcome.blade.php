@@ -54,4 +54,13 @@
             Somos un equipo enfocado en la transparencia. Nuestra plataforma digital permite monitorizar tu coche en tiempo real y ver métricas de rendimiento del taller.
         </p>
     </section>
+
+    <section class="py-20 container mx-auto px-6 text-center">
+        <p class="text-gray-400 max-w-3xl mx-auto">
+            <a href="/login" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+    Ir al Login
+</a>
+        </p>
+    </section>
+
 @endsection

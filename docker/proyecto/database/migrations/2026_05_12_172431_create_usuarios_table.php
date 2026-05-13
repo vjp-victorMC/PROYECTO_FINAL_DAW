@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id('id_usuario'); // Auto-increment y Primary Key
             $table->string('nombre', 100);
             $table->string('email', 100)->unique();
+            $table->string('dni', 20)->unique();
             $table->string('contraseña', 255);
             $table->enum('rol', ['mecanico', 'admin', 'cliente']);
             $table->timestamps(); // Recomendado en Laravel
