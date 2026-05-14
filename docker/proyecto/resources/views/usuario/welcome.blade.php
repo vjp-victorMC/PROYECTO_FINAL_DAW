@@ -1,66 +1,190 @@
+@vite(['resources/css/usuarios/welcome.css'])
+@vite(['resources/css/contents/topbar.css'])
+
 @extends('layouts.app')
-
 @section('content')
-    <section class="py-20 bg-gray-900">
-        <div class="container mx-auto px-6 text-center">
-            <h1 class="text-6xl font-black mb-4">TALLERES <span class="text-blue-500">RÁPIDOS Y CURIOSOS</span></h1>
-            <p class="text-xl text-gray-400 mb-10 italic">"Digitalizando el corazón de tu vehículo"</p>
-            <div class="w-full h-80 bg-black border-2 border-gray-800 flex items-center justify-center rounded-xl shadow-2xl">
-                <span class="text-gray-600 font-bold uppercase tracking-widest">[ IMAGEN TALLER 3D / PRINCIPAL ]</span>
+
+<div class="pg">
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-text">
+            <div class="hero-badge"><i class="ti ti-tool" aria-hidden="true"></i> Taller oficial Badajoz</div>
+            <h1>Tu vehículo en manos <span>expertas</span></h1>
+            <p>Más de 20 años cuidando vehículos en Extremadura. Revisiones, reparaciones y puesta a punto con garantía total y presupuesto sin compromiso.</p>
+            <div class="hero-btns">
+                <a href="#" class="btn-primary"><i class="ti ti-calendar" aria-hidden="true"></i> Pedir cita</a>
+                <a href="#" class="btn-outline"><i class="ti ti-car" aria-hidden="true"></i> Nuestros servicios</a>
             </div>
         </div>
-    </section>
-
-    <section class="py-12 bg-black border-y border-gray-800">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-wrap justify-center gap-16 opacity-50 font-bold text-2xl">
-                <span>BOSCH</span>
-                <span>CASTROL</span>
-                <span>SHELL</span>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <strong>+20</strong>
+                <small>Años de experiencia</small>
             </div>
-            <p class="text-center text-sm text-gray-500 mt-6">Utilizamos recambios de primera línea para garantizar la seguridad de nuestros clientes.</p>
-        </div>
-    </section>
-
-    <section class="py-20 container mx-auto px-6">
-        <h2 class="text-3xl font-bold mb-12 border-l-4 border-blue-500 pl-4">Nuestros Servicios</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
-                <h3 class="text-2xl font-bold text-blue-400 mb-4">Mecánica Rápida</h3>
-                <p class="text-gray-400 mb-6 text-sm">Intervenciones ágiles: Neumáticos, pastillas de freno, mantenimiento oficial, ITV, distribución y embrague. Pensado para que no te detengas.</p>
-                <div class="w-full h-40 bg-black border border-gray-700"></div>
+            <div class="stat-card">
+                <strong>+8.000</strong>
+                <small>Clientes satisfechos</small>
             </div>
-            <div class="bg-gray-800 p-8 rounded-lg border border-gray-700">
-                <h3 class="text-2xl font-bold text-red-500 mb-4">Mecánica Compleja</h3>
-                <p class="text-gray-400 mb-6 text-sm">Expertos en cajas de cambio y reconstrucción de motores. Diagnosis avanzada para averías que otros no encuentran.</p>
-                <div class="w-full h-40 bg-black border border-gray-700"></div>
+            <div class="stat-card">
+                <strong>24h</strong>
+                <small>Diagnóstico rápido</small>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="py-20 bg-gray-900">
-        <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center border-t border-gray-800 pt-10">
-            <div class="w-full h-64 bg-black border border-gray-700 flex items-center justify-center text-gray-600 font-bold">IMAGEN STOCK 2ª MANO</div>
-            <div>
-                <h2 class="text-3xl font-bold mb-4">Vehículos de Ocasión</h2>
-                <p class="text-gray-400 mb-4">¿Por qué elegirnos? Ofrecemos garantía total, revisión de 100 puntos y búsqueda personalizada según tus requisitos.</p>
+    <!-- SERVICIOS -->
+    <div class="section" style="background:#fff;">
+        <div class="section-label">Lo que hacemos</div>
+        <div class="section-title">Nuestros servicios</div>
+        <div class="section-sub">Todo lo que tu vehículo necesita, en un solo lugar.</div>
+        <div class="services-grid">
+            <div class="svc-card">
+                <div class="svc-icon"><i class="ti ti-tool" aria-hidden="true"></i></div>
+                <h3>Revisión general</h3>
+                <p>Diagnóstico completo del estado de tu vehículo con informe detallado.</p>
+            </div>
+            <div class="svc-card">
+                <div class="svc-icon"><i class="ti ti-engine" aria-hidden="true"></i></div>
+                <h3>Motor y mecánica</h3>
+                <p>Reparación y mantenimiento de motor, distribución y sistemas mecánicos.</p>
+            </div>
+            <div class="svc-card">
+                <div class="svc-icon"><i class="ti ti-brake" aria-hidden="true"></i></div>
+                <h3>Frenos y suspensión</h3>
+                <p>Revisión y cambio de frenos, amortiguadores y dirección.</p>
+            </div>
+            <div class="svc-card">
+                <div class="svc-icon"><i class="ti ti-bolt" aria-hidden="true"></i></div>
+                <h3>Electricidad</h3>
+                <p>Diagnóstico eléctrico, batería, alternador y sistemas electrónicos.</p>
+            </div>
+            <div class="svc-card">
+                <div class="svc-icon"><i class="ti ti-droplet" aria-hidden="true"></i></div>
+                <h3>Cambio de aceite</h3>
+                <p>Sustitución de aceite y filtros con lubricantes de primera calidad.</p>
+            </div>
+            <div class="svc-card">
+                <div class="svc-icon"><i class="ti ti-circle" aria-hidden="true"></i></div>
+                <h3>Neumáticos</h3>
+                <p>Montaje, equilibrado y alineación de ruedas para mayor seguridad.</p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="py-20 container mx-auto px-6 text-center">
-        <h2 class="text-3xl font-bold mb-6 italic">Sobre Nosotros</h2>
-        <p class="text-gray-400 max-w-3xl mx-auto">
-            Somos un equipo enfocado en la transparencia. Nuestra plataforma digital permite monitorizar tu coche en tiempo real y ver métricas de rendimiento del taller.
-        </p>
-    </section>
+    <!-- POR QUÉ ELEGIRNOS -->
+    <div class="why">
+        <div class="section-label">Nuestra diferencia</div>
+        <div class="section-title">¿Por qué Azul Motor?</div>
+        <div class="section-sub">Transparencia, rapidez y calidad en cada intervención.</div>
+        <div class="why-grid">
+            <div class="why-item">
+                <div class="why-num">01</div>
+                <div>
+                    <h4>Presupuesto gratis</h4>
+                    <p>Sin sorpresas. Te informamos del coste antes de empezar cualquier trabajo.</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-num">02</div>
+                <div>
+                    <h4>Garantía en reparaciones</h4>
+                    <p>Todos nuestros trabajos incluyen garantía de 12 meses o 20.000 km.</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-num">03</div>
+                <div>
+                    <h4>Vehículo de sustitución</h4>
+                    <p>Para que no te quedes sin movilidad mientras reparamos tu coche.</p>
+                </div>
+            </div>
+            <div class="why-item">
+                <div class="why-num">04</div>
+                <div>
+                    <h4>Técnicos certificados</h4>
+                    <p>Profesionales con formación continua y equipos de diagnóstico de última generación.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <section class="py-20 container mx-auto px-6 text-center">
-        <p class="text-gray-400 max-w-3xl mx-auto">
-            <a href="/login" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-    Ir al Login
-</a>
-        </p>
-    </section>
+    <!-- PEDIR CITA -->
+    <div class="cita-section">
+        <div class="cita-inner">
+            <div class="cita-info">
+                <div class="section-label">Reserva online</div>
+                <h2>Pide tu cita</h2>
+                <p>Reserva en menos de 2 minutos. Te confirmamos disponibilidad en menos de 1 hora en horario laboral.</p>
+                <div class="cita-detail"><i class="ti ti-clock" aria-hidden="true"></i> Lun–Vie: 8:00 – 19:00</div>
+                <div class="cita-detail"><i class="ti ti-clock" aria-hidden="true"></i> Sáb: 9:00 – 14:00</div>
+                <div class="cita-detail"><i class="ti ti-map-pin" aria-hidden="true"></i> Av. de Huelva, 45 · Badajoz</div>
+                <div class="cita-detail"><i class="ti ti-phone" aria-hidden="true"></i> 924 000 000</div>
+            </div>
+            <div class="cita-form">
+                <input type="text" placeholder="Nombre y apellidos">
+                <input type="tel" placeholder="Teléfono de contacto">
+                <input type="text" placeholder="Matrícula del vehículo">
+                <select>
+                    <option value="">Tipo de servicio</option>
+                    <option>Revisión general</option>
+                    <option>Motor y mecánica</option>
+                    <option>Frenos y suspensión</option>
+                    <option>Electricidad</option>
+                    <option>Cambio de aceite</option>
+                    <option>Neumáticos</option>
+                    <option>Otro</option>
+                </select>
+                <input type="date">
+                <textarea placeholder="¿Algún detalle adicional?"></textarea>
+                <a href="#" class="btn-primary"><i class="ti ti-calendar" aria-hidden="true"></i> Confirmar cita</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- TESTIMONIOS -->
+    <div class="testi">
+        <div class="section-label" style="padding:0 0 8px;">Opiniones</div>
+        <div class="section-title" style="margin-bottom:6px;">Lo que dicen nuestros clientes</div>
+        <div class="section-sub">Más de 8.000 clientes confían en nosotros.</div>
+        <div class="testi-grid">
+            <div class="testi-card">
+                <div class="stars">★★★★★</div>
+                <p>"Llevé el coche por un ruido extraño y en menos de 24 horas lo tenía listo. Presupuesto claro y precio justo."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">MG</div>
+                    <div>
+                        <div class="testi-name">Manuel García</div>
+                        <div class="testi-car">Seat León · Cliente desde 2019</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="stars">★★★★★</div>
+                <p>"La revisión anual siempre la hago aquí. Profesionales, puntuales y sin cobrar de más. Muy recomendables."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">LR</div>
+                    <div>
+                        <div class="testi-name">Laura Rodríguez</div>
+                        <div class="testi-car">Volkswagen Golf · Cliente desde 2021</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="stars">★★★★★</div>
+                <p>"Me dieron coche de sustitución mientras reparaban el mío. Un detalle que marca la diferencia. Volveré seguro."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">JM</div>
+                    <div>
+                        <div class="testi-name">Javier Moreno</div>
+                        <div class="testi-car">Peugeot 308 · Cliente desde 2022</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 @endsection
+

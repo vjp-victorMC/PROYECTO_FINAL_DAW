@@ -1,0 +1,258 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.am-wrap {
+  font-family: Arial, sans-serif;
+  text-transform: uppercase;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+/* --- BARRA SUPERIOR --- */
+.am-topbar {
+  background: #0c141e;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0 22px;
+}
+
+.am-contact {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.am-contact span {
+  color: #ccc;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.am-contact i {
+  color: #4a9eff;
+  font-size: 13px;
+}
+
+.am-vdiv {
+  width: 1px;
+  height: 11px;
+  background: #333;
+}
+
+.am-auth {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.am-auth a {
+  color: #ccc;
+  text-decoration: none;
+  padding: 0 8px;
+}
+
+.am-auth a:last-child {
+  color: #4a9eff;
+}
+
+.am-auth-sep {
+  color: #333;
+}
+
+/* --- NAVBAR PRINCIPAL --- */
+.am-navbar {
+  background: white;
+  height: 68px;
+  display: flex;
+  align-items: stretch;
+}
+
+.am-logo-block {
+  background: #002e6d;
+  display: flex;
+  align-items: center;
+  padding: 0 28px 0 22px;
+  clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%);
+  flex-shrink: 0;
+  min-width: 190px;
+}
+
+.am-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.am-diamond {
+  width: 30px;
+  height: 30px;
+  border: 2.5px solid #4a9eff;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.am-diamond span {
+  transform: rotate(-45deg);
+  color: white;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.am-brandname {
+  font-size: 19px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: white;
+}
+
+.am-brandname em {
+  font-style: normal;
+  font-weight: 300;
+  color: #a0c4ff;
+}
+
+.am-nav-inner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 36px;
+}
+
+.am-menu {
+  list-style: none;
+  display: flex;
+  gap: 18px;
+}
+
+.am-menu a {
+  text-decoration: none;
+  color: #444;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  transition: color 0.2s;
+}
+
+.am-menu a:hover,
+.am-menu a.active {
+  color: #002e6d;
+  border-bottom: 2px solid #002e6d;
+  padding-bottom: 2px;
+}
+
+.am-cita {
+  background: #0056b3;
+  color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 30px 0 40px;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 12px;
+  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.am-cita:hover {
+  background: #003f8a;
+}
+
+/* --- HAMBURGUESA --- */
+.am-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 16px;
+  color: #002e6d;
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* --- MENÚ MÓVIL --- */
+.am-mobile-menu {
+  display: none;
+  background: #002e6d;
+  flex-direction: column;
+}
+
+.am-mobile-menu a {
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: block;
+}
+
+.am-mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+.am-mobile-menu .am-cita-mob {
+  background: #0056b3;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  font-size: 13px;
+}
+
+.am-mobile-menu.open {
+  display: flex;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 640px) {
+  .am-contact .am-mail-item {
+    display: none;
+  }
+  .am-vdiv {
+    display: none;
+  }
+  .am-menu {
+    display: none;
+  }
+  .am-cita {
+    display: none;
+  }
+  .am-hamburger {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .am-auth a {
+    padding: 0 5px;
+    font-size: 9px;
+  }
+  .am-contact span {
+    font-size: 9px;
+  }
+  .am-logo-block {
+    min-width: 160px;
+    padding: 0 24px 0 16px;
+  }
+  .am-nav-inner {
+    padding-left: 0;
+  }
+}
