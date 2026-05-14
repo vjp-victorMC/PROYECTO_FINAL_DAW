@@ -105,8 +105,22 @@
         const footerText = document.getElementById('footer-text');
         const labelId = document.getElementById('label-identificador');
 
-        let isLogin = true;
+        // Lee la URL para comprobar si viene de la opción "Registrarse" del menú
+        const urlParams = new URLSearchParams(window.location.search);
+        let isLogin = urlParams.get('action') !== 'register';
 
+        // Si no es Login (es decir, es Registro), cambia el diseño nada más cargar la página
+        if (!isLogin) {
+            groupNombre.classList.remove('hidden', 'opacity-0', '-translate-y-2');
+            groupNombre.classList.add('opacity-100', 'translate-y-0');
+            formTitle.innerHTML = 'Nuevo <span class="text-blue-500">Cliente</span>';
+            btnSubmit.innerText = 'Crear mi Cuenta';
+            footerText.innerText = '¿Ya eres cliente?';
+            toggleBtn.querySelector('span:last-child').innerText = 'Inicia Sesión';
+            labelId.innerText = 'Correo Electrónico';
+        }
+
+        // Mantiene la funcionalidad original para cambiar al hacer clic abajo
         toggleBtn.addEventListener('click', () => {
             isLogin = !isLogin;
 
@@ -127,6 +141,7 @@
             toggleBtn.querySelector('span:last-child').innerText = isLogin ? 'Regístrate gratis' : 'Inicia Sesión';
             labelId.innerText = isLogin ? 'DNI o Email' : 'Correo Electrónico';
         });
-    </script>
+</script>
+
 </body>
 </html>

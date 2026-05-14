@@ -9,9 +9,9 @@
       <span class="am-mail-item"><i class="ti ti-mail"></i>info@azulmotor.es</span>
     </div>
     <div class="am-auth">
-      <a href="#">Iniciar sesión</a>
+      <a href="{{ route ('login')}}">Iniciar sesión</a>
       <span class="am-auth-sep">|</span>
-      <a href="#">Registrarse</a>
+      <a href="{{ route ('login', ['action' => 'register']) }}">Registrarse</a>
     </div>
   </div>
 
