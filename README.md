@@ -7,7 +7,7 @@ Me fio mas de la mierda de las islas canarias que de este huevada
 
 docker-compose up -d --build
 
-docker exect -it laravel_server bash
+docker exec -it laravel_server bash
 
 cd proyecto
 
