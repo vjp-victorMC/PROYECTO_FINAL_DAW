@@ -33,44 +33,156 @@
         </div>
     </div>
 
-    <!-- SERVICIOS -->
-    <div class="section" style="background:#fff;">
-        <div class="section-label">Lo que hacemos</div>
-        <div class="section-title">Nuestros servicios</div>
-        <div class="section-sub">Todo lo que tu vehículo necesita, en un solo lugar.</div>
-        <div class="services-grid">
-            <div class="svc-card">
-                <div class="svc-icon"><i class="ti ti-tool" aria-hidden="true"></i></div>
-                <h3>Revisión general</h3>
-                <p>Diagnóstico completo del estado de tu vehículo con informe detallado.</p>
+    <!-- SERVICIOS CON COCHE X-RAY INTERACTIVO -->
+    <div class="xray-section">
+        <div class="xray-section-header">
+            <div class="section-label">Lo que hacemos</div>
+            <div class="section-title">Nuestros servicios</div>
+            <div class="section-sub">Pulsa sobre los iconos del coche para ver el detalle de cada servicio.</div>
+        </div>
+
+        <div class="xray-layout">
+            <!-- Panel izquierdo: tabs + info -->
+            <div class="xray-sidebar">
+                <!-- Tabs de servicios -->
+                <div class="xray-tabs" id="xray-tabs">
+                    <button class="xray-tab" data-service="diagnosis" onclick="setActiveService('diagnosis')">
+                        <svg class="xray-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span>Diagnóstico</span>
+                    </button>
+                    <button class="xray-tab" data-service="mantenimiento" onclick="setActiveService('mantenimiento')">
+                        <svg class="xray-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        <span>Mantenimiento</span>
+                    </button>
+                    <button class="xray-tab" data-service="aceite" onclick="setActiveService('aceite')">
+                        <svg class="xray-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+                        <span>Cambio de aceite</span>
+                    </button>
+                    <button class="xray-tab active" data-service="neumaticos" onclick="setActiveService('neumaticos')">
+                        <svg class="xray-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                        <span>Neumáticos</span>
+                    </button>
+                    <button class="xray-tab" data-service="baterias" onclick="setActiveService('baterias')">
+                        <svg class="xray-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"/><line x1="23" y1="13" x2="23" y2="11"/><polyline points="11 6 7 12 13 12 9 18"/></svg>
+                        <span>Baterías</span>
+                    </button>
+                    <button class="xray-tab" data-service="aire" onclick="setActiveService('aire')">
+                        <svg class="xray-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h10a3 3 0 1 0-3-3"/><path d="M2 6h16a3 3 0 1 1-3 3"/><path d="M2 18h7a3 3 0 1 0-3-3"/></svg>
+                        <span>Aire acond.</span>
+                    </button>
+                </div>
+
+                <!-- Panel de información -->
+                <div class="xray-info-card" id="xray-info-panel">
+                    <svg class="xray-info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <div>
+                        <h2 class="xray-info-title" id="xray-info-title">Neumáticos</h2>
+                        <p class="xray-info-desc" id="xray-info-desc">Trabajamos con todas las marcas del mercado y realizamos cambios de neumáticos de todo tipo de vehículos: turismos, 4x4 y furgonetas. Reparación y alineación.</p>
+                    </div>
+                    <a href="#" class="xray-cta-btn">Ver más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                </div>
             </div>
-            <div class="svc-card">
-                <div class="svc-icon"><i class="ti ti-engine" aria-hidden="true"></i></div>
-                <h3>Motor y mecánica</h3>
-                <p>Reparación y mantenimiento de motor, distribución y sistemas mecánicos.</p>
-            </div>
-            <div class="svc-card">
-                <div class="svc-icon"><i class="ti ti-brake" aria-hidden="true"></i></div>
-                <h3>Frenos y suspensión</h3>
-                <p>Revisión y cambio de frenos, amortiguadores y dirección.</p>
-            </div>
-            <div class="svc-card">
-                <div class="svc-icon"><i class="ti ti-bolt" aria-hidden="true"></i></div>
-                <h3>Electricidad</h3>
-                <p>Diagnóstico eléctrico, batería, alternador y sistemas electrónicos.</p>
-            </div>
-            <div class="svc-card">
-                <div class="svc-icon"><i class="ti ti-droplet" aria-hidden="true"></i></div>
-                <h3>Cambio de aceite</h3>
-                <p>Sustitución de aceite y filtros con lubricantes de primera calidad.</p>
-            </div>
-            <div class="svc-card">
-                <div class="svc-icon"><i class="ti ti-circle" aria-hidden="true"></i></div>
-                <h3>Neumáticos</h3>
-                <p>Montaje, equilibrado y alineación de ruedas para mayor seguridad.</p>
+
+            <!-- Panel derecho: imagen del coche con hotspots -->
+            <div class="xray-container">
+                <!-- Watermark -->
+                <div class="xray-watermark">X-RAY</div>
+
+                <!-- Imagen del coche -->
+                <img src="{{ asset('images/seat-leon-xray.jpg') }}" alt="Seat León con vista de rayos X" class="xray-car-img">
+
+                <!-- Hotspot: Diagnóstico -->
+                <button class="xray-hotspot" id="hs-diagnosis" data-service="diagnosis"
+                        style="top:55%;left:78%;" onclick="setActiveService('diagnosis')" aria-label="Diagnóstico">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span class="xray-hotspot-pulse"></span>
+                </button>
+
+                <!-- Hotspot: Mantenimiento -->
+                <button class="xray-hotspot" id="hs-mantenimiento" data-service="mantenimiento"
+                        style="top:40%;left:70%;" onclick="setActiveService('mantenimiento')" aria-label="Mantenimiento">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    <span class="xray-hotspot-pulse"></span>
+                </button>
+
+                <!-- Hotspot: Aceite -->
+                <button class="xray-hotspot" id="hs-aceite" data-service="aceite"
+                        style="top:62%;left:62%;" onclick="setActiveService('aceite')" aria-label="Cambio de aceite">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+                    <span class="xray-hotspot-pulse"></span>
+                </button>
+
+                <!-- Hotspot: Neumáticos -->
+                <button class="xray-hotspot active" id="hs-neumaticos" data-service="neumaticos"
+                        style="top:78%;left:78%;" onclick="setActiveService('neumaticos')" aria-label="Neumáticos">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span class="xray-hotspot-pulse"></span>
+                </button>
+
+                <!-- Hotspot: Baterías -->
+                <button class="xray-hotspot" id="hs-baterias" data-service="baterias"
+                        style="top:48%;left:55%;" onclick="setActiveService('baterias')" aria-label="Baterías">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3.19"/><line x1="23" y1="13" x2="23" y2="11"/><polyline points="11 6 7 12 13 12 9 18"/></svg>
+                    <span class="xray-hotspot-pulse"></span>
+                </button>
+
+                <!-- Hotspot: Aire acondicionado -->
+                <button class="xray-hotspot" id="hs-aire" data-service="aire"
+                        style="top:35%;left:48%;" onclick="setActiveService('aire')" aria-label="Aire acondicionado">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h10a3 3 0 1 0-3-3"/><path d="M2 6h16a3 3 0 1 1-3 3"/><path d="M2 18h7a3 3 0 1 0-3-3"/></svg>
+                    <span class="xray-hotspot-pulse"></span>
+                </button>
             </div>
         </div>
     </div>
+
+    <script>
+    const xrayServices = {
+        diagnosis: {
+            label: 'Diagnóstico',
+            desc: 'Diagnóstico electrónico completo de todos los sistemas del vehículo. Detectamos averías mediante equipos multimarca de última generación.'
+        },
+        mantenimiento: {
+            label: 'Mantenimiento',
+            desc: 'Revisiones periódicas según el plan del fabricante: filtros, correas, frenos, suspensión y puesta a punto general.'
+        },
+        aceite: {
+            label: 'Cambio de aceite',
+            desc: 'Cambio de aceite y filtro con lubricantes de primera marca, adaptados a las especificaciones de cada motor.'
+        },
+        neumaticos: {
+            label: 'Neumáticos',
+            desc: 'Trabajamos con todas las marcas del mercado y realizamos cambios de neumáticos de todo tipo de vehículos: turismos, 4x4 y furgonetas. Reparación y alineación.'
+        },
+        baterias: {
+            label: 'Baterías',
+            desc: 'Comprobación, carga y sustitución de baterías. Disponemos de baterías para todo tipo de vehículos, incluidos start-stop.'
+        },
+        aire: {
+            label: 'Aire acondicionado',
+            desc: 'Recarga, mantenimiento y reparación del sistema de aire acondicionado y climatización. Dejamos tu coche a punto para cualquier estación.'
+        }
+    };
+
+    function setActiveService(id) {
+        const svc = xrayServices[id];
+        if (!svc) return;
+
+        // Actualizar info panel
+        document.getElementById('xray-info-title').textContent = svc.label;
+        document.getElementById('xray-info-desc').textContent = svc.desc;
+
+        // Actualizar tabs
+        document.querySelectorAll('.xray-tab').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.service === id);
+        });
+
+        // Actualizar hotspots
+        document.querySelectorAll('.xray-hotspot').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.service === id);
+        });
+    }
+    </script>
 
     <!-- POR QUÉ ELEGIRNOS -->
     <div class="why">
