@@ -1,159 +1,13 @@
 @extends('layouts.app')
+@vite(['resources/css/admin/admin.css'])
 
 @section('content')
 <style>
-    .dash { display: grid; grid-template-columns: 220px 1fr; min-height: 700px; border: 1px solid #1f2937; border-radius: 12px; overflow: hidden; background: #111827; }
-    .sidebar { background: #0f172a; border-right: 1px solid #1f2937; padding: 1rem 0; display: flex; flex-direction: column; gap: 2px; }
-    .sidebar-brand { padding: 0 1rem 1rem; border-bottom: 1px solid #1f2937; margin-bottom: 0.5rem; }
-    .sidebar-brand h2 { font-size: 14px; font-weight: 600; color: #f9fafb; line-height: 1.3; }
-    .sidebar-brand p { font-size: 11px; color: #6b7280; }
-    .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 1rem; font-size: 13px; color: #9ca3af; cursor: pointer; border-radius: 0; transition: background .15s; position: relative; text-decoration: none; }
-    .nav-item:hover { background: #1f2937; color: #f9fafb; }
-    .nav-item.active { background: #1f2937; color: #3b82f6; font-weight: 600; }
-    .nav-item.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #3b82f6; border-radius: 0 2px 2px 0; }
-    .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .nav-badge { margin-left: auto; background: #ef4444; color: #fff; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 20px; }
-    .nav-section { font-size: 10px; font-weight: 600; color: #4b5563; padding: 8px 1rem 4px; text-transform: uppercase; letter-spacing: .08em; margin-top: 6px; }
-    .main { display: flex; flex-direction: column; overflow: hidden; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 1.5rem; border-bottom: 1px solid #1f2937; }
-    .topbar h1 { font-size: 16px; font-weight: 600; color: #f9fafb; }
-    .topbar-actions { display: flex; align-items: center; gap: 8px; }
-    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; font-size: 13px; border-radius: 8px; border: 1px solid #374151; background: transparent; color: #d1d5db; cursor: pointer; transition: background .15s; }
-    .btn:hover { background: #1f2937; }
-    .btn-primary { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
-    .btn-primary:hover { background: #1e40af; border-color: #1e40af; }
-    .btn-sm { padding: 4px 10px; font-size: 12px; }
-    .btn-danger { background: #7f1d1d; color: #fca5a5; border-color: #7f1d1d; }
-    .content { flex: 1; overflow-y: auto; padding: 1.5rem; }
-    .panel { display: none; }
-    .panel.active { display: block; }
-    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
-    .kpi { background: #1f2937; border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; gap: 4px; }
-    .kpi-label { font-size: 12px; color: #6b7280; }
-    .kpi-value { font-size: 22px; font-weight: 600; color: #f9fafb; }
-    .kpi-delta { font-size: 12px; }
-    .kpi-delta.up { color: #4ade80; }
-    .kpi-delta.warn { color: #fbbf24; }
-    .kpi-delta.down { color: #f87171; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .card { background: #1f2937; border: 1px solid #374151; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
-    .card-last { margin-bottom: 0; }
-    .card-title { font-size: 13px; font-weight: 600; color: #9ca3af; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .card-title svg { width: 16px; height: 16px; }
-    .cal-header { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 6px; }
-    .cal-day-label { font-size: 11px; color: #6b7280; text-align: center; padding: 4px; }
-    .cal-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
-    .cal-slot { min-height: 64px; border-radius: 8px; border: 1px solid #374151; padding: 4px; display: flex; flex-direction: column; gap: 3px; cursor: pointer; }
-    .cal-slot:hover { border-color: #3b82f6; }
-    .appt { border-radius: 4px; padding: 3px 5px; font-size: 10px; font-weight: 600; line-height: 1.3; cursor: grab; }
-    .appt.mecanica-rapida { background: #1e3a5f; color: #93c5fd; }
-    .appt.mecanica-compleja { background: #4c1d1d; color: #fca5a5; }
-    .appt.diagnostico { background: #14532d; color: #86efac; }
-    .appt.recogida { background: #451a03; color: #fcd34d; }
-    .appt-empty { border: 1px dashed #374151; background: transparent; color: #4b5563; font-size: 10px; text-align: center; padding: 6px 4px; border-radius: 4px; min-height: 28px; }
-    .box-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
-    .box-badge { padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-    .box-free { background: #14532d; color: #4ade80; }
-    .box-busy { background: #4c1d1d; color: #f87171; }
-    .box-partial { background: #451a03; color: #fbbf24; }
-    .or-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .or-table th { font-size: 11px; font-weight: 600; color: #6b7280; padding: 6px 8px; border-bottom: 1px solid #374151; text-align: left; }
-    .or-table td { padding: 8px; border-bottom: 1px solid #1f2937; color: #d1d5db; }
-    .or-table tr:last-child td { border-bottom: none; }
-    .status-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-    .s-espera { background: #451a03; color: #fbbf24; }
-    .s-reparando { background: #1e3a5f; color: #93c5fd; }
-    .s-prueba { background: #14532d; color: #4ade80; }
-    .s-entrega { background: #2e1065; color: #c4b5fd; }
-    .notif-list { display: flex; flex-direction: column; gap: 0; }
-    .notif { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #374151; }
-    .notif:last-child { border-bottom: none; }
-    .notif-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .notif-icon svg { width: 16px; height: 16px; }
-    .notif-icon.warn { background: #451a03; color: #fbbf24; }
-    .notif-icon.info { background: #1e3a5f; color: #93c5fd; }
-    .notif-icon.promo { background: #2e1065; color: #c4b5fd; }
-    .notif-icon.ok { background: #14532d; color: #4ade80; }
-    .notif-body p { font-size: 13px; color: #d1d5db; line-height: 1.4; }
-    .notif-body p strong { color: #f9fafb; }
-    .notif-body span { font-size: 11px; color: #6b7280; }
-    .notif-actions { margin-left: auto; display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .form-field { display: flex; flex-direction: column; gap: 4px; }
-    .form-field label { font-size: 12px; color: #9ca3af; }
-    .form-field input, .form-field select { padding: 7px 10px; border-radius: 8px; border: 1px solid #374151; background: #111827; color: #f9fafb; font-size: 13px; font-family: inherit; }
-    .form-field input:focus, .form-field select:focus { outline: none; border-color: #3b82f6; }
-    .form-field select option { background: #1f2937; }
-    .presup-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 1rem; }
-    .presup-table th { font-size: 11px; font-weight: 600; color: #6b7280; padding: 6px 8px; border-bottom: 1px solid #374151; text-align: left; }
-    .presup-table td { padding: 8px; border-bottom: 1px solid #374151; color: #d1d5db; }
-    .presup-table input { width: 100%; border: none; background: transparent; font-size: 13px; color: #f9fafb; font-family: inherit; }
-    .presup-total { display: flex; justify-content: flex-end; gap: 2rem; align-items: center; padding: 12px 0; color: #9ca3af; font-size: 14px; }
-    .presup-total-value { font-size: 20px; font-weight: 700; color: #f9fafb; }
-    .factura-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #374151; font-size: 13px; }
-    .factura-row:last-child { border-bottom: none; }
-    .factura-id { font-weight: 600; color: #f9fafb; width: 90px; }
-    .factura-cliente { flex: 1; color: #9ca3af; }
-    .factura-importe { font-weight: 600; color: #f9fafb; width: 80px; text-align: right; }
-    .factura-estado { width: 110px; text-align: right; font-size: 12px; font-weight: 600; }
-    .impagado { color: #f87171; }
-    .cobrado { color: #4ade80; }
-    .pendiente { color: #fbbf24; }
-    .tab-bar { display: flex; gap: 4px; margin-bottom: 1rem; border-bottom: 1px solid #374151; padding-bottom: 0; }
-    .tab { padding: 6px 14px; font-size: 13px; color: #9ca3af; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s; }
-    .tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
-    .tab:hover:not(.active) { color: #f9fafb; }
-    .foto-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
-    .foto-slot { aspect-ratio: 1; border-radius: 8px; border: 1px dashed #374151; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; color: #6b7280; flex-direction: column; gap: 4px; background: #111827; transition: border-color .15s, color .15s; }
-    .foto-slot:hover { border-color: #3b82f6; color: #3b82f6; }
-    .foto-slot svg { width: 20px; height: 20px; }
-    .foto-filled { background: #374151; border-style: solid; border-color: #4b5563; color: #9ca3af; }
-    .baremo-row { display: flex; align-items: center; gap: 10px; padding: 8px; border: 1px solid #374151; border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: background .15s; }
-    .baremo-row:hover { background: #1e3a5f; }
-    .baremo-op { flex: 1; font-size: 13px; color: #d1d5db; }
-    .baremo-tiempo { font-size: 12px; color: #9ca3af; width: 60px; text-align: right; }
-    .baremo-precio { font-size: 13px; font-weight: 600; color: #60a5fa; width: 70px; text-align: right; }
-    .baremo-add { font-size: 12px; color: #60a5fa; padding: 4px 10px; border: 1px solid #1d4ed8; border-radius: 8px; background: transparent; cursor: pointer; white-space: nowrap; transition: background .15s; }
-    .baremo-add:hover { background: #1e3a5f; }
-    .pieza-row { display: flex; align-items: center; gap: 10px; padding: 8px; border-bottom: 1px solid #374151; font-size: 13px; }
-    .pieza-row:last-child { border-bottom: none; }
-    .pieza-ref { color: #6b7280; font-size: 11px; font-family: monospace; }
-    .pieza-precio { font-weight: 600; color: #f9fafb; margin-left: auto; }
-    .pieza-stock { font-size: 11px; color: #4ade80; }
-    .pieza-pedido { font-size: 11px; color: #fbbf24; }
-    .firma-section { margin-top: 1rem; display: flex; gap: 8px; align-items: center; padding: 10px; border-radius: 8px; background: #111827; border: 1px solid #1d4ed8; }
-    .firma-section svg { width: 20px; height: 20px; color: #60a5fa; flex-shrink: 0; }
-    .firma-text { flex: 1; font-size: 12px; color: #9ca3af; line-height: 1.4; }
-    .firma-text strong { color: #d1d5db; }
-    .avatar { width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
-    .av-blue { background: #1e3a5f; color: #93c5fd; }
-    .av-green { background: #14532d; color: #86efac; }
-    .av-amber { background: #451a03; color: #fcd34d; }
-    .av-coral { background: #4c1d1d; color: #fca5a5; }
-    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.7); align-items: center; justify-content: center; }
-    .modal-overlay.open { display: flex; }
-    .modal-box { background: #1f2937; border-radius: 12px; border: 1px solid #374151; padding: 1.5rem; width: 440px; max-width: 95vw; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .modal-header span { font-size: 15px; font-weight: 600; color: #f9fafb; }
-    .modal-header button { background: none; border: none; color: #9ca3af; cursor: pointer; line-height: 1; }
-    .modal-header button:hover { color: #f9fafb; }
-    .modal-header button svg { width: 18px; height: 18px; }
-    .search-input { width: 100%; padding: 7px 10px; border-radius: 8px; border: 1px solid #374151; background: #111827; color: #f9fafb; font-size: 13px; font-family: inherit; margin-bottom: 10px; }
-    .search-input:focus { outline: none; border-color: #3b82f6; }
-    .card-danger .card-title { color: #f87171; }
-    @media (max-width: 768px) {
-        .dash { grid-template-columns: 1fr; }
-        .sidebar { flex-direction: row; flex-wrap: wrap; padding: 0.5rem; gap: 4px; }
-        .kpi-row { grid-template-columns: repeat(2, 1fr); }
-        .grid-2 { grid-template-columns: 1fr; }
-        .form-grid { grid-template-columns: 1fr; }
-        .foto-grid { grid-template-columns: repeat(3, 1fr); }
-    }
+    
 </style>
 
 <section class="py-8 container mx-auto px-6">
 
-    {{-- DASHBOARD SHELL --}}
     <div class="dash">
 
         {{-- SIDEBAR --}}
@@ -163,47 +17,95 @@
                 <p>Panel administrativo</p>
             </div>
 
-            <span class="nav-section">Principal</span>
-            <a href="#" class="nav-item active" onclick="showPanel('agenda'); return false;">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                Agenda
+            <span class="nav-section">Flujo de reparación</span>
+
+            <a href="#" class="nav-item active" onclick="showPanel('solicitudes'); return false;">
+                <span class="nav-step">1</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 8h6m-6 4h4" />
+                </svg>
+                Revisar solicitud
+                <span class="nav-badge">4</span>
             </a>
-            <a href="#" class="nav-item" onclick="showPanel('expediente'); return false;">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                Expedientes
+
+            <a href="#" class="nav-item" onclick="showPanel('mecanico'); return false;">
+                <span class="nav-step">2</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Asignar mecánico
+                <span class="nav-badge nav-badge-warn">2</span>
+            </a>
+
+            <a href="#" class="nav-item" onclick="showPanel('programar'); return false;">
+                <span class="nav-step">3</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Programar fecha
+            </a>
+
+            <a href="#" class="nav-item" onclick="showPanel('piezas'); return false;">
+                <span class="nav-step">4</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+                Aprobar piezas
+                <span class="nav-badge">3</span>
+            </a>
+
+            <a href="#" class="nav-item" onclick="showPanel('pago'); return false;">
+                <span class="nav-step">5</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Confirmar pago
+                <span class="nav-badge nav-badge-warn">1</span>
+            </a>
+
+            <a href="#" class="nav-item" onclick="showPanel('entrega'); return false;">
+                <span class="nav-step">6</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Marcar entregado
+                <span class="nav-badge nav-badge-ok">2</span>
             </a>
 
             <span class="nav-section">Gestión</span>
+
             <a href="#" class="nav-item" onclick="showPanel('presupuestos'); return false;">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                <span class="nav-step" style="border-radius:4px">€</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
                 Presupuestos
             </a>
-            <a href="#" class="nav-item" onclick="showPanel('facturacion'); return false;">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                Facturación
-            </a>
 
-            <span class="nav-section">Alertas</span>
-            <a href="#" class="nav-item" onclick="showPanel('notificaciones'); return false;">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                Notificaciones
-                <span class="nav-badge">5</span>
+            <a href="#" class="nav-item" onclick="showPanel('facturacion'); return false;">
+                <span class="nav-step" style="border-radius:4px">#</span>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Facturación
             </a>
         </aside>
 
-        {{-- MAIN CONTENT --}}
+        {{-- MAIN --}}
         <div class="main">
-
-            {{-- TOP BAR --}}
             <div class="topbar">
-                <h1 id="panel-title">Planificador central · Semana 20</h1>
+                <h1 id="panel-title">Revisar solicitudes</h1>
                 <div class="topbar-actions">
-                    <button class="btn" onclick="showModal()">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                        Nueva cita
+                    <button class="btn" onclick="showModal('nueva-sol')">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Nueva solicitud
                     </button>
-                    <button class="btn btn-primary" id="topbar-cta">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <button class="btn btn-primary">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
                         Presupuesto rápido
                     </button>
                 </div>
@@ -211,236 +113,929 @@
 
             <div class="content">
 
-                {{-- ==================== PANEL: AGENDA ==================== --}}
-                <div class="panel active" id="panel-agenda">
+                {{-- ========== PASO 1: REVISAR SOLICITUD ========== --}}
+                <div class="panel active" id="panel-solicitudes">
+
+                    {{-- PIPELINE DE ESTADOS --}}
+                    <div class="pipeline">
+                        <div class="pipe-step pipe-active">
+                            <div class="pipe-inner">
+                                <span class="pipe-num">PASO 1</span>
+                                <span class="pipe-label">Revisar</span>
+                                <span class="pipe-count">4</span>
+                            </div>
+                        </div>
+                        <div class="pipe-step">
+                            <div class="pipe-inner">
+                                <span class="pipe-num">PASO 2</span>
+                                <span class="pipe-label">Sin mecánico</span>
+                                <span class="pipe-count">2</span>
+                            </div>
+                        </div>
+                        <div class="pipe-step">
+                            <div class="pipe-inner">
+                                <span class="pipe-num">PASO 3</span>
+                                <span class="pipe-label">Sin fecha</span>
+                                <span class="pipe-count">1</span>
+                            </div>
+                        </div>
+                        <div class="pipe-step">
+                            <div class="pipe-inner">
+                                <span class="pipe-num">PASO 4</span>
+                                <span class="pipe-label">Piezas</span>
+                                <span class="pipe-count">3</span>
+                            </div>
+                        </div>
+                        <div class="pipe-step">
+                            <div class="pipe-inner">
+                                <span class="pipe-num">PASO 5</span>
+                                <span class="pipe-label">Cobro pend.</span>
+                                <span class="pipe-count">1</span>
+                            </div>
+                        </div>
+                        <div class="pipe-step">
+                            <div class="pipe-inner">
+                                <span class="pipe-num">PASO 6</span>
+                                <span class="pipe-label">Entrega lista</span>
+                                <span class="pipe-count">2</span>
+                            </div>
+                        </div>
+                    </div>
 
                     {{-- KPIs --}}
                     <div class="kpi-row">
                         <div class="kpi">
-                            <span class="kpi-label">Citas hoy</span>
-                            <span class="kpi-value">8</span>
-                            <span class="kpi-delta up">↑ 2 más que ayer</span>
+                            <span class="kpi-label">Solicitudes pendientes</span>
+                            <span class="kpi-value">4</span>
+                            <span class="kpi-delta warn">↑ 2 nuevas hoy</span>
                         </div>
                         <div class="kpi">
-                            <span class="kpi-label">Boxes libres</span>
-                            <span class="kpi-value">2/5</span>
-                            <span class="kpi-delta warn">3 ocupados</span>
+                            <span class="kpi-label">OR activas</span>
+                            <span class="kpi-value">9</span>
+                            <span class="kpi-delta">3 en reparación</span>
                         </div>
                         <div class="kpi">
-                            <span class="kpi-label">Operarios</span>
-                            <span class="kpi-value">4/4</span>
-                            <span class="kpi-delta up">Plantilla completa</span>
+                            <span class="kpi-label">Tiempo medio revisión</span>
+                            <span class="kpi-value">18 min</span>
+                            <span class="kpi-delta up">↓ 5 min esta semana</span>
                         </div>
                         <div class="kpi">
-                            <span class="kpi-label">OR en curso</span>
-                            <span class="kpi-value">6</span>
-                            <span class="kpi-delta">2 en espera pieza</span>
+                            <span class="kpi-label">Tasa aceptación</span>
+                            <span class="kpi-value">94%</span>
+                            <span class="kpi-delta up">↑ 2% vs mes anterior</span>
                         </div>
                     </div>
 
-                    {{-- CALENDARIO --}}
+                    {{-- LISTADO SOLICITUDES PENDIENTES --}}
                     <div class="card">
                         <div class="card-title">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
-                            Disponibilidad de boxes · Esta semana
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            Solicitudes sin revisar
                         </div>
-                        <div class="box-badges">
-                            <span class="box-badge box-free">Box 1 · Libre</span>
-                            <span class="box-badge box-busy">Box 2 · Ocupado</span>
-                            <span class="box-badge box-busy">Box 3 · Ocupado</span>
-                            <span class="box-badge box-partial">Box 4 · Tarde libre</span>
-                            <span class="box-badge box-busy">Box 5 · Ocupado</span>
+
+                        <div class="sol-row">
+                            <span class="sol-id">SOL-0041</span>
+                            <div class="sol-info">
+                                <strong>Ana López · 4521 KMV</strong>
+                                <span>VW Golf VII 1.6 TDI · Recibida hace 12 min</span>
+                                <div class="sol-desc">Ruido extraño al frenar, posible disco y pastillas desgastados</div>
+                            </div>
+                            <span class="sol-urgency urg-alta">Urgente</span>
+                            <span class="status-pill s-nueva">● Nueva</span>
+                            <div class="sol-actions">
+                                <button class="btn btn-sm btn-success" onclick="showPanel('mecanico')">✓ Aceptar</button>
+                                <button class="btn btn-sm btn-danger">✕ Rechazar</button>
+                            </div>
                         </div>
-                        <div class="cal-header">
-                            <div class="cal-day-label">Lun 12</div>
-                            <div class="cal-day-label">Mar 13</div>
-                            <div class="cal-day-label">Mié 14</div>
-                            <div class="cal-day-label">Jue 15</div>
-                            <div class="cal-day-label">Vie 16</div>
+
+                        <div class="sol-row">
+                            <span class="sol-id">SOL-0040</span>
+                            <div class="sol-info">
+                                <strong>Roberto Núñez · 3012 BCA</strong>
+                                <span>Seat Ibiza 1.0 TSI · Recibida hace 45 min</span>
+                                <div class="sol-desc">Revisión general + cambio de aceite y filtros</div>
+                            </div>
+                            <span class="sol-urgency urg-media">Media</span>
+                            <span class="status-pill s-nueva">● Nueva</span>
+                            <div class="sol-actions">
+                                <button class="btn btn-sm btn-success" onclick="showPanel('mecanico')">✓ Aceptar</button>
+                                <button class="btn btn-sm btn-danger">✕ Rechazar</button>
+                            </div>
                         </div>
-                        <div class="cal-grid" id="calGrid">
-                            <div class="cal-slot" ondragover="event.preventDefault();this.style.borderColor='#3b82f6'" ondragleave="this.style.borderColor=''" ondrop="dropAppt(event,this)">
-                                <div class="appt mecanica-rapida" draggable="true" ondragstart="dragAppt(event,this)" ondragend="this.style.opacity='1'">Cambio aceite<br>García · 9h</div>
-                                <div class="appt mecanica-rapida" draggable="true" ondragstart="dragAppt(event,this)" ondragend="this.style.opacity='1'">Pastillas freno<br>López · 11h</div>
+
+                        <div class="sol-row">
+                            <span class="sol-id">SOL-0039</span>
+                            <div class="sol-info">
+                                <strong>Carmen Vidal · 9087 HJT</strong>
+                                <span>Ford Focus 2.0 TDCI · Recibida hace 2 h</span>
+                                <div class="sol-desc">Motor tira humo blanco al arrancar en frío, posible junta culata</div>
                             </div>
-                            <div class="cal-slot" ondragover="event.preventDefault();this.style.borderColor='#3b82f6'" ondragleave="this.style.borderColor=''" ondrop="dropAppt(event,this)">
-                                <div class="appt mecanica-compleja" draggable="true" ondragstart="dragAppt(event,this)" ondragend="this.style.opacity='1'">Caja cambios<br>Martín · 9h</div>
+                            <span class="sol-urgency urg-alta">Urgente</span>
+                            <span class="status-pill s-nueva">● Nueva</span>
+                            <div class="sol-actions">
+                                <button class="btn btn-sm btn-success" onclick="showPanel('mecanico')">✓ Aceptar</button>
+                                <button class="btn btn-sm btn-danger">✕ Rechazar</button>
                             </div>
-                            <div class="cal-slot" ondragover="event.preventDefault();this.style.borderColor='#3b82f6'" ondragleave="this.style.borderColor=''" ondrop="dropAppt(event,this)">
-                                <div class="appt diagnostico" draggable="true" ondragstart="dragAppt(event,this)" ondragend="this.style.opacity='1'">Diagnosis avanzada<br>Ruiz · 10h</div>
-                                <div class="appt-empty">+ Añadir cita</div>
+                        </div>
+
+                        <div class="sol-row">
+                            <span class="sol-id">SOL-0038</span>
+                            <div class="sol-info">
+                                <strong>Pedro Ruiz · 6634 MNP</strong>
+                                <span>Renault Clio 0.9 TCe · Recibida hace 3 h</span>
+                                <div class="sol-desc">Testigo ABS encendido, revisión de sensores</div>
                             </div>
-                            <div class="cal-slot" ondragover="event.preventDefault();this.style.borderColor='#3b82f6'" ondragleave="this.style.borderColor=''" ondrop="dropAppt(event,this)">
-                                <div class="appt recogida" draggable="true" ondragstart="dragAppt(event,this)" ondragend="this.style.opacity='1'">Distribución<br>Sánchez · 9h</div>
-                                <div class="appt mecanica-rapida" draggable="true" ondragstart="dragAppt(event,this)" ondragend="this.style.opacity='1'">ITV<br>Díaz · 11h</div>
-                            </div>
-                            <div class="cal-slot" ondragover="event.preventDefault();this.style.borderColor='#3b82f6'" ondragleave="this.style.borderColor=''" ondrop="dropAppt(event,this)">
-                                <div class="appt diagnostico" draggable="true" ondragstart="dragAppt(event,this)" ondragend="this.style.opacity='1'">Embrague<br>Fernández · 10h</div>
+                            <span class="sol-urgency urg-baja">Normal</span>
+                            <span class="status-pill s-nueva">● Nueva</span>
+                            <div class="sol-actions">
+                                <button class="btn btn-sm btn-success" onclick="showPanel('mecanico')">✓ Aceptar</button>
+                                <button class="btn btn-sm btn-danger">✕ Rechazar</button>
                             </div>
                         </div>
                     </div>
 
-                    {{-- CAPTURA RÁPIDA POR MATRÍCULA --}}
+                    {{-- ESTADO GLOBAL DE REPARACIONES --}}
                     <div class="card card-last">
                         <div class="card-title">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                            Captura rápida por matrícula
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                            Estado actual de todas las reparaciones
                         </div>
-                        <div class="form-grid" style="align-items:end">
-                            <div class="form-field" style="grid-column:span 2">
-                                <label>Matrícula</label>
-                                <div style="display:flex;gap:8px">
-                                    <input type="text" id="matriculaInput" placeholder="Ej: 1234 ABC" style="flex:1;text-transform:uppercase;font-weight:600;letter-spacing:.05em" oninput="autofillMatricula(this.value)">
-                                    <button class="btn btn-primary" onclick="autofillMatricula(document.getElementById('matriculaInput').value)">
-                                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                                        Buscar
-                                    </button>
+                        <table class="or-table">
+                            <thead>
+                                <tr>
+                                    <th>OR</th>
+                                    <th>Matrícula</th>
+                                    <th>Vehículo</th>
+                                    <th>Mecánico</th>
+                                    <th>Estado de reparación</th>
+                                    <th>Actualización</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-weight:600">#0248</td>
+                                    <td>4521 KMV</td>
+                                    <td>VW Golf VII</td>
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:6px"><span class="avatar av-blue">JM</span> Juan M.</div>
+                                    </td>
+                                    <td><span class="status-pill s-reparando">🔧 En reparación</span></td>
+                                    <td class="text-muted">Hace 15 min</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:600">#0247</td>
+                                    <td>3012 BCA</td>
+                                    <td>Seat Ibiza 1.0</td>
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:6px"><span class="avatar av-green">AL</span> Ana L.</div>
+                                    </td>
+                                    <td><span class="status-pill s-piezas">📦 Esperando piezas</span></td>
+                                    <td class="text-muted">Hace 2 h</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:600">#0246</td>
+                                    <td>9087 HJT</td>
+                                    <td>Ford Focus 2.0</td>
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:6px"><span class="avatar av-amber">PR</span> Pablo R.</div>
+                                    </td>
+                                    <td><span class="status-pill s-prueba">🛣️ Prueba carretera</span></td>
+                                    <td class="text-muted">Hace 45 min</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:600">#0245</td>
+                                    <td>6634 MNP</td>
+                                    <td>Renault Clio 0.9</td>
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:6px"><span class="avatar av-coral">SG</span> Sofía G.</div>
+                                    </td>
+                                    <td><span class="status-pill s-pago">💳 Pendiente pago</span></td>
+                                    <td class="text-muted">Hace 1 h</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:600">#0244</td>
+                                    <td>1234 ABC</td>
+                                    <td>Peugeot 308</td>
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:6px"><span class="avatar av-purple">LG</span> Luis G.</div>
+                                    </td>
+                                    <td><span class="status-pill s-entregado">✅ Entregado</span></td>
+                                    <td class="text-muted">Hace 3 h</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:600">#0243</td>
+                                    <td>7823 RTY</td>
+                                    <td>Toyota Yaris</td>
+                                    <td>
+                                        <div style="display:flex;align-items:center;gap:6px"><span class="avatar av-blue">JM</span> Juan M.</div>
+                                    </td>
+                                    <td><span class="status-pill s-asignado">👤 Mecánico asignado</span></td>
+                                    <td class="text-muted">Hace 4 h</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{-- ========== PASO 2: ASIGNAR MECÁNICO ========== --}}
+                <div class="panel" id="panel-mecanico">
+                    <div class="kpi-row">
+                        <div class="kpi">
+                            <span class="kpi-label">Mecánicos disponibles</span>
+                            <span class="kpi-value">3/5</span>
+                            <span class="kpi-delta up">2 con carga baja</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">OR sin asignar</span>
+                            <span class="kpi-value">2</span>
+                            <span class="kpi-delta warn">Pendientes ahora</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Horas libres hoy</span>
+                            <span class="kpi-value">11 h</span>
+                            <span class="kpi-delta">Entre todos los talleres</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Especialidad requerida</span>
+                            <span class="kpi-value" style="font-size:14px;padding-top:4px">Mecánica compleja</span>
+                            <span class="kpi-delta">OR #0248 · Golf VII</span>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-bottom:1rem">
+                        <div class="card-title">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            Solicitud activa a asignar
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;padding:8px;background:#111827;border-radius:8px;border:1px solid #374151">
+                            <span class="badge-new">SOL-0041</span>
+                            <div>
+                                <div style="font-size:13px;color:#f9fafb;font-weight:600">Ana López · 4521 KMV · VW Golf VII 1.6 TDI</div>
+                                <div style="font-size:12px;color:#6b7280">Ruido al frenar — discos y pastillas. Urgente.</div>
+                            </div>
+                            <span class="status-pill s-asignado" style="margin-left:auto">Asignando…</span>
+                        </div>
+                    </div>
+
+                    <div class="card card-last">
+                        <div class="card-title">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            Selecciona mecánico responsable
+                        </div>
+                        <div class="mec-grid">
+                            <div class="mec-card selected" onclick="selectMec(this)">
+                                <div class="mec-header">
+                                    <span class="avatar av-blue">JM</span>
+                                    <div>
+                                        <div class="mec-name">Juan Martínez</div>
+                                        <div class="mec-spec">Mecánica compleja · Motor</div>
+                                    </div>
                                 </div>
+                                <div class="mec-load">
+                                    <div class="mec-load-bar load-mid" style="width:60%"></div>
+                                </div>
+                                <div class="mec-stats">Carga: <strong>60%</strong> &nbsp;·&nbsp; OR activas: <strong>2</strong> &nbsp;·&nbsp; Libera: <strong>15:00</strong></div>
                             </div>
-                            <div class="form-field"><label>Titular</label><input type="text" id="f-titular" placeholder="—"></div>
-                            <div class="form-field"><label>Teléfono</label><input type="text" id="f-tel" placeholder="—"></div>
-                            <div class="form-field"><label>Marca / Modelo</label><input type="text" id="f-modelo" placeholder="—"></div>
-                            <div class="form-field"><label>Motor / Año</label><input type="text" id="f-motor" placeholder="—"></div>
-                            <div class="form-field">
-                                <label>Tipo de servicio</label>
-                                <select>
-                                    <option>Mecánica rápida</option>
-                                    <option>Mecánica compleja</option>
-                                    <option>Diagnóstico</option>
-                                    <option>ITV</option>
-                                </select>
+                            <div class="mec-card" onclick="selectMec(this)">
+                                <div class="mec-header">
+                                    <span class="avatar av-green">AL</span>
+                                    <div>
+                                        <div class="mec-name">Ana López</div>
+                                        <div class="mec-spec">Mecánica rápida · ITV</div>
+                                    </div>
+                                </div>
+                                <div class="mec-load">
+                                    <div class="mec-load-bar load-low" style="width:30%"></div>
+                                </div>
+                                <div class="mec-stats">Carga: <strong>30%</strong> &nbsp;·&nbsp; OR activas: <strong>1</strong> &nbsp;·&nbsp; Libera: <strong>12:30</strong></div>
                             </div>
-                            <div class="form-field"><label>Fecha y hora</label><input type="datetime-local"></div>
+                            <div class="mec-card" onclick="selectMec(this)">
+                                <div class="mec-header">
+                                    <span class="avatar av-amber">PR</span>
+                                    <div>
+                                        <div class="mec-name">Pablo Ruiz</div>
+                                        <div class="mec-spec">Electricidad · Diagnosis</div>
+                                    </div>
+                                </div>
+                                <div class="mec-load">
+                                    <div class="mec-load-bar load-high" style="width:90%"></div>
+                                </div>
+                                <div class="mec-stats">Carga: <strong>90%</strong> &nbsp;·&nbsp; OR activas: <strong>3</strong> &nbsp;·&nbsp; Libera: <strong>18:00</strong></div>
+                            </div>
+                            <div class="mec-card" onclick="selectMec(this)">
+                                <div class="mec-header">
+                                    <span class="avatar av-coral">SG</span>
+                                    <div>
+                                        <div class="mec-name">Sofía García</div>
+                                        <div class="mec-spec">Chapa · Pintura</div>
+                                    </div>
+                                </div>
+                                <div class="mec-load">
+                                    <div class="mec-load-bar load-low" style="width:25%"></div>
+                                </div>
+                                <div class="mec-stats">Carga: <strong>25%</strong> &nbsp;·&nbsp; OR activas: <strong>1</strong> &nbsp;·&nbsp; Libera: <strong>11:00</strong></div>
+                            </div>
                         </div>
-                        <div style="margin-top:12px;text-align:right">
-                            <button class="btn btn-primary">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                Confirmar cita
+                        <div style="text-align:right;margin-top:12px">
+                            <button class="btn" style="margin-right:8px">Cancelar</button>
+                            <button class="btn btn-primary" onclick="showPanel('programar')">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Confirmar asignación → Paso 3
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {{-- ==================== PANEL: EXPEDIENTE ==================== --}}
-                <div class="panel" id="panel-expediente">
-                    <div class="tab-bar">
-                        <div class="tab active" onclick="switchTab(this,'tab-or')">Órdenes activas</div>
-                        <div class="tab" onclick="switchTab(this,'tab-fotos')">Galería de daños</div>
-                    </div>
+                {{-- ========== PASO 3: PROGRAMAR FECHA ========== --}}
+                <div class="panel" id="panel-programar">
+                    <div class="grid-2">
+                        <div>
+                            <div class="card">
+                                <div class="card-title">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Semana 20 · Disponibilidad Juan Martínez
+                                </div>
 
-                    <div id="tab-or">
-                        <div class="card">
-                            <table class="or-table">
-                                <thead>
-                                    <tr>
-                                        <th>OR</th>
-                                        <th>Matrícula</th>
-                                        <th>Vehículo</th>
-                                        <th>Operario</th>
-                                        <th>Estado</th>
-                                        <th>Actualización</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="font-weight:600">#0248</td>
-                                        <td>4521 KMV</td>
-                                        <td>VW Golf VII 1.6TDI</td>
-                                        <td>
-                                            <div style="display:flex;align-items:center;gap:6px">
-                                                <span class="avatar av-blue">JM</span> Juan M.
-                                            </div>
-                                        </td>
-                                        <td><span class="status-pill s-reparando">🔧 En reparación</span></td>
-                                        <td style="font-size:12px;color:#6b7280">Hace 15 min</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight:600">#0247</td>
-                                        <td>3012 BCA</td>
-                                        <td>Seat Ibiza 1.0 TSI</td>
-                                        <td>
-                                            <div style="display:flex;align-items:center;gap:6px">
-                                                <span class="avatar av-green">AL</span> Ana L.
-                                            </div>
-                                        </td>
-                                        <td><span class="status-pill s-espera">📦 Espera pieza</span></td>
-                                        <td style="font-size:12px;color:#6b7280">Hace 2 h</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight:600">#0246</td>
-                                        <td>9087 HJT</td>
-                                        <td>Ford Focus 2.0 TDCI</td>
-                                        <td>
-                                            <div style="display:flex;align-items:center;gap:6px">
-                                                <span class="avatar av-amber">PR</span> Pablo R.
-                                            </div>
-                                        </td>
-                                        <td><span class="status-pill s-prueba">🛣️ Prueba carretera</span></td>
-                                        <td style="font-size:12px;color:#6b7280">Hace 45 min</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-weight:600">#0245</td>
-                                        <td>6634 MNP</td>
-                                        <td>Renault Clio 0.9 TCe</td>
-                                        <td>
-                                            <div style="display:flex;align-items:center;gap:6px">
-                                                <span class="avatar av-coral">SG</span> Sofía G.
-                                            </div>
-                                        </td>
-                                        <td><span class="status-pill s-entrega">✅ Lista entrega</span></td>
-                                        <td style="font-size:12px;color:#6b7280">Hace 1 h</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <div class="week-grid">
+                                    <div class="wg-header"></div>
+                                    <div class="wg-header">Lun 12</div>
+                                    <div class="wg-header">Mar 13</div>
+                                    <div class="wg-header">Mié 14</div>
+                                    <div class="wg-header">Jue 15</div>
+                                    <div class="wg-header">Vie 16</div>
+
+                                    <div class="wg-time">09:00</div>
+                                    <div class="wg-cell wg-busy">
+                                        <div class="wg-appt">OR #0246</div><span class="wg-slot-label">3 h</span>
+                                    </div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell wg-busy">
+                                        <div class="wg-appt">OR #0248</div><span class="wg-slot-label">2 h</span>
+                                    </div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+
+                                    <div class="wg-time">11:00</div>
+                                    <div class="wg-cell wg-busy">
+                                        <div class="wg-appt">OR #0246</div>
+                                    </div>
+                                    <div class="wg-cell wg-selected" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell wg-busy">
+                                        <div class="wg-appt">Revis. rápida</div>
+                                    </div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+
+                                    <div class="wg-time">13:00</div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell wg-busy">
+                                        <div class="wg-appt">OR #0247</div>
+                                    </div>
+
+                                    <div class="wg-time">15:00</div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell wg-busy">
+                                        <div class="wg-appt">Embrague</div><span class="wg-slot-label">3.5 h</span>
+                                    </div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                    <div class="wg-cell" onclick="selectSlot(this)"></div>
+                                </div>
+
+                                <div style="margin-top:10px;font-size:11px;color:#6b7280;display:flex;gap:12px">
+                                    <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#1e3a5f;display:inline-block"></span> Ocupado</span>
+                                    <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#1d4ed8;display:inline-block"></span> Seleccionado</span>
+                                    <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#1f2937;border:1px solid #374151;display:inline-block"></span> Libre</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="card">
+                                <div class="card-title">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Detalles de la cita
+                                </div>
+                                <div class="form-grid" style="margin-bottom:12px">
+                                    <div class="form-field" style="grid-column:span 2">
+                                        <label>Vehículo</label>
+                                        <input type="text" value="4521 KMV · VW Golf VII 1.6 TDI" readonly style="color:#9ca3af">
+                                    </div>
+                                    <div class="form-field">
+                                        <label>Mecánico asignado</label>
+                                        <input type="text" value="Juan Martínez" readonly style="color:#9ca3af">
+                                    </div>
+                                    <div class="form-field">
+                                        <label>Duración estimada</label>
+                                        <select>
+                                            <option>1 hora</option>
+                                            <option>2 horas</option>
+                                            <option selected>3 horas</option>
+                                            <option>4 horas</option>
+                                            <option>Todo el día</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-field">
+                                        <label>Fecha</label>
+                                        <input type="date" value="2026-05-13">
+                                    </div>
+                                    <div class="form-field">
+                                        <label>Hora de inicio</label>
+                                        <input type="time" value="11:00">
+                                    </div>
+                                    <div class="form-field" style="grid-column:span 2">
+                                        <label>Notas para el mecánico</label>
+                                        <textarea>Cliente indica ruido metálico al frenar entre 60-80 km/h. Revisar discos y pastillas traseros principalmente.</textarea>
+                                    </div>
+                                </div>
+                                <div style="padding:10px;background:#111827;border-radius:8px;border:1px solid #374151;font-size:12px;color:#6b7280;margin-bottom:12px">
+                                    📱 Se enviará confirmación al cliente por WhatsApp/SMS al guardar.
+                                </div>
+                                <div style="display:flex;gap:8px;justify-content:flex-end">
+                                    <button class="btn">Guardar sin notificar</button>
+                                    <button class="btn btn-primary" onclick="showPanel('piezas')">
+                                        Confirmar y notificar → Paso 4
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ========== PASO 4: APROBAR COMPRA DE PIEZAS ========== --}}
+                <div class="panel" id="panel-piezas">
+                    <div class="kpi-row">
+                        <div class="kpi">
+                            <span class="kpi-label">Piezas pendientes aprobación</span>
+                            <span class="kpi-value">3</span>
+                            <span class="kpi-delta warn">En 2 OR distintas</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Importe total pedido</span>
+                            <span class="kpi-value">€487</span>
+                            <span class="kpi-delta">Sin IVA</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Plazo entrega estimado</span>
+                            <span class="kpi-value">24 h</span>
+                            <span class="kpi-delta up">Proveedor en stock</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">OR bloqueadas por piezas</span>
+                            <span class="kpi-value">2</span>
+                            <span class="kpi-delta down">Esperando aprobación</span>
                         </div>
                     </div>
 
-                    <div id="tab-fotos" style="display:none">
+                    {{-- OR #0247 --}}
+                    <div class="card">
+                        <div class="card-title" style="justify-content:space-between">
+                            <span style="display:flex;align-items:center;gap:8px">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
+                                OR #0247 · Seat Ibiza 1.0 TSI · Ana López — Recambista: AutoPiezas Sur
+                            </span>
+                            <span class="status-pill s-piezas">📦 En espera</span>
+                        </div>
+
+                        <div class="pieza-row">
+                            <div style="flex:1">
+                                <div style="font-size:13px;color:#d1d5db;font-weight:600">Kit embrague LuK · Seat Ibiza 1.0</div>
+                                <div class="pieza-ref">REF: 624 3397 09</div>
+                            </div>
+                            <span class="pieza-stock">✓ En stock</span>
+                            <span class="pieza-precio">€89.40</span>
+                            <button class="approve-toggle on" onclick="toggleApprove(this)" title="Aprobado"></button>
+                        </div>
+                        <div class="pieza-row">
+                            <div style="flex:1">
+                                <div style="font-size:13px;color:#d1d5db;font-weight:600">Volante motor bimasa · Seat Ibiza</div>
+                                <div class="pieza-ref">REF: 0 232 231 014</div>
+                            </div>
+                            <span class="pieza-pedido">⏳ Bajo pedido · 24 h</span>
+                            <span class="pieza-precio">€142.00</span>
+                            <button class="approve-toggle" onclick="toggleApprove(this)" title="Pendiente aprobación"></button>
+                        </div>
+                        <div style="text-align:right;margin-top:10px;display:flex;gap:8px;justify-content:flex-end;align-items:center">
+                            <span style="font-size:12px;color:#6b7280">Total OR #0247: <strong style="color:#f9fafb">€231.40</strong></span>
+                            <button class="btn btn-sm btn-primary">Aprobar todas y pedir</button>
+                        </div>
+                    </div>
+
+                    {{-- OR #0248 --}}
+                    <div class="card card-last">
+                        <div class="card-title" style="justify-content:space-between">
+                            <span style="display:flex;align-items:center;gap:8px">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
+                                OR #0248 · VW Golf VII · Juan Martínez — Recambista: RecambiosFast
+                            </span>
+                            <span class="status-pill s-piezas">📦 En espera</span>
+                        </div>
+
+                        <div class="pieza-row">
+                            <div style="flex:1">
+                                <div style="font-size:13px;color:#d1d5db;font-weight:600">Juego discos freno delanteros · Golf VII</div>
+                                <div class="pieza-ref">REF: TRW DF6116S</div>
+                            </div>
+                            <span class="pieza-stock">✓ En stock</span>
+                            <span class="pieza-precio">€95.80</span>
+                            <button class="approve-toggle on" onclick="toggleApprove(this)" title="Aprobado"></button>
+                        </div>
+                        <div class="pieza-row">
+                            <div style="flex:1">
+                                <div style="font-size:13px;color:#d1d5db;font-weight:600">Pastillas freno delanteras · Golf VII 1.6 TDI</div>
+                                <div class="pieza-ref">REF: BREMBO P85 075</div>
+                            </div>
+                            <span class="pieza-stock">✓ En stock</span>
+                            <span class="pieza-precio">€42.60</span>
+                            <button class="approve-toggle on" onclick="toggleApprove(this)" title="Aprobado"></button>
+                        </div>
+                        <div style="text-align:right;margin-top:10px;display:flex;gap:8px;justify-content:flex-end;align-items:center">
+                            <span style="font-size:12px;color:#6b7280">Total OR #0248: <strong style="color:#f9fafb">€138.40</strong></span>
+                            <button class="btn btn-sm btn-success" onclick="showPanel('pago')">✓ Aprobado → Paso 5</button>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ========== PASO 5: CONFIRMAR PAGO ========== --}}
+                <div class="panel" id="panel-pago">
+                    <div class="kpi-row">
+                        <div class="kpi">
+                            <span class="kpi-label">Cobros pendientes</span>
+                            <span class="kpi-value">1</span>
+                            <span class="kpi-delta warn">OR lista para cobrar</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Importe a cobrar</span>
+                            <span class="kpi-value">€628.40</span>
+                            <span class="kpi-delta">IVA incluido</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Método habitual cliente</span>
+                            <span class="kpi-value" style="font-size:14px;padding-top:4px">Tarjeta</span>
+                            <span class="kpi-delta">Última visita: tarjeta débito</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Facturado este mes</span>
+                            <span class="kpi-value">€12.840</span>
+                            <span class="kpi-delta up">+8% vs abril</span>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
                         <div class="card">
-                            <div style="font-size:13px;color:#9ca3af;margin-bottom:8px">
-                                Vehículo: <strong style="color:#f9fafb">4521 KMV · VW Golf VII</strong> · OR #0248 · Entrada 12/05/2026
+                            <div class="card-title">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
+                                </svg>
+                                OR #0245 · Renault Clio · Pedro Ruiz
                             </div>
-                            <div class="foto-grid">
-                                <div class="foto-slot foto-filled">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                    <span>Frontal</span>
-                                </div>
-                                <div class="foto-slot foto-filled">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                    <span>Lateral izq</span>
-                                </div>
-                                <div class="foto-slot foto-filled">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                    <span>Maletero</span>
-                                </div>
-                                @foreach(range(1,5) as $i)
-                                <div class="foto-slot">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                    <span>Añadir foto</span>
-                                </div>
-                                @endforeach
+
+                            <div class="pago-resumen">
+                                <div class="pago-line"><span>M.O. Diagnosis ABS (2 h)</span><span>€160.00</span></div>
+                                <div class="pago-line"><span>Sensor ABS delantero izq.</span><span>€48.90</span></div>
+                                <div class="pago-line"><span>Líquido de frenos DOT4 (1 L)</span><span>€12.00</span></div>
+                                <div class="pago-line"><span>Subtotal</span><span>€220.90</span></div>
+                                <div class="pago-line"><span>IVA 21%</span><span>€46.39</span></div>
+                                <div class="pago-line total"><span>TOTAL</span><span>€267.29</span></div>
                             </div>
-                            <div style="margin-top:12px;text-align:right">
-                                <button class="btn btn-primary">
-                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                                    Subir fotos
+
+                            <div style="margin-bottom:10px">
+                                <div style="font-size:12px;color:#9ca3af;margin-bottom:6px">Forma de pago</div>
+                                <div class="pago-metodo">
+                                    <button class="pago-btn selected" onclick="selectPago(this)">💳 Tarjeta</button>
+                                    <button class="pago-btn" onclick="selectPago(this)">💵 Efectivo</button>
+                                    <button class="pago-btn" onclick="selectPago(this)">📱 Bizum</button>
+                                    <button class="pago-btn" onclick="selectPago(this)">🏦 Transfer.</button>
+                                </div>
+                            </div>
+
+                            <div style="display:flex;gap:8px;justify-content:flex-end">
+                                <button class="btn btn-sm">📱 Enviar link de pago</button>
+                                <button class="btn btn-sm btn-success" onclick="showPanel('entrega')">
+                                    ✓ Confirmar cobro → Paso 6
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card card-last">
+                            <div class="card-title">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                Impagados activos
+                            </div>
+                            <div class="factura-row">
+                                <span class="factura-id">#FAC-0301</span>
+                                <span class="factura-cliente">Roberto N. · Golf VII</span>
+                                <span class="factura-importe">€890.00</span>
+                                <span class="factura-estado impagado">Vencida 30d</span>
+                                <button class="baremo-add" style="margin-left:auto">Recordar</button>
+                            </div>
+                            <div class="factura-row">
+                                <span class="factura-id">#FAC-0298</span>
+                                <span class="factura-cliente">Carmen V. · Ibiza</span>
+                                <span class="factura-importe">€245.50</span>
+                                <span class="factura-estado impagado">Vencida 15d</span>
+                                <button class="baremo-add" style="margin-left:auto">Recordar</button>
+                            </div>
+                            <div class="factura-row">
+                                <span class="factura-id">#FAC-0294</span>
+                                <span class="factura-cliente">Luis M. · Focus</span>
+                                <span class="factura-importe">€1.384.20</span>
+                                <span class="factura-estado impagado">Vencida 45d</span>
+                                <button class="baremo-add" style="margin-left:auto">Recordar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- ========== PASO 6: MARCAR ENTREGADO ========== --}}
+                <div class="panel" id="panel-entrega">
+                    <div class="kpi-row">
+                        <div class="kpi">
+                            <span class="kpi-label">Listos para entrega</span>
+                            <span class="kpi-value">2</span>
+                            <span class="kpi-delta up">Pagados y revisados</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Entregados hoy</span>
+                            <span class="kpi-value">3</span>
+                            <span class="kpi-delta up">↑ 1 vs ayer</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Tiempo medio en taller</span>
+                            <span class="kpi-value">1.4 días</span>
+                            <span class="kpi-delta up">↓ 0.2d esta semana</span>
+                        </div>
+                        <div class="kpi">
+                            <span class="kpi-label">Satisfacción cliente</span>
+                            <span class="kpi-value">4.8 ★</span>
+                            <span class="kpi-delta up">Últimas 30 reseñas</span>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        {{-- Coche 1 --}}
+                        <div class="card">
+                            <div class="card-title" style="justify-content:space-between">
+                                <span style="display:flex;align-items:center;gap:8px">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    OR #0245 · Renault Clio · Pedro Ruiz
+                                </span>
+                                <span class="status-pill s-pago">💳 Pago confirmado</span>
+                            </div>
+                            <div style="font-size:12px;color:#6b7280;margin-bottom:12px">
+                                Propietario: <strong style="color:#f9fafb">Pedro Ruiz Olmedo</strong> · 628 441 920 · Recogida prevista: Hoy 17:00
+                            </div>
+                            <div class="checklist" id="checklist-245">
+                                <div class="check-item checked" onclick="toggleCheck(this)">
+                                    <div class="check-box">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="check-label">Reparación completada y documentada en OR</span>
+                                </div>
+                                <div class="check-item checked" onclick="toggleCheck(this)">
+                                    <div class="check-box">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="check-label">Prueba de carretera realizada</span>
+                                </div>
+                                <div class="check-item checked" onclick="toggleCheck(this)">
+                                    <div class="check-box">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="check-label">Pago confirmado (Tarjeta ✓)</span>
+                                </div>
+                                <div class="check-item" onclick="toggleCheck(this)">
+                                    <div class="check-box"></div>
+                                    <span class="check-label">Vehículo limpio interior/exterior</span>
+                                </div>
+                                <div class="check-item" onclick="toggleCheck(this)">
+                                    <div class="check-box"></div>
+                                    <span class="check-label">Llave y documentación preparadas</span>
+                                </div>
+                                <div class="check-item" onclick="toggleCheck(this)">
+                                    <div class="check-box"></div>
+                                    <span class="check-label">Cliente notificado por WhatsApp</span>
+                                </div>
+                            </div>
+                            <div style="text-align:right;margin-top:12px">
+                                <button class="btn btn-success btn-sm" onclick="marcarEntregado(this,'OR #0245')">
+                                    🚗 Marcar como entregado
+                                </button>
+                            </div>
+                        </div>
+
+                        {{-- Coche 2 --}}
+                        <div class="card">
+                            <div class="card-title" style="justify-content:space-between">
+                                <span style="display:flex;align-items:center;gap:8px">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:16px;height:16px">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    OR #0244 · Peugeot 308 · Luis González
+                                </span>
+                                <span class="status-pill s-pago">💳 Pago confirmado</span>
+                            </div>
+                            <div style="font-size:12px;color:#6b7280;margin-bottom:12px">
+                                Propietario: <strong style="color:#f9fafb">María Fernández</strong> · 655 112 930 · Recogida prevista: Hoy 18:30
+                            </div>
+                            <div class="checklist" id="checklist-244">
+                                <div class="check-item checked" onclick="toggleCheck(this)">
+                                    <div class="check-box">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="check-label">Reparación completada y documentada en OR</span>
+                                </div>
+                                <div class="check-item checked" onclick="toggleCheck(this)">
+                                    <div class="check-box">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="check-label">Prueba de carretera realizada</span>
+                                </div>
+                                <div class="check-item checked" onclick="toggleCheck(this)">
+                                    <div class="check-box">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="check-label">Pago confirmado (Bizum ✓)</span>
+                                </div>
+                                <div class="check-item checked" onclick="toggleCheck(this)">
+                                    <div class="check-box">
+                                        <svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="check-label">Vehículo limpio interior/exterior</span>
+                                </div>
+                                <div class="check-item" onclick="toggleCheck(this)">
+                                    <div class="check-box"></div>
+                                    <span class="check-label">Llave y documentación preparadas</span>
+                                </div>
+                                <div class="check-item" onclick="toggleCheck(this)">
+                                    <div class="check-box"></div>
+                                    <span class="check-label">Cliente notificado por WhatsApp</span>
+                                </div>
+                            </div>
+                            <div style="text-align:right;margin-top:12px">
+                                <button class="btn btn-success btn-sm" onclick="marcarEntregado(this,'OR #0244')">
+                                    🚗 Marcar como entregado
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- ==================== PANEL: PRESUPUESTOS ==================== --}}
+                {{-- ========== PRESUPUESTOS (con gráficas) ========== --}}
                 <div class="panel" id="panel-presupuestos">
+
+                    {{-- GRÁFICAS --}}
+                    <div class="grid-2" style="margin-bottom:1rem">
+                        <div class="card card-last">
+                            <div class="card-title">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                                Presupuestos emitidos · Últimos 6 meses
+                            </div>
+                            <div class="chart-section">
+                                <div class="bar-chart" style="align-items:flex-end">
+                                    <div class="bar-col">
+                                        <span class="bar-val">€8.2k</span>
+                                        <div class="bar-fill" style="height:55px;background:#1d4ed8"></div>
+                                        <span class="bar-label">Dic</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <span class="bar-val">€9.1k</span>
+                                        <div class="bar-fill" style="height:61px;background:#1d4ed8"></div>
+                                        <span class="bar-label">Ene</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <span class="bar-val">€11.4k</span>
+                                        <div class="bar-fill" style="height:76px;background:#1d4ed8"></div>
+                                        <span class="bar-label">Feb</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <span class="bar-val">€10.8k</span>
+                                        <div class="bar-fill" style="height:72px;background:#1d4ed8"></div>
+                                        <span class="bar-label">Mar</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <span class="bar-val">€13.2k</span>
+                                        <div class="bar-fill" style="height:88px;background:#2563eb"></div>
+                                        <span class="bar-label">Abr</span>
+                                    </div>
+                                    <div class="bar-col">
+                                        <span class="bar-val">€14.8k</span>
+                                        <div class="bar-fill" style="height:100px;background:#3b82f6"></div>
+                                        <span class="bar-label">May</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex;gap:16px;margin-top:8px;font-size:12px;color:#6b7280;border-top:1px solid #374151;padding-top:8px">
+                                <span>Emitidos este mes: <strong style="color:#f9fafb">38</strong></span>
+                                <span>Aceptados: <strong style="color:#4ade80">31 (81%)</strong></span>
+                                <span>Rechazados: <strong style="color:#f87171">7</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="card card-last">
+                            <div class="card-title">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                                </svg>
+                                Desglose por tipo de servicio · Mayo
+                            </div>
+                            <div class="donut-wrap">
+                                <svg viewBox="0 0 100 100" width="110" height="110" style="flex-shrink:0">
+                                    <!-- donut chart SVG con stroke-dasharray -->
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#374151" stroke-width="18" />
+                                    <!-- Mecánica compleja 38% → 239.1 de 238.76 -->
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#3b82f6" stroke-width="18"
+                                        stroke-dasharray="90.7 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)" />
+                                    <!-- Mecánica rápida 27% -->
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#22c55e" stroke-width="18"
+                                        stroke-dasharray="64.5 238.76" stroke-dashoffset="-90.7" transform="rotate(-90 50 50)" />
+                                    <!-- Piezas 20% -->
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#f59e0b" stroke-width="18"
+                                        stroke-dasharray="47.8 238.76" stroke-dashoffset="-155.2" transform="rotate(-90 50 50)" />
+                                    <!-- Diagnóstico 15% -->
+                                    <circle cx="50" cy="50" r="38" fill="none" stroke="#a855f7" stroke-width="18"
+                                        stroke-dasharray="35.8 238.76" stroke-dashoffset="-203" transform="rotate(-90 50 50)" />
+                                    <text x="50" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#f9fafb">€14.8k</text>
+                                </svg>
+                                <div class="donut-legend">
+                                    <div class="donut-leg-item">
+                                        <span class="donut-leg-dot" style="background:#3b82f6"></span>
+                                        Mecánica compleja
+                                        <span class="donut-leg-val">38% · €5.6k</span>
+                                    </div>
+                                    <div class="donut-leg-item">
+                                        <span class="donut-leg-dot" style="background:#22c55e"></span>
+                                        Mecánica rápida
+                                        <span class="donut-leg-val">27% · €4.0k</span>
+                                    </div>
+                                    <div class="donut-leg-item">
+                                        <span class="donut-leg-dot" style="background:#f59e0b"></span>
+                                        Piezas y recambios
+                                        <span class="donut-leg-val">20% · €3.0k</span>
+                                    </div>
+                                    <div class="donut-leg-item">
+                                        <span class="donut-leg-dot" style="background:#a855f7"></span>
+                                        Diagnosis
+                                        <span class="donut-leg-val">15% · €2.2k</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- CONSTRUCTOR + BAREMO --}}
                     <div class="grid-2">
                         <div>
-                            {{-- BAREMO --}}
                             <div class="card">
                                 <div class="card-title">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
                                     Buscador de baremo
                                 </div>
-                                <input class="search-input" type="text" placeholder="Ej: embrague Seat Ibiza 1.0 TSI...">
+                                <input class="search-input" type="text" placeholder="Ej: embrague Seat Ibiza 1.0 TSI…">
                                 <div class="baremo-row">
                                     <span class="baremo-op">Embrague Seat Ibiza 1.0 TSI (2018–23)</span>
                                     <span class="baremo-tiempo">3.5 h</span>
@@ -454,17 +1049,18 @@
                                     <button class="baremo-add" onclick="addBaremo('M.O. Embrague Seat Ibiza 1.4 (4h)','320.00')">+ Añadir</button>
                                 </div>
                                 <div class="baremo-row">
-                                    <span class="baremo-op">Embrague Seat Ibiza FR 1.5 TSI (2021–)</span>
-                                    <span class="baremo-tiempo">3 h</span>
-                                    <span class="baremo-precio">€240</span>
-                                    <button class="baremo-add" onclick="addBaremo('M.O. Embrague Ibiza FR 1.5 (3h)','240.00')">+ Añadir</button>
+                                    <span class="baremo-op">Frenos delanteros Golf VII (discos+pastillas)</span>
+                                    <span class="baremo-tiempo">1.5 h</span>
+                                    <span class="baremo-precio">€120</span>
+                                    <button class="baremo-add" onclick="addBaremo('M.O. Frenos delanteros Golf VII (1.5h)','120.00')">+ Añadir</button>
                                 </div>
                             </div>
 
-                            {{-- RECAMBISTAS --}}
                             <div class="card card-last">
                                 <div class="card-title">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                    </svg>
                                     Precios en tiempo real · Recambistas
                                 </div>
                                 <div class="pieza-row">
@@ -478,12 +1074,12 @@
                                 </div>
                                 <div class="pieza-row">
                                     <div>
-                                        <div style="font-size:13px;color:#d1d5db">Kit embrague Valeo · Seat Ibiza 1.0</div>
-                                        <div class="pieza-ref">REF: 826 522</div>
+                                        <div style="font-size:13px;color:#d1d5db">Discos freno delant. TRW · Golf VII</div>
+                                        <div class="pieza-ref">REF: TRW DF6116S</div>
                                     </div>
                                     <span class="pieza-stock">En stock</span>
-                                    <span class="pieza-precio">€76.20</span>
-                                    <button class="baremo-add" onclick="addBaremo('Kit embrague Valeo Ibiza 1.0','76.20')">+ Añadir</button>
+                                    <span class="pieza-precio">€95.80</span>
+                                    <button class="baremo-add" onclick="addBaremo('Discos freno TRW Golf VII','95.80')">+ Añadir</button>
                                 </div>
                                 <div class="pieza-row">
                                     <div>
@@ -497,10 +1093,11 @@
                             </div>
                         </div>
 
-                        {{-- CONSTRUCTOR DE PRESUPUESTO --}}
                         <div class="card" style="display:flex;flex-direction:column">
                             <div class="card-title">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
                                 Presupuesto #PRE-0312
                             </div>
                             <div style="font-size:12px;color:#6b7280;margin-bottom:10px">
@@ -518,33 +1115,44 @@
                                 </thead>
                                 <tbody id="presupBody">
                                     <tr>
-                                        <td><input type="text" value="M.O. Embrague (3.5h)"></td>
+                                        <td><input type="text" value="M.O. Frenos delanteros (1.5h)"></td>
                                         <td><input type="number" value="1" style="width:40px" oninput="recalcTotal()"></td>
-                                        <td><input type="number" value="280.00" style="width:65px" oninput="recalcTotal()"></td>
-                                        <td class="linea-total" style="font-weight:600">€280.00</td>
+                                        <td><input type="number" value="120.00" style="width:65px" oninput="recalcTotal()"></td>
+                                        <td class="linea-total" style="font-weight:600">€120.00</td>
                                         <td><button onclick="removeRow(this)" style="background:none;border:none;cursor:pointer;color:#6b7280">✕</button></td>
                                     </tr>
                                     <tr>
-                                        <td><input type="text" value="Kit embrague LuK"></td>
+                                        <td><input type="text" value="Discos freno TRW Golf VII"></td>
                                         <td><input type="number" value="1" style="width:40px" oninput="recalcTotal()"></td>
-                                        <td><input type="number" value="89.40" style="width:65px" oninput="recalcTotal()"></td>
-                                        <td class="linea-total" style="font-weight:600">€89.40</td>
+                                        <td><input type="number" value="95.80" style="width:65px" oninput="recalcTotal()"></td>
+                                        <td class="linea-total" style="font-weight:600">€95.80</td>
+                                        <td><button onclick="removeRow(this)" style="background:none;border:none;cursor:pointer;color:#6b7280">✕</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="text" value="Pastillas freno Brembo"></td>
+                                        <td><input type="number" value="1" style="width:40px" oninput="recalcTotal()"></td>
+                                        <td><input type="number" value="42.60" style="width:65px" oninput="recalcTotal()"></td>
+                                        <td class="linea-total" style="font-weight:600">€42.60</td>
                                         <td><button onclick="removeRow(this)" style="background:none;border:none;cursor:pointer;color:#6b7280">✕</button></td>
                                     </tr>
                                 </tbody>
                             </table>
                             <button class="btn btn-sm" style="align-self:flex-start;margin-bottom:auto" onclick="addBlankRow()">
-                                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
                                 Añadir línea
                             </button>
-                            <div class="presup-total" id="presupTotals">
-                                <span style="color:#9ca3af">Subtotal</span><span id="total-sub">€369.40</span>
-                                <span style="color:#9ca3af">IVA 21%</span><span id="total-iva">€77.57</span>
-                                <span style="color:#9ca3af">Total</span><span class="presup-total-value" id="total-final">€446.97</span>
+                            <div class="presup-total">
+                                <span>Subtotal</span><span id="total-sub">€258.40</span>
+                                <span>IVA 21%</span><span id="total-iva">€54.26</span>
+                                <span>Total</span><span class="presup-total-value" id="total-final">€312.66</span>
                             </div>
                             <div class="firma-section">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                                <div class="firma-text">Enviar para <strong>firma digital</strong> · El cliente acepta desde su móvil y queda registrado legalmente.</div>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                                <div class="firma-text">Enviar para <strong>firma digital</strong> · El cliente acepta desde su móvil.</div>
                                 <div style="display:flex;gap:6px">
                                     <button class="btn btn-sm">📱 WhatsApp</button>
                                     <button class="btn btn-sm">✉️ Email</button>
@@ -554,7 +1162,7 @@
                     </div>
                 </div>
 
-                {{-- ==================== PANEL: FACTURACIÓN ==================== --}}
+                {{-- ========== FACTURACIÓN ========== --}}
                 <div class="panel" id="panel-facturacion">
                     <div class="kpi-row">
                         <div class="kpi">
@@ -576,7 +1184,9 @@
                             <span class="kpi-label">Exportar trimestre</span>
                             <span class="kpi-value" style="font-size:14px;margin-top:4px">
                                 <button class="btn btn-sm">
-                                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
                                     Excel · PDF
                                 </button>
                             </span>
@@ -585,134 +1195,49 @@
 
                     <div class="card card-danger">
                         <div class="card-title" style="color:#f87171">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
                             Control de impagados
                         </div>
                         <div class="factura-row">
-                            <span class="factura-id">#FAC-0301</span>
-                            <span class="factura-cliente">Roberto Núñez · Golf VII</span>
-                            <span class="factura-importe">€890.00</span>
-                            <span class="factura-estado impagado">Vencida 30d</span>
+                            <span class="factura-id">#FAC-0301</span><span class="factura-cliente">Roberto Núñez · Golf VII</span>
+                            <span class="factura-importe">€890.00</span><span class="factura-estado impagado">Vencida 30d</span>
                             <button class="baremo-add" style="margin-left:auto">Recordatorio</button>
                         </div>
                         <div class="factura-row">
-                            <span class="factura-id">#FAC-0298</span>
-                            <span class="factura-cliente">Carmen Vidal · Ibiza</span>
-                            <span class="factura-importe">€245.50</span>
-                            <span class="factura-estado impagado">Vencida 15d</span>
+                            <span class="factura-id">#FAC-0298</span><span class="factura-cliente">Carmen Vidal · Ibiza</span>
+                            <span class="factura-importe">€245.50</span><span class="factura-estado impagado">Vencida 15d</span>
                             <button class="baremo-add" style="margin-left:auto">Recordatorio</button>
                         </div>
                         <div class="factura-row">
-                            <span class="factura-id">#FAC-0294</span>
-                            <span class="factura-cliente">Luis Mora · Focus</span>
-                            <span class="factura-importe">€1.384.20</span>
-                            <span class="factura-estado impagado">Vencida 45d</span>
+                            <span class="factura-id">#FAC-0294</span><span class="factura-cliente">Luis Mora · Focus</span>
+                            <span class="factura-importe">€1.384.20</span><span class="factura-estado impagado">Vencida 45d</span>
                             <button class="baremo-add" style="margin-left:auto">Recordatorio</button>
                         </div>
                     </div>
 
                     <div class="card card-last">
                         <div class="card-title">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                             Historial de facturas
                         </div>
                         <div class="factura-row">
-                            <span class="factura-id">#FAC-0311</span>
-                            <span class="factura-cliente">Ana López · Golf VII</span>
-                            <span class="factura-importe">€446.97</span>
-                            <span class="factura-estado pendiente">Pendiente firma</span>
+                            <span class="factura-id">#FAC-0311</span><span class="factura-cliente">Ana López · Golf VII</span>
+                            <span class="factura-importe">€312.66</span><span class="factura-estado pendiente">Pendiente firma</span>
                             <button class="baremo-add" style="margin-left:auto">Convertir a factura</button>
                         </div>
                         <div class="factura-row">
-                            <span class="factura-id">#FAC-0310</span>
-                            <span class="factura-cliente">Pedro Ruiz · Clio</span>
-                            <span class="factura-importe">€182.30</span>
-                            <span class="factura-estado cobrado">✓ Cobrada</span>
+                            <span class="factura-id">#FAC-0310</span><span class="factura-cliente">Pedro Ruiz · Clio</span>
+                            <span class="factura-importe">€267.29</span><span class="factura-estado cobrado">✓ Cobrada</span>
                             <button class="baremo-add" style="margin-left:auto">Descargar</button>
                         </div>
                         <div class="factura-row">
-                            <span class="factura-id">#FAC-0309</span>
-                            <span class="factura-cliente">Marta Jiménez · Polo</span>
-                            <span class="factura-importe">€635.00</span>
-                            <span class="factura-estado cobrado">✓ Cobrada</span>
+                            <span class="factura-id">#FAC-0309</span><span class="factura-cliente">Marta Jiménez · Polo</span>
+                            <span class="factura-importe">€635.00</span><span class="factura-estado cobrado">✓ Cobrada</span>
                             <button class="baremo-add" style="margin-left:auto">Descargar</button>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- ==================== PANEL: NOTIFICACIONES ==================== --}}
-                <div class="panel" id="panel-notificaciones">
-                    <div class="card card-last">
-                        <div class="card-title">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-                            Centro de alertas activas
-                        </div>
-                        <div class="notif-list">
-                            <div class="notif" id="notif-1">
-                                <div class="notif-icon ok">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-                                </div>
-                                <div class="notif-body">
-                                    <p>Pedido de <strong>filtros de aceite (×12)</strong> recibido en almacén. Avisar a Juan Martínez.</p>
-                                    <span>Hace 5 min · Almacén</span>
-                                </div>
-                                <div class="notif-actions">
-                                    <button class="btn btn-sm">Avisar mecánico</button>
-                                    <button onclick="dismissNotif('notif-1')" style="background:none;border:none;cursor:pointer;color:#6b7280;font-size:16px" title="Descartar">✕</button>
-                                </div>
-                            </div>
-                            <div class="notif" id="notif-2">
-                                <div class="notif-icon warn">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                </div>
-                                <div class="notif-body">
-                                    <p>OR #0247 lleva <strong>2 horas esperando pieza</strong> del recambista. Confirmar plazo.</p>
-                                    <span>Hace 2 h · Mecánica compleja</span>
-                                </div>
-                                <div class="notif-actions">
-                                    <button class="btn btn-sm">Llamar recambista</button>
-                                    <button onclick="dismissNotif('notif-2')" style="background:none;border:none;cursor:pointer;color:#6b7280;font-size:16px">✕</button>
-                                </div>
-                            </div>
-                            <div class="notif" id="notif-3">
-                                <div class="notif-icon promo">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                                </div>
-                                <div class="notif-body">
-                                    <p><strong>Roberto Núñez</strong> no viene hace <strong>14 meses</strong>. Ofrecer revisión + cambio de aceite a precio especial.</p>
-                                    <span>Hoy · Fidelización</span>
-                                </div>
-                                <div class="notif-actions">
-                                    <button class="btn btn-sm">📱 Enviar oferta</button>
-                                    <button onclick="dismissNotif('notif-3')" style="background:none;border:none;cursor:pointer;color:#6b7280;font-size:16px">✕</button>
-                                </div>
-                            </div>
-                            <div class="notif" id="notif-4">
-                                <div class="notif-icon promo">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                                </div>
-                                <div class="notif-body">
-                                    <p><strong>Carmen Vidal</strong> no viene hace <strong>11 meses</strong>. Kilometraje estimado: 9.000 km. Recordar mantenimiento.</p>
-                                    <span>Hoy · Fidelización</span>
-                                </div>
-                                <div class="notif-actions">
-                                    <button class="btn btn-sm">📱 Enviar oferta</button>
-                                    <button onclick="dismissNotif('notif-4')" style="background:none;border:none;cursor:pointer;color:#6b7280;font-size:16px">✕</button>
-                                </div>
-                            </div>
-                            <div class="notif" id="notif-5">
-                                <div class="notif-icon info">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                                </div>
-                                <div class="notif-body">
-                                    <p>Factura <strong>#FAC-0294</strong> lleva <strong>45 días vencida</strong>. Considerar acción de cobro.</p>
-                                    <span>Hoy · Finanzas</span>
-                                </div>
-                                <div class="notif-actions">
-                                    <button class="btn btn-sm" onclick="showPanel('facturacion')">Ver factura</button>
-                                    <button onclick="dismissNotif('notif-5')" style="background:none;border:none;cursor:pointer;color:#6b7280;font-size:16px">✕</button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -723,172 +1248,180 @@
 
 </section>
 
-{{-- MODAL NUEVA CITA --}}
+{{-- MODAL NUEVA SOLICITUD --}}
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)hideModal()">
     <div class="modal-box">
         <div class="modal-header">
-            <span>Nueva cita</span>
+            <span id="modal-title">Nueva solicitud de reparación</span>
             <button onclick="hideModal()">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
         </div>
         <div class="form-grid">
-            <div class="form-field"><label>Matrícula</label><input type="text" placeholder="1234 ABC"></div>
-            <div class="form-field"><label>Teléfono</label><input type="text" placeholder="600 000 000"></div>
+            <div class="form-field"><label>Matrícula</label><input type="text" placeholder="1234 ABC" style="text-transform:uppercase"></div>
+            <div class="form-field"><label>Teléfono cliente</label><input type="text" placeholder="600 000 000"></div>
+            <div class="form-field" style="grid-column:span 2">
+                <label>Descripción del problema</label>
+                <textarea placeholder="Describe la avería o servicio solicitado…" style="min-height:80px"></textarea>
+            </div>
             <div class="form-field">
-                <label>Servicio</label>
+                <label>Urgencia</label>
+                <select>
+                    <option>Normal</option>
+                    <option>Media</option>
+                    <option>Urgente</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>Tipo de servicio</label>
                 <select>
                     <option>Mecánica rápida</option>
                     <option>Mecánica compleja</option>
                     <option>Diagnóstico</option>
                     <option>ITV</option>
+                    <option>Chapa y pintura</option>
                 </select>
             </div>
-            <div class="form-field">
-                <label>Operario</label>
-                <select>
-                    <option>Juan M.</option>
-                    <option>Ana L.</option>
-                    <option>Pablo R.</option>
-                    <option>Sofía G.</option>
-                </select>
-            </div>
-            <div class="form-field"><label>Fecha</label><input type="date"></div>
-            <div class="form-field"><label>Hora</label><input type="time" value="09:00"></div>
         </div>
         <div style="text-align:right;margin-top:14px">
+            <button class="btn" onclick="hideModal()" style="margin-right:8px">Cancelar</button>
             <button class="btn btn-primary" onclick="hideModal()">
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                Confirmar cita
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Crear solicitud
             </button>
         </div>
     </div>
 </div>
 
 <script>
-// ---------- NAVEGACIÓN ----------
-const panelTitles = {
-    agenda: 'Planificador central · Semana 20',
-    expediente: 'Expedientes digitales 360°',
-    presupuestos: 'Constructor de presupuestos',
-    facturacion: 'Facturación y cobro',
-    notificaciones: 'Notificaciones activas'
-};
+    // ---------- NAVEGACIÓN ----------
+    const panelTitles = {
+        solicitudes: 'Paso 1 · Revisar solicitudes',
+        mecanico: 'Paso 2 · Asignar mecánico responsable',
+        programar: 'Paso 3 · Programar fecha de reparación',
+        piezas: 'Paso 4 · Aprobar compra de piezas',
+        pago: 'Paso 5 · Confirmar pago',
+        entrega: 'Paso 6 · Marcar coche como entregado',
+        presupuestos: 'Constructor de presupuestos',
+        facturacion: 'Facturación y cobro',
+    };
 
-function showPanel(id) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const panel = document.getElementById('panel-' + id);
-    if (panel) panel.classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => {
-        if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) {
-            n.classList.add('active');
-        }
-    });
-    document.getElementById('panel-title').textContent = panelTitles[id] || '';
-}
-
-// ---------- TABS EXPEDIENTE ----------
-function switchTab(el, tabId) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    ['tab-or', 'tab-fotos'].forEach(id => {
-        const el2 = document.getElementById(id);
-        if (el2) el2.style.display = id === tabId ? 'block' : 'none';
-    });
-}
-
-// ---------- AUTOFILL MATRÍCULA ----------
-const vehicleDB = {
-    '1234 ABC': { titular: 'Ana López Martínez', tel: '628 441 920', modelo: 'VW Golf VII 1.6 TDI', motor: '1.6 TDI / 2019' },
-    '4521 KMV': { titular: 'Roberto Núñez Pardo', tel: '612 334 779', modelo: 'Seat Ibiza 1.0 TSI', motor: '1.0 TSI / 2021' },
-    '3012 BCA': { titular: 'Carmen Vidal Serra', tel: '677 002 341', modelo: 'Ford Focus 2.0 TDCI', motor: '2.0 TDCI / 2018' },
-    '9087 HJT': { titular: 'Pedro Ruiz Olmedo', tel: '655 112 930', modelo: 'Ford Focus 2.0 TDCI', motor: '2.0 TDCI / 2017' },
-};
-
-function autofillMatricula(val) {
-    const key = val.toUpperCase().trim();
-    const entry = vehicleDB[key];
-    if (entry) {
-        document.getElementById('f-titular').value = entry.titular;
-        document.getElementById('f-tel').value = entry.tel;
-        document.getElementById('f-modelo').value = entry.modelo;
-        document.getElementById('f-motor').value = entry.motor;
+    function showPanel(id) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const panel = document.getElementById('panel-' + id);
+        if (panel) panel.classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => {
+            if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) {
+                n.classList.add('active');
+            }
+        });
+        document.getElementById('panel-title').textContent = panelTitles[id] || '';
     }
-}
 
-// ---------- PRESUPUESTO ----------
-function addBaremo(concepto, precio) {
-    const tbody = document.getElementById('presupBody');
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
+    // ---------- MECÁNICO: SELECCIÓN ----------
+    function selectMec(card) {
+        card.closest('.mec-grid').querySelectorAll('.mec-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+    }
+
+    // ---------- CALENDARIO: SELECCIÓN SLOT ----------
+    let selectedSlot = null;
+
+    function selectSlot(cell) {
+        if (cell.classList.contains('wg-busy')) return;
+        if (selectedSlot) selectedSlot.classList.remove('wg-selected');
+        cell.classList.add('wg-selected');
+        selectedSlot = cell;
+    }
+
+    // ---------- PAGO: MÉTODO ----------
+    function selectPago(btn) {
+        btn.closest('.pago-metodo').querySelectorAll('.pago-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    // ---------- APROBACIÓN PIEZAS (toggle) ----------
+    function toggleApprove(btn) {
+        btn.classList.toggle('on');
+        btn.title = btn.classList.contains('on') ? 'Aprobado' : 'Pendiente aprobación';
+    }
+
+    // ---------- ENTREGA: CHECKLIST ----------
+    function toggleCheck(item) {
+        item.classList.toggle('checked');
+        const box = item.querySelector('.check-box');
+        if (item.classList.contains('checked')) {
+            box.innerHTML = '<svg width="10" height="10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+        } else {
+            box.innerHTML = '';
+        }
+    }
+
+    function marcarEntregado(btn, label) {
+        const card = btn.closest('.card');
+        const statusPill = card.querySelector('.status-pill');
+        if (statusPill) {
+            statusPill.className = 'status-pill s-entregado';
+            statusPill.textContent = '✅ Entregado';
+        }
+        btn.textContent = '✓ Entregado';
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+    }
+
+    // ---------- PRESUPUESTO ----------
+    function addBaremo(concepto, precio) {
+        const tbody = document.getElementById('presupBody');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
         <td><input type="text" value="${concepto}"></td>
         <td><input type="number" value="1" style="width:40px" oninput="recalcTotal()"></td>
         <td><input type="number" value="${precio}" style="width:65px" oninput="recalcTotal()"></td>
         <td class="linea-total" style="font-weight:600">€${parseFloat(precio).toFixed(2)}</td>
         <td><button onclick="removeRow(this)" style="background:none;border:none;cursor:pointer;color:#6b7280">✕</button></td>
     `;
-    tbody.appendChild(tr);
-    recalcTotal();
-}
-
-function addBlankRow() {
-    addBaremo('Concepto', '0.00');
-}
-
-function removeRow(btn) {
-    btn.closest('tr').remove();
-    recalcTotal();
-}
-
-function recalcTotal() {
-    const rows = document.querySelectorAll('#presupBody tr');
-    let sub = 0;
-    rows.forEach(row => {
-        const uds = parseFloat(row.querySelectorAll('input')[1]?.value) || 0;
-        const pu  = parseFloat(row.querySelectorAll('input')[2]?.value) || 0;
-        const linea = uds * pu;
-        const totalCell = row.querySelector('.linea-total');
-        if (totalCell) totalCell.textContent = '€' + linea.toFixed(2);
-        sub += linea;
-    });
-    const iva = sub * 0.21;
-    const total = sub + iva;
-    document.getElementById('total-sub').textContent   = '€' + sub.toFixed(2);
-    document.getElementById('total-iva').textContent   = '€' + iva.toFixed(2);
-    document.getElementById('total-final').textContent = '€' + total.toFixed(2);
-}
-
-// ---------- DRAG & DROP CITAS ----------
-let draggedAppt = null;
-
-function dragAppt(event, el) {
-    draggedAppt = el;
-    el.style.opacity = '0.4';
-}
-
-function dropAppt(event, slot) {
-    event.preventDefault();
-    if (draggedAppt) {
-        slot.appendChild(draggedAppt);
-        draggedAppt.style.opacity = '1';
-        draggedAppt = null;
+        tbody.appendChild(tr);
+        recalcTotal();
     }
-    slot.style.borderColor = '';
-}
 
-// ---------- MODAL ----------
-function showModal() { document.getElementById('modalOverlay').classList.add('open'); }
-function hideModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-
-// ---------- NOTIFICACIONES ----------
-function dismissNotif(id) {
-    const el = document.getElementById(id);
-    if (el) {
-        el.style.transition = 'opacity .3s';
-        el.style.opacity = '0';
-        setTimeout(() => el.remove(), 300);
+    function addBlankRow() {
+        addBaremo('Concepto', '0.00');
     }
-}
+
+    function removeRow(btn) {
+        btn.closest('tr').remove();
+        recalcTotal();
+    }
+
+    function recalcTotal() {
+        const rows = document.querySelectorAll('#presupBody tr');
+        let sub = 0;
+        rows.forEach(row => {
+            const uds = parseFloat(row.querySelectorAll('input')[1]?.value) || 0;
+            const pu = parseFloat(row.querySelectorAll('input')[2]?.value) || 0;
+            const linea = uds * pu;
+            const totalCell = row.querySelector('.linea-total');
+            if (totalCell) totalCell.textContent = '€' + linea.toFixed(2);
+            sub += linea;
+        });
+        const iva = sub * 0.21;
+        document.getElementById('total-sub').textContent = '€' + sub.toFixed(2);
+        document.getElementById('total-iva').textContent = '€' + iva.toFixed(2);
+        document.getElementById('total-final').textContent = '€' + (sub + iva).toFixed(2);
+    }
+
+    // ---------- MODAL ----------
+    function showModal(type) {
+        document.getElementById('modalOverlay').classList.add('open');
+    }
+
+    function hideModal() {
+        document.getElementById('modalOverlay').classList.remove('open');
+    }
 </script>
 @endsection
