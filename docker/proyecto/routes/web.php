@@ -10,9 +10,9 @@ Route::get('/servicios', function () {
     return view('usuario.servicios');
 })-> name ('servicios');
 
-Route::get('/segunda-mano', function () {
-    return view('usuario.segunda-mano');
-})->name ('segunda_mano');
+Route::get('/ocasion', function () {
+    return view('usuario.ocasion');
+})->name('ocasion');
 
 Route::get('/nosotros', function () {
     return view('usuario.nosotros');
@@ -24,8 +24,8 @@ Route::get('/login', function () {
 
 Route::get('/contacto', function () {
     return view('usuario.contacto');
-})-> name ('login');
+})-> name ('contacto');
 
 Route::get('/financiacion', function () {
-    return view('usuario.fiananciacion');
-})-> name ('financiacion');
+    return view('usuario.financiacion');
+})->name('financiacion');
