@@ -9,7 +9,7 @@
     <!-- HERO -->
     <div class="hero">
         <div class="hero-text">
-            <div class="hero-badge"><i class="ti ti-tool" aria-hidden="true"></i> Taller oficial Badajoz</div>
+            <div class="hero-badge"><i class="ti ti-tool" aria-hidden="true"></i> Taller oficial Plasencia</div>
             <h1>Tu vehículo en manos <span>expertas</span></h1>
             <p>Más de 20 años cuidando vehículos en Extremadura. Revisiones, reparaciones y puesta a punto con garantía total y presupuesto sin compromiso.</p>
             <div class="hero-btns">
@@ -79,7 +79,6 @@
                         <h2 class="xray-info-title" id="xray-info-title">Neumáticos</h2>
                         <p class="xray-info-desc" id="xray-info-desc">Trabajamos con todas las marcas del mercado y realizamos cambios de neumáticos de todo tipo de vehículos: turismos, 4x4 y furgonetas. Reparación y alineación.</p>
                     </div>
-                    <a href="#" class="xray-cta-btn">Ver más <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                 </div>
             </div>
 
@@ -187,7 +186,7 @@
     <!-- POR QUÉ ELEGIRNOS -->
     <div class="why">
         <div class="section-label">Nuestra diferencia</div>
-        <div class="section-title">¿Por qué Azul Motor?</div>
+        <div class="section-title">¿Por qué Talleres R&C?</div>
         <div class="section-sub">Transparencia, rapidez y calidad en cada intervención.</div>
         <div class="why-grid">
             <div class="why-item">
@@ -230,7 +229,7 @@
                 <p>Reserva en menos de 2 minutos. Te confirmamos disponibilidad en menos de 1 hora en horario laboral.</p>
                 <div class="cita-detail"><i class="ti ti-clock" aria-hidden="true"></i> Lun–Vie: 8:00 – 19:00</div>
                 <div class="cita-detail"><i class="ti ti-clock" aria-hidden="true"></i> Sáb: 9:00 – 14:00</div>
-                <div class="cita-detail"><i class="ti ti-map-pin" aria-hidden="true"></i> Av. de Huelva, 45 · Badajoz</div>
+                <div class="cita-detail"><i class="ti ti-map-pin" aria-hidden="true"></i> Av. de España, 45 · Plasencia</div>
                 <div class="cita-detail"><i class="ti ti-phone" aria-hidden="true"></i> 924 000 000</div>
             </div>
             <div class="cita-form">

@@ -6,7 +6,7 @@
     <div class="am-contact">
       <span><i class="ti ti-phone"></i>924 000 000</span>
       <div class="am-vdiv"></div>
-      <span class="am-mail-item"><i class="ti ti-mail"></i>info@azulmotor.es</span>
+      <span class="am-mail-item"><i class="ti ti-mail"></i>info@talleresr&c.es</span>
     </div>
     <div class="am-auth">
       <a href="{{ route ('login')}}">Iniciar sesión</a>
@@ -19,15 +19,14 @@
     <div class="am-logo-block">
       <div class="am-logo">
         <div class="am-diamond"><span>A</span></div>
-        <div class="am-brandname">AZUL<em>MOTOR</em></div>
+        <div class="am-brandname">Talleres <em>R&C</em></div>
       </div>
     </div>
     <div class="am-nav-inner">
       <ul class="am-menu">
-        <li><a href="#" class="active">Inicio</a></li>
-        <li><a href="#">Vehículos</a></li>
-        <li><a href="#">Financiación</a></li>
-        <li><a href="#">Taller</a></li>
+        <li><a href="{{ route ('welcome')}}" class="active">Inicio</a></li>
+        <li><a href="{{ route ('segunda_mano')}}">Vehículos</a></li>
+        <li><a href="{{ route ('nosotros')}}">Taller</a></li>
         <li><a href="#">Tasación</a></li>
         <li><a href="#">Contacto</a></li>
       </ul>
@@ -39,10 +38,10 @@
   </div>
 
   <nav class="am-mobile-menu" id="mobileMenu">
-    <a href="#">Inicio</a>
-    <a href="#">Vehículos</a>
+    <a href="{{ route ('welcome')}}">Inicio</a>
+    <a href="{{ route ('segunda_mano')}}">Vehículos</a>
     <a href="#">Financiación</a>
-    <a href="#">Taller</a>
+    <a href="{{ route ('nosotros')}}">Taller</a>
     <a href="#">Tasación</a>
     <a href="#">Contacto</a>
     <a href="#" class="am-cita-mob">Pedir cita</a>
