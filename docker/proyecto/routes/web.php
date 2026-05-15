@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+//------ RUTAS PUBLICAS ------
+
+//USUARIO
 Route::get('/', function () {
     return view('usuario.welcome');
 })-> name ('welcome');
@@ -18,14 +21,42 @@ Route::get('/nosotros', function () {
     return view('usuario.nosotros');
 })-> name ('nosotros');
 
-Route::get('/login', function () {
-    return view('login');
-})-> name ('login');
+Route::get('/financiacion', function () {
+    return view('usuario.financiacion');
+})->name('financiacion');
 
 Route::get('/contacto', function () {
     return view('usuario.contacto');
 })-> name ('contacto');
 
-Route::get('/financiacion', function () {
-    return view('usuario.financiacion');
-})->name('financiacion');
+Route::get('login', function () {
+    return view('login');
+})->name("login");
+
+ Route::get('/administrativo', function () {
+    return view('administrativo.admin');
+});
+
+
+//------ RUTAS PRIVADAS ------
+Route::middleware('auth:sanctum')->group(function () {
+
+    //MECANICO
+    Route::middleware('role:mecanico')->group(function () {
+
+        // Route::get('/mecanico', function () {
+        //     return view('login');
+        // })->name("login");
+
+    });
+
+    //ADMINISTRADOR
+    Route::middleware('role:administrador')->group(function () {
+
+        // Route::get('/administrativo', function () {
+        //     return view('administrativo.admin');
+        // });
+
+    });
+
+});
