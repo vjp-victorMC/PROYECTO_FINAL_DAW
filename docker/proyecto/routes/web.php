@@ -33,9 +33,9 @@ Route::get('login', function () {
     return view('login');
 })->name("login");
 
- Route::get('/administrativo', function () {
-    return view('administrativo.admin');
-});
+// Route::get('/administrativo', function () {
+//     return view('administrativo.admin');
+// });
 
 
 //------ RUTAS PRIVADAS ------
@@ -51,11 +51,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     //ADMINISTRADOR
-    Route::middleware('role:administrador')->group(function () {
+    Route::middleware('role:admin')->group(function () {
 
-        // Route::get('/administrativo', function () {
-        //     return view('administrativo.admin');
-        // });
+        Route::get('/administrativo', function () {
+            return view('administrativo.admin');
+        });
 
     });
 

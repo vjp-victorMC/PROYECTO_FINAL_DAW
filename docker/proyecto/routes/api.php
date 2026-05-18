@@ -27,6 +27,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Solo administradores
-    Route::middleware('role:administrador')->group(function () {
+    Route::middleware('role:admin')->group(function () {
     });
 });
