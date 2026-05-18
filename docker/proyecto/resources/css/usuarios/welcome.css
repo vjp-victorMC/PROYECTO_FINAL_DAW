@@ -754,3 +754,417 @@ body {
     padding: 40px 20px;
   }
 }
+
+/* ==========================================
+   STOCK DE OCASIÓN
+   ========================================== */
+.stock-section {
+  padding: 100px 5%;
+  background: #fff;
+}
+
+.stock-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+}
+
+.stock-title-group {
+  flex: 1;
+}
+
+.stock-link-all {
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.stock-link-all:hover {
+  color: var(--primary-dark);
+  transform: translateX(5px);
+}
+
+.stock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.stock-card {
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid #E5E5E7;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.stock-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
+}
+
+.stock-card-top {
+  background: #F4F7FB;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: var(--transition);
+}
+
+.stock-card:hover .stock-card-top {
+  background: #EBF2FC;
+}
+
+.stock-card-top svg {
+  transition: transform 0.6s var(--transition);
+}
+
+.stock-card:hover .stock-card-top svg {
+  transform: scale(1.08);
+}
+
+.stock-card-bottom {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.stock-brand {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+
+.stock-model {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 8px;
+}
+
+.stock-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.stock-divider {
+  height: 1px;
+  background: #E5E5E7;
+  margin-bottom: 24px;
+}
+
+.stock-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.stock-price {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.stock-btn-detail {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--secondary);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.stock-btn-detail:hover {
+  color: var(--primary);
+  transform: translateX(4px);
+}
+
+
+/* ==========================================
+   FINANCIACIÓN A MEDIDA
+   ========================================== */
+.finance-section {
+  padding: 100px 5%;
+  background: #fbfbfd; /* ultra soft white/gray */
+  border-top: 1px solid #E5E5E7;
+  border-bottom: 1px solid #E5E5E7;
+}
+
+.finance-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 60px;
+}
+
+@media(min-width: 1024px) {
+  .finance-container {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+  }
+}
+
+.finance-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.finance-title {
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 800;
+  color: var(--secondary);
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -2px;
+}
+
+.finance-title span {
+  color: var(--primary);
+}
+
+.finance-desc {
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 36px;
+  max-width: 550px;
+}
+
+.finance-bullets {
+  list-style: none;
+  display: grid;
+  gap: 18px;
+}
+
+.finance-bullets li {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--secondary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.finance-bullet-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.15);
+}
+
+/* SIMULATOR CARD */
+.sim-card {
+  background: #fff;
+  border-radius: 30px;
+  padding: 40px;
+  border: 1px solid #E5E5E7;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  transition: var(--transition);
+}
+
+.sim-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.sim-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sim-icon-box {
+  width: 48px;
+  height: 48px;
+  background: var(--primary);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.sim-icon-box svg {
+  width: 24px;
+  height: 24px;
+}
+
+.sim-header-text h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.sim-header-text p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.sim-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.sim-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sim-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sim-slider-labels label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+.sim-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Custom range inputs style */
+.sim-slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 100px;
+  background: #E5E5E7;
+  outline: none;
+  transition: background 0.3s;
+}
+
+.sim-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  border: 4px solid #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.sim-slider-input::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: var(--primary-dark);
+}
+
+/* Mozilla Firefox support */
+.sim-slider-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  border: 4px solid #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.sim-slider-input::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  background: var(--primary-dark);
+}
+
+.sim-result-box {
+  background: #F0F6FF;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid rgba(0, 102, 255, 0.15);
+}
+
+.sim-result-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+}
+
+.sim-result-value {
+  font-size: 40px;
+  font-weight: 900;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+}
+
+.sim-result-note {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.sim-btn-submit {
+  width: 100%;
+  justify-content: center;
+  padding: 18px;
+  font-size: 15px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .stock-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .stock-link-all {
+    margin-bottom: 0;
+  }
+
+  .sim-card {
+    padding: 30px 20px;
+  }
+}

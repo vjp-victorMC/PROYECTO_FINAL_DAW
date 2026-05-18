@@ -26,7 +26,6 @@
       <ul class="am-menu">
         <li><a href="{{ route ('welcome')}}" class="{{ request()->routeIs('welcome') ? 'active' : '' }}">Inicio</a></li>
         <li><a href="{{ route ('ocasion')}}" class="{{ request()->routeIs('ocasion') ? 'active' : '' }}">Vehículos</a></li>
-        <li><a href="{{ route ('financiacion')}}" class="{{ request()->routeIs('financiacion') ? 'active' : '' }}">Financiación</a></li>
         <li><a href="{{ route ('nosotros')}}" class="{{ request()->routeIs('nosotros') ? 'active' : '' }}">Taller</a></li>
         <li><a href="{{ route ('contacto')}}" class="{{ request()->routeIs('contacto') ? 'active' : '' }}">Contacto</a></li>
       </ul>
