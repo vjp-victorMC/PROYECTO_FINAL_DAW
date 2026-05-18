@@ -2,94 +2,11 @@
 @vite(['resources/css/admin/admin.css'])
 
 @section('content')
-<style>
-    
-</style>
+@include('components.header-admin')
 
-<section class="py-8 container mx-auto px-6">
+<section class="py-8 px-6">
 
-    <div class="dash">
-
-        {{-- SIDEBAR --}}
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <h2>Rápidos y Curiosos</h2>
-                <p>Panel administrativo</p>
-            </div>
-
-            <span class="nav-section">Flujo de reparación</span>
-
-            <a href="#" class="nav-item active" onclick="showPanel('solicitudes'); return false;">
-                <span class="nav-step">1</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 8h6m-6 4h4" />
-                </svg>
-                Revisar solicitud
-                <span class="nav-badge">4</span>
-            </a>
-
-            <a href="#" class="nav-item" onclick="showPanel('mecanico'); return false;">
-                <span class="nav-step">2</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                Asignar mecánico
-                <span class="nav-badge nav-badge-warn">2</span>
-            </a>
-
-            <a href="#" class="nav-item" onclick="showPanel('programar'); return false;">
-                <span class="nav-step">3</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Programar fecha
-            </a>
-
-            <a href="#" class="nav-item" onclick="showPanel('piezas'); return false;">
-                <span class="nav-step">4</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-                Aprobar piezas
-                <span class="nav-badge">3</span>
-            </a>
-
-            <a href="#" class="nav-item" onclick="showPanel('pago'); return false;">
-                <span class="nav-step">5</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                Confirmar pago
-                <span class="nav-badge nav-badge-warn">1</span>
-            </a>
-
-            <a href="#" class="nav-item" onclick="showPanel('entrega'); return false;">
-                <span class="nav-step">6</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Marcar entregado
-                <span class="nav-badge nav-badge-ok">2</span>
-            </a>
-
-            <span class="nav-section">Gestión</span>
-
-            <a href="#" class="nav-item" onclick="showPanel('presupuestos'); return false;">
-                <span class="nav-step" style="border-radius:4px">€</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-                Presupuestos
-            </a>
-
-            <a href="#" class="nav-item" onclick="showPanel('facturacion'); return false;">
-                <span class="nav-step" style="border-radius:4px">#</span>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                Facturación
-            </a>
-        </aside>
+    <div class="dash" style="grid-template-columns:1fr;">
 
         {{-- MAIN --}}
         <div class="main">
