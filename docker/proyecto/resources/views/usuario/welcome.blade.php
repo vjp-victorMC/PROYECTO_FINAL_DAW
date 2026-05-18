@@ -173,6 +173,167 @@
         </div>
     </section>
 
+    <!-- STOCK DE OCASIÓN -->
+    <section class="stock-section animate-up">
+        <div class="stock-container">
+            <div class="stock-header">
+                <div class="stock-title-group">
+                    <span class="section-label">Vehículos Seleccionados</span>
+                    <h2 class="stock-title">Stock de Ocasión</h2>
+                </div>
+                <a href="{{ route('ocasion') }}" class="stock-link-all">Ver todos <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+            </div>
+
+            <div class="stock-grid">
+                <!-- Card 1 -->
+                <div class="stock-card animate-up">
+                    <div class="stock-card-top">
+                        <svg viewBox="0 0 100 50" width="120" height="60" fill="none" stroke="#A9B8CE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85;">
+                            <path d="M15 30 H25 C28 20, 36 12, 50 12 H65 C73 12, 80 18, 83 25 L86 30 H90 C92 30, 94 32, 94 34 V38 C94 40, 92 41, 90 41 H84" />
+                            <path d="M16 41 H10 C8 41, 6 40, 6 38 V34 C6 32, 8 30, 10 30 H15" />
+                            <circle cx="25" cy="41" r="5.5" stroke="#A9B8CE" stroke-width="2.5" fill="#F0F4FA" />
+                            <circle cx="75" cy="41" r="5.5" stroke="#A9B8CE" stroke-width="2.5" fill="#F0F4FA" />
+                            <path d="M31 41 H69" />
+                            <path d="M48 18 H63 C68 18, 73 22, 75 27 L76 30 H48 V18 Z" fill="#A9B8CE" fill-opacity="0.15" stroke="#A9B8CE" stroke-width="1.8" />
+                            <path d="M33 30 H44 V18 H38 C34 18, 30 22, 29 27 Z" fill="#A9B8CE" fill-opacity="0.15" stroke="#A9B8CE" stroke-width="1.8" />
+                        </svg>
+                    </div>
+                    <div class="stock-card-bottom">
+                        <span class="stock-brand">Seat</span>
+                        <h3 class="stock-model">León FR</h3>
+                        <div class="stock-meta">2021 <span style="opacity:0.5">•</span> 32.000 km</div>
+                        <div class="stock-divider"></div>
+                        <div class="stock-footer">
+                            <span class="stock-price">18.900 €</span>
+                            <a href="{{ route('financiacion') }}?car=Seat%20León%20FR&price=18900&brand=Seat&year=2021&km=32.000" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="stock-card animate-up delay-1">
+                    <div class="stock-card-top">
+                        <svg viewBox="0 0 100 50" width="120" height="60" fill="none" stroke="#A9B8CE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85;">
+                            <path d="M15 30 H25 C28 20, 36 12, 50 12 H65 C73 12, 80 18, 83 25 L86 30 H90 C92 30, 94 32, 94 34 V38 C94 40, 92 41, 90 41 H84" />
+                            <path d="M16 41 H10 C8 41, 6 40, 6 38 V34 C6 32, 8 30, 10 30 H15" />
+                            <circle cx="25" cy="41" r="5.5" stroke="#A9B8CE" stroke-width="2.5" fill="#F0F4FA" />
+                            <circle cx="75" cy="41" r="5.5" stroke="#A9B8CE" stroke-width="2.5" fill="#F0F4FA" />
+                            <path d="M31 41 H69" />
+                            <path d="M48 18 H63 C68 18, 73 22, 75 27 L76 30 H48 V18 Z" fill="#A9B8CE" fill-opacity="0.15" stroke="#A9B8CE" stroke-width="1.8" />
+                            <path d="M33 30 H44 V18 H38 C34 18, 30 22, 29 27 Z" fill="#A9B8CE" fill-opacity="0.15" stroke="#A9B8CE" stroke-width="1.8" />
+                        </svg>
+                    </div>
+                    <div class="stock-card-bottom">
+                        <span class="stock-brand">Volkswagen</span>
+                        <h3 class="stock-model">Golf 1.5 TSI</h3>
+                        <div class="stock-meta">2022 <span style="opacity:0.5">•</span> 28.500 km</div>
+                        <div class="stock-divider"></div>
+                        <div class="stock-footer">
+                            <span class="stock-price">21.500 €</span>
+                            <a href="{{ route('financiacion') }}?car=Volkswagen%20Golf%201.5%20TSI&price=21500&brand=Volkswagen&year=2022&km=28.500" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="stock-card animate-up delay-2">
+                    <div class="stock-card-top">
+                        <svg viewBox="0 0 100 50" width="120" height="60" fill="none" stroke="#A9B8CE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85;">
+                            <path d="M15 30 H25 C28 20, 36 12, 50 12 H65 C73 12, 80 18, 83 25 L86 30 H90 C92 30, 94 32, 94 34 V38 C94 40, 92 41, 90 41 H84" />
+                            <path d="M16 41 H10 C8 41, 6 40, 6 38 V34 C6 32, 8 30, 10 30 H15" />
+                            <circle cx="25" cy="41" r="5.5" stroke="#A9B8CE" stroke-width="2.5" fill="#F0F4FA" />
+                            <circle cx="75" cy="41" r="5.5" stroke="#A9B8CE" stroke-width="2.5" fill="#F0F4FA" />
+                            <path d="M31 41 H69" />
+                            <path d="M48 18 H63 C68 18, 73 22, 75 27 L76 30 H48 V18 Z" fill="#A9B8CE" fill-opacity="0.15" stroke="#A9B8CE" stroke-width="1.8" />
+                            <path d="M33 30 H44 V18 H38 C34 18, 30 22, 29 27 Z" fill="#A9B8CE" fill-opacity="0.15" stroke="#A9B8CE" stroke-width="1.8" />
+                        </svg>
+                    </div>
+                    <div class="stock-card-bottom">
+                        <span class="stock-brand">Audi</span>
+                        <h3 class="stock-model">A3 Sportback</h3>
+                        <div class="stock-meta">2020 <span style="opacity:0.5">•</span> 41.000 km</div>
+                        <div class="stock-divider"></div>
+                        <div class="stock-footer">
+                            <span class="stock-price">24.900 €</span>
+                            <a href="{{ route('financiacion') }}?car=Audi%20A3%20Sportback&price=24900&brand=Audi&year=2020&km=41.000" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINANCIACIÓN A MEDIDA -->
+    <section class="finance-section animate-up">
+        <div class="finance-container">
+            <!-- Left Info column -->
+            <div class="finance-info">
+                <span class="section-label">Financiación a Medida</span>
+                <h2 class="finance-title">Conduce hoy,<br>paga <span>a tu ritmo</span></h2>
+                <p class="finance-desc">Te ayudamos a financiar tu vehículo con las mejores condiciones del mercado. Cuotas adaptadas a tu economía, sin sorpresas.</p>
+                <ul class="finance-bullets">
+                    <li><span class="finance-bullet-dot"></span>Respuesta en menos de 24 horas</li>
+                    <li><span class="finance-bullet-dot"></span>Sin comisiones de apertura</li>
+                    <li><span class="finance-bullet-dot"></span>Cuotas desde 99 €/mes</li>
+                    <li><span class="finance-bullet-dot"></span>Hasta 96 meses de plazo</li>
+                </ul>
+            </div>
+
+            <!-- Right Calculator Card -->
+            <div class="sim-card animate-up delay-1">
+                <div class="sim-header">
+                    <div class="sim-icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+                            <line x1="9" y1="22" x2="9" y2="16" />
+                            <line x1="8" y1="6" x2="16" y2="6" />
+                            <line x1="16" y1="16" x2="16" y2="22" />
+                            <line x1="12" y1="16" x2="12" y2="22" />
+                            <circle cx="9" cy="11" r="1" />
+                            <circle cx="15" cy="11" r="1" />
+                            <circle cx="12" cy="11" r="1" />
+                        </svg>
+                    </div>
+                    <div class="sim-header-text">
+                        <h3>Simulador de cuota</h3>
+                        <p>Calcula tu financiación al instante</p>
+                    </div>
+                </div>
+
+                <div class="sim-sliders">
+                    <!-- Importe Slider -->
+                    <div class="sim-slider-group">
+                        <div class="sim-slider-labels">
+                            <label for="range-importe">Importe</label>
+                            <span class="sim-value" id="val-importe">15.000 €</span>
+                        </div>
+                        <input type="range" class="sim-slider-input" id="range-importe" min="3000" max="50000" step="500" value="15000">
+                    </div>
+
+                    <!-- Plazo Slider -->
+                    <div class="sim-slider-group">
+                        <div class="sim-slider-labels">
+                            <label for="range-plazo">Plazo</label>
+                            <span class="sim-value" id="val-plazo">60 meses</span>
+                        </div>
+                        <input type="range" class="sim-slider-input" id="range-plazo" min="12" max="96" step="12" value="60">
+                    </div>
+                </div>
+
+                <!-- Shaded Result Box -->
+                <div class="sim-result-box">
+                    <div class="sim-result-label">TU CUOTA MENSUAL</div>
+                    <div class="sim-result-value" id="val-cuota">285 €</div>
+                    <div class="sim-result-note">TAE 7,9% · Cuota orientativa</div>
+                </div>
+
+                <a href="{{ route('financiacion') }}" class="btn-primary sim-btn-submit" id="btn-solicitar">
+                    <i class="ti ti-calculator" aria-hidden="true"></i> Solicitar Financiación
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- POR QUÉ ELEGIRNOS -->
     <section class="why">
         <div class="animate-up">
@@ -334,6 +495,44 @@
         document.querySelectorAll('.xray-hotspot').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.service === id);
         });
+    }
+
+    // Finance Calculator
+    const rangeImporte = document.getElementById('range-importe');
+    const rangePlazo = document.getElementById('range-plazo');
+    const valImporte = document.getElementById('val-importe');
+    const valPlazo = document.getElementById('val-plazo');
+    const valCuota = document.getElementById('val-cuota');
+
+    function calculateFinance() {
+        if (!rangeImporte || !rangePlazo) return;
+        const amount = parseFloat(rangeImporte.value);
+        const months = parseInt(rangePlazo.value);
+        
+        // Format displayed inputs
+        valImporte.textContent = amount.toLocaleString('es-ES') + ' €';
+        valPlazo.textContent = `${months} meses`;
+
+        // Standard Amortization Formula (TIN ~5.4% yields ~285€ for 15000€ at 60 months)
+        const annualRate = 0.054;
+        const monthlyRate = annualRate / 12;
+        
+        const monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+        
+        valCuota.textContent = `${Math.round(monthlyPayment)} €`;
+
+        // Actualizar el enlace dinámicamente
+        const btnSolicitar = document.getElementById('btn-solicitar');
+        if (btnSolicitar) {
+            btnSolicitar.href = `{{ route('financiacion') }}?price=${amount}&months=${months}`;
+        }
+    }
+
+    if (rangeImporte && rangePlazo) {
+        rangeImporte.addEventListener('input', calculateFinance);
+        rangePlazo.addEventListener('input', calculateFinance);
+        // Initial run
+        calculateFinance();
     }
 
     // Scroll Reveal Intersection Observer

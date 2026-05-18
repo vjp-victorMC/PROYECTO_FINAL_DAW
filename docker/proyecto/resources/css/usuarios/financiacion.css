@@ -1,0 +1,542 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.pg-financiacion {
+  font-family: 'Inter', Arial, sans-serif;
+  background: #f4f6f9;
+}
+
+/* ===================== SHARED TOKENS ===================== */
+.section-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #0056b3;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: #0c141e;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.section-sub {
+  font-size: 13.5px;
+  color: #666;
+  line-height: 1.65;
+  margin-bottom: 36px;
+}
+
+.btn-primary {
+  background: #0056b3;
+  color: #fff;
+  padding: 13px 26px;
+  border: none;
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.22s ease, transform 0.18s ease, box-shadow 0.22s ease;
+}
+
+.btn-primary:hover {
+  background: #003d8a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 86, 179, 0.35);
+}
+
+/* ===================== HERO ===================== */
+.financiacion-hero {
+  background: linear-gradient(135deg, #001e4d 0%, #002e6d 60%, #003d8a 100%);
+  padding: 64px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.financiacion-hero::before {
+  content: '';
+  position: absolute;
+  right: -80px;
+  top: -80px;
+  width: 400px;
+  height: 400px;
+  border: 70px solid rgba(74, 158, 255, 0.07);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.financiacion-hero::after {
+  content: '';
+  position: absolute;
+  left: -40px;
+  bottom: -60px;
+  width: 260px;
+  height: 260px;
+  border: 50px solid rgba(74, 158, 255, 0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.financiacion-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.financiacion-hero-text {
+  max-width: 680px;
+  animation: fadeUp 0.7s ease both;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(74, 158, 255, 0.15);
+  border: 1px solid rgba(74, 158, 255, 0.35);
+  color: #4a9eff;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.financiacion-hero-text h1 {
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.12;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+.financiacion-hero-text h1 span {
+  color: #4a9eff;
+}
+
+.financiacion-hero-text > p {
+  color: #a0c4ff;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+/* ===================== MAIN GRID ===================== */
+.financiacion-main {
+  padding: 72px 24px;
+  background: #fff;
+}
+
+.financiacion-main-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 48px;
+  align-items: start;
+}
+
+@media (max-width: 991px) {
+  .financiacion-main-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Columna Formulario ---- */
+.financiacion-form-block {
+  animation: fadeUp 0.7s 0.1s ease both;
+}
+
+/* Selected Car Card Style */
+.selected-car-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #f4f7fb;
+  border: 1.5px solid #0056b3;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 86, 179, 0.05);
+}
+
+.selected-car-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: #e8f0fb;
+  color: #0056b3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.selected-car-details {
+  flex-grow: 1;
+}
+
+.selected-car-brand {
+  font-size: 10px;
+  font-weight: 800;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.selected-car-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0c141e;
+  margin-bottom: 2px;
+}
+
+.selected-car-meta {
+  font-size: 12px;
+  color: #666;
+}
+
+.selected-car-price-box {
+  text-align: right;
+}
+
+.selected-car-price-label {
+  font-size: 10px;
+  color: #888;
+  display: block;
+}
+
+.selected-car-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0056b3;
+}
+
+/* No Car Selected Card */
+.no-car-selected-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fafbfc;
+  border: 1.5px solid #dde2ea;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.no-car-icon {
+  font-size: 24px;
+  color: #0056b3;
+  flex-shrink: 0;
+}
+
+.no-car-selected-card p {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.no-car-selected-card a {
+  color: #0056b3;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* Form Styles */
+.financiacion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 560px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #dde2ea;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Inter', Arial, sans-serif;
+  color: #333;
+  background: #fafbfc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.form-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: #0056b3;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.form-check a {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.btn-submit {
+  width: 100%;
+  justify-content: center;
+  padding: 14px;
+  font-size: 13px;
+}
+
+/* ---- Columna Simulador (Sidebar) ---- */
+.financiacion-sidebar {
+  animation: fadeUp 0.7s 0.2s ease both;
+}
+
+.sim-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  border: 1.5px solid #e0e4ec;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sim-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sim-icon-box {
+  width: 42px;
+  height: 42px;
+  background: #0056b3;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.sim-icon-box svg {
+  width: 22px;
+  height: 22px;
+}
+
+.sim-header-text h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0c141e;
+}
+
+.sim-header-text p {
+  font-size: 12px;
+  color: #666;
+}
+
+.sim-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sim-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sim-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sim-slider-labels label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #333;
+}
+
+.sim-value {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0056b3;
+}
+
+.sim-slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 10px;
+  background: #e0e4ec;
+  outline: none;
+}
+
+.sim-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0056b3;
+  cursor: pointer;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.15s;
+}
+
+.sim-slider-input::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.sim-slider-input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0056b3;
+  cursor: pointer;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.15s;
+}
+
+.sim-slider-input::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+
+.sim-result-box {
+  background: #f0f5fc;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(0, 86, 179, 0.1);
+}
+
+.sim-result-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #0056b3;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.sim-result-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: #003d8a;
+  margin-bottom: 2px;
+}
+
+.sim-result-note {
+  font-size: 11px;
+  color: #666;
+}
+
+.financiacion-advantages {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1px solid #e8eaf0;
+}
+
+.adv-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.adv-item i {
+  font-size: 18px;
+  color: #0056b3;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.adv-item strong {
+  font-size: 12.5px;
+  color: #0c141e;
+  display: block;
+}
+
+.adv-item p {
+  font-size: 11.5px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* ===================== ANIMACIONES ===================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+  .financiacion-hero-text h1 { font-size: 26px; }
+  .financiacion-main { padding: 48px 16px; }
+  .section-title { font-size: 20px; }
+  .sim-card { padding: 20px; }
+}
