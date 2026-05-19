@@ -30,6 +30,18 @@
 
             <div class="content">
 
+                {{-- PANEL GESTIÓN: SOLO BOTONES --}}
+                <div class="panel" id="panel-gestion" style="text-align:center; padding:60px 0;">
+                    <button class="btn btn-primary" style="font-size:1.2em;padding:18px 40px;margin:16px"
+                        onclick="showPanel('presupuestos')">
+                        📄 Presupuestos
+                    </button>
+                    <button class="btn btn-primary" style="font-size:1.2em;padding:18px 40px;margin:16px"
+                        onclick="showPanel('facturacion')">
+                        🧾 Facturación
+                    </button>
+                </div>
+
                 {{-- ========== PASO 1: REVISAR SOLICITUD ========== --}}
                 <div class="panel active" id="panel-solicitudes">
 
@@ -304,8 +316,6 @@
                         <div class="card-title">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            Selecciona mecánico responsable
                         </div>
                         <div class="mec-grid">
                             <div class="mec-card selected" onclick="selectMec(this)">
@@ -624,10 +634,7 @@
                             <div class="card-title">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
-                                </svg>
-                                OR #0245 · Renault Clio · Pedro Ruiz
                             </div>
-
                             <div class="pago-resumen">
                                 <div class="pago-line"><span>M.O. Diagnosis ABS (2 h)</span><span>€160.00</span></div>
                                 <div class="pago-line"><span>Sensor ABS delantero izq.</span><span>€48.90</span></div>
@@ -659,8 +666,6 @@
                             <div class="card-title">
                                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                </svg>
-                                Impagados activos
                             </div>
                             <div class="factura-row">
                                 <span class="factura-id">#FAC-0301</span>
@@ -1114,8 +1119,6 @@
                         <div class="card-title" style="color:#f87171">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                            Control de impagados
                         </div>
                         <div class="factura-row">
                             <span class="factura-id">#FAC-0301</span><span class="factura-cliente">Roberto Núñez · Golf VII</span>
@@ -1138,23 +1141,22 @@
                         <div class="card-title">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Historial de facturas
-                        </div>
-                        <div class="factura-row">
-                            <span class="factura-id">#FAC-0311</span><span class="factura-cliente">Ana López · Golf VII</span>
-                            <span class="factura-importe">€312.66</span><span class="factura-estado pendiente">Pendiente firma</span>
-                            <button class="baremo-add" style="margin-left:auto">Convertir a factura</button>
-                        </div>
-                        <div class="factura-row">
-                            <span class="factura-id">#FAC-0310</span><span class="factura-cliente">Pedro Ruiz · Clio</span>
-                            <span class="factura-importe">€267.29</span><span class="factura-estado cobrado">✓ Cobrada</span>
-                            <button class="baremo-add" style="margin-left:auto">Descargar</button>
-                        </div>
-                        <div class="factura-row">
-                            <span class="factura-id">#FAC-0309</span><span class="factura-cliente">Marta Jiménez · Polo</span>
-                            <span class="factura-importe">€635.00</span><span class="factura-estado cobrado">✓ Cobrada</span>
-                            <button class="baremo-add" style="margin-left:auto">Descargar</button>
+                            </div>
+                            <div class="factura-row">
+                                <span class="factura-id">#FAC-0311</span><span class="factura-cliente">Ana López · Golf VII</span>
+                                <span class="factura-importe">€312.66</span><span class="factura-estado pendiente">Pendiente firma</span>
+                                <button class="baremo-add" style="margin-left:auto">Convertir a factura</button>
+                            </div>
+                            <div class="factura-row">
+                                <span class="factura-id">#FAC-0310</span><span class="factura-cliente">Pedro Ruiz · Clio</span>
+                                <span class="factura-importe">€267.29</span><span class="factura-estado cobrado">✓ Cobrada</span>
+                                <button class="baremo-add" style="margin-left:auto">Descargar</button>
+                            </div>
+                            <div class="factura-row">
+                                <span class="factura-id">#FAC-0309</span><span class="factura-cliente">Marta Jiménez · Polo</span>
+                                <span class="factura-importe">€635.00</span><span class="factura-estado cobrado">✓ Cobrada</span>
+                                <button class="baremo-add" style="margin-left:auto">Descargar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1225,18 +1227,13 @@
         entrega: 'Paso 6 · Marcar coche como entregado',
         presupuestos: 'Constructor de presupuestos',
         facturacion: 'Facturación y cobro',
+        gestion: 'Gestión',
     };
 
     function showPanel(id) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         const panel = document.getElementById('panel-' + id);
         if (panel) panel.classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => {
-            if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) {
-                n.classList.add('active');
-            }
-        });
         document.getElementById('panel-title').textContent = panelTitles[id] || '';
     }
 

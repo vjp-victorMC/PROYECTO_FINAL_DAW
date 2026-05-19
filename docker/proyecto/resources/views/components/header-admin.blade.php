@@ -72,12 +72,8 @@
                 <li><a href="#" onclick="adminNav(this,'piezas');return false;">Aprobar piezas</a></li>
                 <li><a href="#" onclick="adminNav(this,'pago');return false;">Confirmar pago</a></li>
                 <li><a href="#" onclick="adminNav(this,'entrega');return false;">Marcar entregado</a></li>
-                <li class="am-dropdown">
-                    <a href="#" onclick="return false;">Gestión</a>
-                    <div class="am-dropdown-menu">
-                        <a href="#" onclick="adminNav(this,'presupuestos');return false;">Presupuestos</a>
-                        <a href="#" onclick="adminNav(this,'facturacion');return false;">Facturación</a>
-                    </div>
+                <li>
+                    <a href="#" onclick="adminNav(this,'gestion');return false;">Gestión</a>
                 </li>
             </ul>
             <button class="am-hamburger" id="ham" aria-label="Abrir menú">
@@ -94,8 +90,7 @@
         <a href="#" onclick="adminNav(this,'piezas');return false;">Aprobar piezas</a>
         <a href="#" onclick="adminNav(this,'pago');return false;">Confirmar pago</a>
         <a href="#" onclick="adminNav(this,'entrega');return false;">Marcar entregado</a>
-        <a href="#" onclick="adminNav(this,'presupuestos');return false;">Presupuestos</a>
-        <a href="#" onclick="adminNav(this,'facturacion');return false;">Facturación</a>
+        <a href="#" onclick="adminNav(this,'gestion');return false;">Gestión</a>
     </nav>
 </div>
 
