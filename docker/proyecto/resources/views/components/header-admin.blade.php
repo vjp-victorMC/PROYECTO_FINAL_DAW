@@ -1,49 +1,5 @@
 @vite(['resources/css/components/topbar.css'])
-
-<style>
-    /* Dropdown Gestión */
-    .am-dropdown {
-        position: relative;
-    }
-
-    .am-dropdown>a::after {
-        content: ' ▾';
-        font-size: 10px;
-    }
-
-    .am-dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 100%;
-        background: #0f172a;
-        border: 1px solid #1f2937;
-        border-radius: 8px;
-        min-width: 160px;
-        z-index: 200;
-        overflow: hidden;
-        margin-left: 8px; /* separación opcional */
-    }
-
-    .am-dropdown:hover .am-dropdown-menu,
-    .am-dropdown-menu:hover {
-        display: block;
-    }
-
-    .am-dropdown-menu a {
-        display: block;
-        padding: 9px 16px;
-        font-size: 13px;
-        color: #9ca3af;
-        text-decoration: none;
-        white-space: nowrap;
-    }
-
-    .am-dropdown-menu a:hover {
-        background: #1f2937;
-        color: #f9fafb;
-    }
-</style>
+@vite(['resources/css/admin/header-admin.css'])
 
 <div class="am-wrap">
     <div class="am-topbar">
@@ -53,6 +9,15 @@
             <span class="am-mail-item"><i class="ti ti-mail"></i>info@azulmotor.es</span>
         </div>
         <div class="am-auth">
+            <span class="am-welcome">
+                Bienvenido,
+                @auth
+                {{ Auth::user()->name ?? 'Administrador' }}
+                @else
+                Administrador
+                @endauth
+            </span>
+            <span class="am-auth-sep">|</span>
             <a href="#">Cerrar sesión</a>
         </div>
     </div>
