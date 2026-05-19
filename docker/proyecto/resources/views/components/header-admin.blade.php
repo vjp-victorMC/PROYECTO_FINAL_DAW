@@ -12,7 +12,7 @@
             <span class="am-welcome">
                 Bienvenido,
                 @auth
-                {{ Auth::user()->name ?? 'Administrador' }}
+                {{ Auth::user()->name ?? 'Astdminirador' }}
                 @else
                 Administrador
                 @endauth
