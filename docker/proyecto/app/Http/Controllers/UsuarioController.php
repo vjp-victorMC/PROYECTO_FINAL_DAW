@@ -97,7 +97,7 @@ class UsuarioController extends Controller
         ]);
 
         // Opcional: iniciar sesión automáticamente
-        // Auth::login($usuario);
+        Auth::login($usuario);
 
         return response()->json([
             'success' => true,
@@ -111,7 +111,11 @@ class UsuarioController extends Controller
     public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate(); // destruye la sesión del servidor
+        $request->session()->regenerateToken(); // regenera token CSRF por seguridad
 
-        return response()->json(['success' => true]);
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+        return redirect()->route('welcome');
     }
 }

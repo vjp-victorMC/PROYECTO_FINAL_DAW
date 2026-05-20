@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsuarioController;
+
 
 //------ RUTAS PUBLICAS ------
 
@@ -32,6 +34,9 @@ Route::get('/contacto', function () {
 Route::get('login', function () {
     return view('login');
 })->name("login");
+
+Route::post('logout', [UsuarioController::class, 'logout'])->name('logout');
+
 
 // Route::get('/administrativo', function () {
 //     return view('administrativo.admin');
