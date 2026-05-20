@@ -5,9 +5,9 @@
     <div class="ft-brand">
       <div class="ft-logo">
         <div class="ft-diamond"><span>A</span></div>
-        <div class="ft-name">AZUL<em>MOTOR</em></div>
+        <div class="ft-name">Talleres<em>R&C</em></div>
       </div>
-      <p>Tu taller de confianza en Badajoz. Calidad, honestidad y profesionalidad desde 2003. Más de 20 años cuidando vehículos en Extremadura.</p>
+      <p>Tu taller de confianza en Plasencia. Calidad, honestidad y profesionalidad desde 2003. Más de 20 años cuidando vehículos en Extremadura.</p>
       <div class="ft-social">
         <a href="#" aria-label="Facebook"><i class="ti ti-brand-facebook" aria-hidden="true"></i></a>
         <a href="#" aria-label="Instagram"><i class="ti ti-brand-instagram" aria-hidden="true"></i></a>
@@ -39,15 +39,15 @@
     <div class="ft-col">
       <h5>Contacto</h5>
       <div class="ft-ci"><i class="ti ti-phone" aria-hidden="true"></i>924 000 000</div>
-      <div class="ft-ci"><i class="ti ti-mail" aria-hidden="true"></i>info@azulmotor.es</div>
-      <div class="ft-ci"><i class="ti ti-map-pin" aria-hidden="true"></i>Av. de Huelva, 45</div>
-      <div class="ft-ci"><i class="ti ti-building" aria-hidden="true"></i>Badajoz, 06001</div>
+      <div class="ft-ci"><i class="ti ti-mail" aria-hidden="true"></i>info@talleresr&c.es</div>
+      <div class="ft-ci"><i class="ti ti-map-pin" aria-hidden="true"></i>Av. de España, 45</div>
+      <div class="ft-ci"><i class="ti ti-building" aria-hidden="true"></i>Plasencia, 06001</div>
       <div class="ft-badge"><i class="ti ti-clock" aria-hidden="true"></i>Lun–Vie 8:00–19:00 · Sáb 9:00–14:00</div>
     </div>
   </div>
 
   <div class="ft-bottom">
-    <p>© 2025 Azul Motor · Todos los derechos reservados</p>
+    <p>© 2025 Talelres R&C · Todos los derechos reservados</p>
     <p><a href="#">Política de privacidad</a> · <a href="#">Cookies</a></p>
   </div>
 </div>

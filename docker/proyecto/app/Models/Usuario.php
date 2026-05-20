@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
+    use HasFactory, Notifiable;
+
     protected $table = 'usuarios';
     protected $primaryKey = 'id_usuario';
 
@@ -22,4 +26,13 @@ class Usuario extends Model
     ];
 
     public $timestamps = false;
+
+    /**
+     * Laravel expects a password field; usamos 'contraseña' en la tabla,
+     * así que indicamos a Auth cuál es el campo de la contraseña.
+     */
+    public function getAuthPassword()
+    {
+        return $this->contraseña;
+    }
 }
