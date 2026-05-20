@@ -1,7 +1,8 @@
 @extends('layouts.app')
-@vite(['resources/css/admin/admin.css'])
+
 
 @section('content')
+@vite(['resources/css/admin/admin.css'])
 @include('components.header-admin')
 
 <section class="py-8 px-6">

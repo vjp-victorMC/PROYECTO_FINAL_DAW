@@ -1,43 +1,201 @@
-/* Dropdown Gestión */
+/* ═══════════════════════════════════════════════════════════════
+   header-admin.css
+   Extiende topbar.css para el panel de administración.
+   Hereda: am-wrap, am-topbar, am-navbar, am-logo-block, am-menu,
+           am-cita, am-hamburger, am-mobile-menu de topbar.css
+═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. BIENVENIDA en la barra superior ── */
+.am-welcome {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* ── 2. Botón "Cerrar sesión" igual que los <a> del am-auth ── */
+.am-auth-logout {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0;
+    transition: var(--transition);
+}
+
+.am-auth-logout:hover {
+    color: #fff;
+}
+
+/* ── 3. LOGO: la "T" del diamante hereda el fondo azul de am-logo-block;
+         solo necesitamos asegurarnos de que el texto sea blanco ── */
+.am-diamond span {
+    /* ya definido en topbar.css; no sobreescribir color para mantener --primary */
+}
+
+/* ── 4. MENÚ ADMIN — mismo hover + underline que topbar.css ──
+   topbar.css ya define:
+     .am-menu a          → color: var(--text-main), font-weight 600
+     .am-menu a:hover    → color: var(--primary)
+     .am-menu a::after   → underline deslizante
+     .am-menu a.active::after → underline visible
+   Solo añadimos lo que es exclusivo del panel admin:
+── */
+
+/* Estado activo con underline visible (igual que :hover) */
+.am-menu a.active {
+    color: var(--primary);
+}
+
+/* Aseguramos que el ::after active funcione aunque la clase la ponga JS */
+.am-menu a.active::after {
+    width: 100%;
+}
+
+/* ── 5. DROPDOWN "Gestión" ── */
 .am-dropdown {
     position: relative;
 }
 
+/* Flecha discreta al lado del texto */
 .am-dropdown>a::after {
-    content: ' ▾';
-    font-size: 10px;
+    /* Sobreescribe el ::after del underline para este elemento específico.
+       Usamos un pseudo-elemento adicional mediante un truco: 
+       quitamos el underline en el li padre y ponemos la flecha vía data */
+    content: '' !important;
+    /* el underline sigue, la flecha va inline */
+    width: 0 !important;
+    /* nunca underline en el padre del dropdown */
 }
 
+/* Flecha real mediante el atributo data que ponemos en JS, o con otro pseudo */
+.am-dropdown>a .am-arrow {
+    display: inline-block;
+    font-size: 10px;
+    margin-left: 4px;
+    transition: transform 0.25s ease;
+    vertical-align: middle;
+}
+
+.am-dropdown:hover>a .am-arrow,
+.am-dropdown>a.active .am-arrow {
+    transform: rotate(180deg);
+}
+
+/* Panel del dropdown */
 .am-dropdown-menu {
     display: none;
     position: absolute;
-    top: 0;
-    left: 100%;
-    background: #0f172a;
-    border: 1px solid #1f2937;
-    border-radius: 8px;
-    min-width: 160px;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #E5E5E7;
+    border-radius: 12px;
+    min-width: 180px;
     z-index: 200;
     overflow: hidden;
-    margin-left: 8px;
-    /* separación opcional */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+    /* Animación de entrada */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.am-dropdown:hover .am-dropdown-menu,
-.am-dropdown-menu:hover {
+.am-dropdown:hover .am-dropdown-menu {
     display: block;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Triángulo superior decorativo */
+.am-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-left: 1px solid #E5E5E7;
+    border-top: 1px solid #E5E5E7;
+    rotate: 45deg;
 }
 
 .am-dropdown-menu a {
     display: block;
-    padding: 9px 16px;
-    font-size: 13px;
-    color: #9ca3af;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
     text-decoration: none;
     white-space: nowrap;
+    transition: var(--transition);
+    /* Underline deslizante igual que el menú principal */
+    position: relative;
+}
+
+.am-dropdown-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 18px;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: var(--transition);
+    border-radius: 2px;
 }
 
 .am-dropdown-menu a:hover {
-    background: #1f2937;
-    color: #f9fafb;
+    color: var(--primary);
+    background: var(--bg-light);
+}
+
+.am-dropdown-menu a:hover::after {
+    width: calc(100% - 36px);
+}
+
+/* ── 6. BOTÓN "← Web pública" 
+   Hereda am-cita de topbar.css; solo cambiamos el texto no necesita override.
+   Si se quiere diferenciarlo visualmente: ── */
+.am-cita-admin {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* ── 7. RESPONSIVE ── */
+@media (max-width: 1100px) {
+    .am-menu {
+        gap: 18px;
+    }
+}
+
+@media (max-width: 850px) {
+
+    /* En móvil el dropdown se abre con click, no hover */
+    .am-dropdown-menu {
+        position: static;
+        transform: none;
+        box-shadow: none;
+        border-radius: 8px;
+        border: 1px solid #E5E5E7;
+        margin: 4px 0 4px 16px;
+    }
+
+    .am-dropdown:hover .am-dropdown-menu {
+        display: none;
+        /* desactivar hover en móvil */
+    }
+
+    .am-dropdown-menu.open {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
 }
