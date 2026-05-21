@@ -1052,7 +1052,47 @@
 
     /* ===== CHARTS PRESUPUESTOS ===== */
     .chart-section {
+        display: none;
         margin-bottom: 1.25rem;
+    }
+
+    .chart-section.active {
+        display: block;
+    }
+
+    .chart-tabs {
+        margin-left: auto;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .chart-tab {
+        background: transparent;
+        border: 1px solid transparent;
+        color: #9ca3af;
+        padding: 6px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background .12s, color .12s, border-color .12s;
+    }
+
+    .chart-tab:hover {
+        background: #1f2937;
+        color: #f9fafb;
+    }
+
+    .chart-tab.active {
+        background: #1d4ed8;
+        color: #fff;
+        border-color: #1d4ed8;
+    }
+
+    .chart-svg {
+        width: 100%;
+        height: 160px;
+        display: block;
     }
 
     .chart-title {
@@ -1378,6 +1418,100 @@
         border-color: #4b5563;
         color: #9ca3af;
     }
+
+    /* ===== AJUSTES GLOBALES PARA PANEL ADMIN ===== */
+    .admin-subtitle {
+        font-size: 13px;
+        color: #9ca3af;
+        margin-bottom: 8px;
+    }
+
+    /* Usuarios */
+    .user-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        background: transparent;
+    }
+
+    .user-table th, .user-table td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #374151;
+        color: #d1d5db;
+        text-align: left;
+    }
+
+    .user-table thead th {
+        color: #6b7280;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .role-badge {
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .role-admin { background:#1d4ed8;color:#fff }
+    .role-mec { background:#14532d;color:#a5f3c5 }
+    .role-cli { background:#374151;color:#9ca3af }
+
+    /* Vehículos grid */
+    .veh-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .veh-card {
+        background: #0f172a;
+        border: 1px solid #263246;
+        border-radius: 10px;
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        cursor: pointer;
+        transition: transform .12s, box-shadow .12s;
+    }
+
+    .veh-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(8,20,40,0.4) }
+
+    .veh-img { width: 96px; height:64px; object-fit:cover; border-radius:6px; flex-shrink:0 }
+    .veh-img-ph { width:96px;height:64px;border-radius:6px;background:#0a1826;display:flex;align-items:center;justify-content:center;color:#6b7280;flex-shrink:0 }
+
+    .veh-info { display:flex;flex-direction:column;gap:4px }
+    .veh-matricula { font-weight:700;color:#deeeff }
+    .veh-modelo { color:#9ca3af;font-size:13px }
+    .veh-precio { color:#60a5fa;font-weight:700 }
+
+    .veh-actions { display:flex;flex-direction:column;gap:6px;margin-left:auto }
+
+    /* Piezas */
+    .pieza-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:12px }
+    .pieza-card { background:#0f172a;border:1px solid #263246;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px }
+    .pieza-nombre { font-weight:700;color:#deeeff }
+    .pieza-meta { display:flex;gap:8px;flex-wrap:wrap;color:#9ca3af;font-size:12px }
+    .pieza-pvp { font-weight:700;color:#f9fafb }
+
+    /* Formularios y modal */
+    .mfg { display:grid;grid-template-columns:1fr 1fr;gap:10px }
+    .mfg-full { grid-column:1/-1 }
+    .mlabel { display:block;font-size:12px;color:#9ca3af;margin-bottom:6px }
+    .minput { width:100%;padding:8px;border-radius:8px;border:1px solid #374151;background:transparent;color:#f9fafb }
+    .minput:focus { outline:none;border-color:#3b82f6 }
+
+    /* Ajustes modal */
+    .modal-box { background:#071029;color:#d1d5db }
+
+    @media (max-width: 1024px) {
+        .veh-grid { grid-template-columns: repeat(2,1fr) }
+        .pieza-grid { grid-template-columns: 1fr }
+        .user-table td { font-size:12px }
+    }
+
 
     @media (max-width: 768px) {
         .dash {
