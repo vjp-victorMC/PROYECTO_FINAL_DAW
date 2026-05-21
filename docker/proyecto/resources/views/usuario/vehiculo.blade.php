@@ -26,6 +26,17 @@
                 <form class="vehiculo-form" action="#" method="POST" id="add-vehicle-form" enctype="multipart/form-data">
                     @csrf
 
+                    <!-- Campo oculto para id_usuario (se intenta obtener del usuario autenticado) -->
+                    @auth
+                        <input type="hidden" name="id_usuario" id="v-id-usuario" value="{{ auth()->user()->id_usuario ?? auth()->id() }}">
+                    @else
+                        <div class="form-group">
+                            <label for="v-dni">DNI *</label>
+                            <input type="text" id="v-dni" name="dni" placeholder="Introduce tu DNI" required pattern="^[0-9]{8}[A-Z]$" title="Introduce un DNI válido (Ej: 12345678A)">
+                        </div>
+                        <input type="hidden" name="id_usuario" id="v-id-usuario" value="">
+                    @endauth
+
                     <!-- SECCIÓN 1: Identificación y Registro -->
                     <div class="form-section-card">
                         <div class="form-section-header">
@@ -103,7 +114,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="v-kilometraje">Kilometraje (km) *</label>
-                                <input type="number" id="v-kilometraje" name="kilometraje" placeholder="Ej: 85000" min="0" required>
+                                <input type="number" id="v-kilometraje" name="km" placeholder="Ej: 85000" min="0" required>
                             </div>
                             <div class="form-group">
                                 <label for="v-transmision">Transmisión *</label>
@@ -140,6 +151,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="form-messages" style="margin-top:8px;color:#b91c1c;display:none"></div>
 
                     <button type="submit" class="btn-primary" id="v-submit" style="margin-top: 8px; width: 100%; justify-content: center; padding: 16px; font-size: 13.5px;">
                         <i class="ti ti-circle-plus" aria-hidden="true"></i> Registrar Vehículo en mi Cuenta
@@ -252,6 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectCombustible = document.getElementById('v-combustible');
     const inputKilometraje = document.getElementById('v-kilometraje');
     const inputImagen = document.getElementById('v-imagen');
+    const inputIdUsuario = document.getElementById('v-id-usuario');
 
     // Elementos de la previsualización en vivo
     const liveBrandText = document.getElementById('live-brand-text');
@@ -270,6 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const previewContainer = document.getElementById('preview-container');
     const imgThumb = document.getElementById('img-thumb');
     const btnRemoveThumb = document.getElementById('btn-remove-thumb');
+    const formMessages = document.getElementById('form-messages');
 
     // Actualización en tiempo real
     inputMatricula.addEventListener('input', function() {
@@ -384,33 +399,106 @@ document.addEventListener('DOMContentLoaded', function() {
         this.style.backgroundColor = '#fff';
     });
 
-    // Envío del formulario con animación de carga
-    document.getElementById('add-vehicle-form').addEventListener('submit', function(e) {
+    // Envío del formulario mediante fetch a la API
+    document.getElementById('add-vehicle-form').addEventListener('submit', async function(e) {
         e.preventDefault();
+        formMessages.style.display = 'none';
+        formMessages.textContent = '';
+
+        let idUsuarioVal = inputIdUsuario ? inputIdUsuario.value : '';
+        // Si no autenticado, obtener id_usuario por DNI
+        const dniInput = document.getElementById('v-dni');
+        if (!idUsuarioVal && dniInput && dniInput.value) {
+            try {
+                const dni = dniInput.value.trim();
+                const resp = await fetch(`/api/usuario/getId/${dni}`);
+                if (!resp.ok) throw new Error('No se pudo obtener el usuario.');
+                const data = await resp.json();
+                if (data && data.id_usuario) {
+                    idUsuarioVal = data.id_usuario;
+                    inputIdUsuario.value = idUsuarioVal;
+                } else if (typeof data === 'number') {
+                    idUsuarioVal = data;
+                    inputIdUsuario.value = idUsuarioVal;
+                } else {
+                    throw new Error('Usuario no encontrado para ese DNI.');
+                }
+            } catch (err) {
+                formMessages.style.display = 'block';
+                formMessages.textContent = 'No se pudo obtener el usuario por DNI.';
+                return;
+            }
+        }
+        if (!idUsuarioVal) {
+            formMessages.style.display = 'block';
+            formMessages.textContent = 'Debes iniciar sesión o introducir un DNI válido.';
+            return;
+        }
+
         const btn = document.getElementById('v-submit');
         const originalContent = btn.innerHTML;
 
-        // Cambiar botón a cargando
+        // Construir FormData
+        const fd = new FormData(this);
+
+        // Asegurar que el campo km se envía con el nombre esperado
+        // (ya renombrado en el HTML), pero también colocamos el valor de fallback
+        if (!fd.get('km') || fd.get('km') === '') fd.set('km', 0);
+
+        // Indicamos la URL del endpoint API
+        const url = '/api/usuario/newCar';
+
+        // Cambiar botón a estado cargando
         btn.innerHTML = '<i class="ti ti-loader animate-spin"></i> Registrando vehículo...';
         btn.disabled = true;
 
-        setTimeout(() => {
+        fetch(url, {
+            method: 'POST',
+            body: fd,
+            headers: {
+                // No ponemos Content-Type para que el navegador agregue el boundary correcto
+                'Accept': 'application/json'
+            }
+        })
+        .then(async response => {
+            const contentType = response.headers.get('content-type') || '';
+            let data = {};
+            if (contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                data = { message: await response.text() };
+            }
+
+            if (!response.ok) {
+                // Errores de validación 422
+                if (response.status === 422 && data.errors) {
+                    const first = Object.values(data.errors)[0];
+                    formMessages.style.display = 'block';
+                    formMessages.textContent = Array.isArray(first) ? first[0] : first;
+                } else {
+                    formMessages.style.display = 'block';
+                    formMessages.textContent = data.message || 'Error al registrar el vehículo.';
+                }
+
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                return;
+            }
+
             // Éxito
             btn.innerHTML = '<i class="ti ti-check"></i> ¡Vehículo añadido con éxito!';
             btn.style.background = '#16a34a';
             btn.style.boxShadow = '0 6px 20px rgba(22, 163, 74, 0.3)';
 
-            // Resetear el formulario después de la simulación
             setTimeout(() => {
                 btn.innerHTML = originalContent;
                 btn.style.background = '';
                 btn.style.boxShadow = '';
                 btn.disabled = false;
-                
-                // Vaciar campos
+
+                // Resetear formulario y preview
                 this.reset();
-                
-                // Resetear previsualización en vivo
+
                 liveBrandText.textContent = 'MARCA';
                 liveModelText.textContent = 'Modelo del coche';
                 livePlateText.textContent = 'MATRÍCULA';
@@ -419,19 +507,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 liveKmText.textContent = 'N/D';
                 carBody.style.fill = '#4a5568';
                 carBody.style.stroke = '#cbd5e1';
-                
-                // Restaurar SVG por si había imagen
                 carSilhouette.style.display = 'block';
                 const visualImg = document.getElementById('visual-loaded-img');
                 if (visualImg) visualImg.remove();
-                
-                // Restaurar dropzone
                 previewContainer.style.display = 'none';
                 uploadPlaceholder.style.display = 'flex';
                 imgThumb.src = '';
-            }, 3000);
 
-        }, 2000);
+                // Mostrar mensaje de éxito breve
+                formMessages.style.display = 'block';
+                formMessages.style.color = '#065f46';
+                formMessages.textContent = 'Vehículo registrado correctamente.';
+                setTimeout(() => { formMessages.style.display = 'none'; formMessages.style.color = '#b91c1c'; }, 3000);
+
+            }, 1200);
+        })
+        .catch(err => {
+            formMessages.style.display = 'block';
+            formMessages.textContent = 'Error de conexión. Inténtalo de nuevo.';
+            btn.innerHTML = originalContent;
+            btn.disabled = false;
+        });
     });
 });
 </script>
