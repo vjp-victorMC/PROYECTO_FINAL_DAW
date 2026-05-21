@@ -1,9 +1,14 @@
 <?php
 
+use App\Http\Controllers\CocheController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\Coche2manoController;
 
 //------ RUTAS PUBLICAS ------
+//Retorna todos los coches de 2 mano de la base de datos
+Route::get('/coche2mano', [Coche2manoController::class, 'getAll2HandCar']);
+
 //Retorna todos los usuarios de la base de dato
 Route::get('/usuario', [UsuarioController::class, 'getAllUser']);
 
@@ -16,8 +21,17 @@ Route::post('/usuario/logout', [UsuarioController::class, 'logout']);
 //Metodo para crear un nuevo usuario
 Route::post('/usuario/newUser', [UsuarioController::class, 'setNewUser']);
 
+//Crear un nuevo coche para un usuario
+Route::post('/usuario/newCar', [CocheController::class, 'setNewCar']);
+
+//Retorna el id del usuario por su dni
+Route::get('/usuario/getId/{dni}', [UsuarioController::class, 'getIdByDni']);
+
 //Retorna el usuario pedido por el id
 Route::get('/usuario/{id}', [UsuarioController::class, 'getUserByID']);
+
+
+
 
 //------ RUTAS PRIVADAS ------
 Route::middleware('auth:sanctum')->group(function () {

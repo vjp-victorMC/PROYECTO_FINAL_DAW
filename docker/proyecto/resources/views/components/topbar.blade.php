@@ -12,9 +12,8 @@
       @auth
       <span class="am-user-name">Hola, <strong>{{ Auth::user()->nombre }}</strong></span>
       <span class="am-auth-sep">|</span>
-      <!-- <form action="{{ route('logout') }}" method="POST" style="display: none;" id="logout-form">
-        @csrf
-      </form> -->
+      <a href="{{ route('vehiculo') }}" class="am-nav-link {{ request()->routeIs('vehiculo') ? 'active' : '' }}" style="padding: 8px 0; font-size: 14px; font-weight: 600;">Añadir Vehículos</a>
+      <span class="am-auth-sep">|</span>
 
       <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         Cerrar sesión
@@ -57,13 +56,14 @@
   <nav class="am-mobile-menu" id="mobileMenu">
     <a href="{{ route ('welcome')}}" class="{{ request()->routeIs('welcome') ? 'active' : '' }}">Inicio</a>
     <a href="{{ route ('ocasion')}}" class="{{ request()->routeIs('ocasion') ? 'active' : '' }}">Vehículos</a>
-    <a href="{{ route ('financiacion')}}" class="{{ request()->routeIs('financiacion') ? 'active' : '' }}">Financiación</a>
+    <a href="{{ route ('compra')}}" class="{{ request()->routeIs('compra') ? 'active' : '' }}">Compra / Financiación</a>
     <a href="{{ route ('nosotros')}}" class="{{ request()->routeIs('nosotros') ? 'active' : '' }}">Taller</a>
     <a href="{{ route ('contacto')}}" class="{{ request()->routeIs('contacto') ? 'active' : '' }}">Contacto</a>
 
     <div class="am-mobile-auth" style="margin-top: 15px; padding: 10px 20px; border-top: 1px solid rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 8px;">
       @auth
       <span class="am-user-name-mob" style="font-size: 14px; color: var(--text-main); font-weight: 500;">Hola, <strong style="color: var(--primary);">{{ Auth::user()->nombre }}</strong></span>
+
       <form action="{{ route('logout') }}" method="POST" style="display: none;" id="logout-form-mob">
         @csrf
       </form>

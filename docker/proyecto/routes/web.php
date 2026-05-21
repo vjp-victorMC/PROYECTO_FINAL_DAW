@@ -23,9 +23,9 @@ Route::get('/nosotros', function () {
     return view('usuario.nosotros');
 })->name('nosotros');
 
-Route::get('/financiacion', function () {
-    return view('usuario.financiacion');
-})->name('financiacion');
+Route::get('/compra', function () {
+    return view('usuario.compra');
+})->name('compra');
 
 Route::get('/contacto', function () {
     return view('usuario.contacto');
@@ -35,24 +35,33 @@ Route::get('login', function () {
     return view('login');
 })->name("login");
 
+Route::get('/vehiculo', function () {
+    return view('usuario.vehiculo');
+})->name('vehiculo');
+
 Route::post('logout', [UsuarioController::class, 'logout'])->name('logout');
 
 // Route::get('/admin', function () {
 //     return view('administrativo.admin');
 // });
 
+        Route::get('/mecanico', function () {
+            return view('mecanico.mecanico');
+        })->name("mecanico");
+
 
 //------ RUTAS PRIVADAS ------
 Route::middleware('auth:sanctum')->group(function () {
 
     //MECANICO
-    Route::middleware('role:mecanico')->group(function () {
+    // Route::middleware('role:mecanico')->group(function () {
 
-        // Route::get('/mecanico', function () {
-        //     return view('login');
-        // })->name("login");
+    //     Route::get('/mecanico', function () {
+    //         return view('login');
+    //     })->name("login");
 
-    });
+    // });
+
 
     //ADMINISTRADOR
     Route::middleware('role:admin')->group(function () {

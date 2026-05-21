@@ -13,14 +13,21 @@ return new class extends Migration
             $table->string('matricula', 20)->unique();
             $table->string('marca', 50);
             $table->string('modelo', 50);
-            $table->unsignedBigInteger('id_cliente');
+
+            // Nuevos campos
+            $table->integer('km');
+            $table->string('combustible', 30);
+            $table->string('transmision', 30);
+            $table->year('anio_matriculacion');
+
+            $table->unsignedBigInteger('id_usuario'); // Cambiado de id_cliente a id_usuario
             $table->string('imagen', 255)->nullable();
             $table->boolean('en_garaje')->default(false);
             $table->timestamps();
 
-            $table->foreign('id_cliente')
-                  ->references('id_cliente')
-                  ->on('clientes')
+            $table->foreign('id_usuario')
+                  ->references('id_usuario')
+                  ->on('usuarios')
                   ->onDelete('cascade');
         });
     }
@@ -30,3 +37,4 @@ return new class extends Migration
         Schema::dropIfExists('coches');
     }
 };
+

@@ -6,7 +6,7 @@
   padding: 0;
 }
 
-.pg-financiacion {
+.pg-compra {
   font-family: 'Inter', Arial, sans-serif;
   background: #f4f6f9;
 }
@@ -62,14 +62,14 @@
 }
 
 /* ===================== HERO ===================== */
-.financiacion-hero {
-  background: linear-gradient(135deg, #001e4d 0%, #002e6d 60%, #003d8a 100%);
+.compra-hero {
+  background: linear-gradient(135deg, #0c141e 0%, #001e4d 60%, #003d8a 100%);
   padding: 64px 24px 60px;
   position: relative;
   overflow: hidden;
 }
 
-.financiacion-hero::before {
+.compra-hero::before {
   content: '';
   position: absolute;
   right: -80px;
@@ -81,7 +81,7 @@
   pointer-events: none;
 }
 
-.financiacion-hero::after {
+.compra-hero::after {
   content: '';
   position: absolute;
   left: -40px;
@@ -93,14 +93,14 @@
   pointer-events: none;
 }
 
-.financiacion-hero-inner {
+.compra-hero-inner {
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
 }
 
-.financiacion-hero-text {
+.compra-hero-text {
   max-width: 680px;
   animation: fadeUp 0.7s ease both;
 }
@@ -121,7 +121,7 @@
   margin-bottom: 20px;
 }
 
-.financiacion-hero-text h1 {
+.compra-hero-text h1 {
   font-size: 36px;
   font-weight: 900;
   color: #fff;
@@ -131,23 +131,23 @@
   letter-spacing: -0.5px;
 }
 
-.financiacion-hero-text h1 span {
+.compra-hero-text h1 span {
   color: #4a9eff;
 }
 
-.financiacion-hero-text > p {
+.compra-hero-text>p {
   color: #a0c4ff;
   font-size: 14px;
   line-height: 1.75;
 }
 
 /* ===================== MAIN GRID ===================== */
-.financiacion-main {
+.compra-main {
   padding: 72px 24px;
   background: #fff;
 }
 
-.financiacion-main-inner {
+.compra-main-inner {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
@@ -157,13 +157,13 @@
 }
 
 @media (max-width: 991px) {
-  .financiacion-main-inner {
+  .compra-main-inner {
     grid-template-columns: 1fr;
   }
 }
 
 /* ---- Columna Formulario ---- */
-.financiacion-form-block {
+.compra-form-block {
   animation: fadeUp 0.7s 0.1s ease both;
 }
 
@@ -176,7 +176,7 @@
   border: 1.5px solid #0056b3;
   border-radius: 12px;
   padding: 20px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   box-shadow: 0 4px 16px rgba(0, 86, 179, 0.05);
 }
 
@@ -241,7 +241,7 @@
   border: 1.5px solid #dde2ea;
   border-radius: 12px;
   padding: 20px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .no-car-icon {
@@ -262,8 +262,88 @@
   text-decoration: underline;
 }
 
+/* ===================== PAYMENT TOGGLE SYSTEM ===================== */
+.payment-method-container {
+  margin-bottom: 32px;
+}
+
+.payment-method-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 560px) {
+  .payment-method-toggle {
+    grid-template-columns: 1fr;
+  }
+}
+
+.toggle-btn {
+  background: #fafbfc;
+  border: 2px solid #dde2ea;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-btn i {
+  font-size: 24px;
+  color: #666;
+  background: #e8ecef;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+}
+
+.toggle-btn div {
+  display: flex;
+  flex-direction: column;
+}
+
+.toggle-btn div strong {
+  font-size: 14px;
+  font-weight: 800;
+  color: #0c141e;
+  margin-bottom: 2px;
+}
+
+.toggle-btn div span {
+  font-size: 11px;
+  color: #666;
+}
+
+.toggle-btn:hover {
+  border-color: #0056b3;
+  background: #f7fafc;
+}
+
+.toggle-btn.active {
+  border-color: #0056b3;
+  background: #f0f6ff;
+  box-shadow: 0 4px 16px rgba(0, 86, 179, 0.08);
+}
+
+.toggle-btn.active i {
+  background: #0056b3;
+  color: #fff;
+}
+
+.toggle-btn.active div strong {
+  color: #0056b3;
+}
+
 /* Form Styles */
-.financiacion-form {
+.compra-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -285,6 +365,16 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.form-group.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 560px) {
+  .form-group.full-width {
+    grid-column: span 1;
+  }
 }
 
 .form-group label {
@@ -345,29 +435,44 @@
   font-size: 13px;
 }
 
-/* ---- Columna Simulador (Sidebar) ---- */
-.financiacion-sidebar {
+/* ---- Columna Sidebar ---- */
+.compra-sidebar {
   animation: fadeUp 0.7s 0.2s ease both;
+  position: sticky;
+  top: 24px;
 }
 
-.sim-card {
+.sidebar-panel {
+  display: none;
+  animation: fadeIn 0.4s ease both;
+}
+
+.sidebar-panel.active {
+  display: block;
+}
+
+/* Sim Card & Cash Summary Card */
+.sim-card,
+.cash-card {
   background: #fff;
   border-radius: 16px;
   padding: 28px;
   border: 1.5px solid #e0e4ec;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.sim-header {
+.sim-header,
+.cash-header {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-.sim-icon-box {
+.sim-icon-box,
+.cash-icon-box {
   width: 42px;
   height: 42px;
   background: #0056b3;
@@ -378,18 +483,25 @@
   color: #fff;
 }
 
-.sim-icon-box svg {
+.cash-icon-box {
+  background: #16a34a;
+}
+
+.sim-icon-box svg,
+.cash-icon-box svg {
   width: 22px;
   height: 22px;
 }
 
-.sim-header-text h3 {
+.sim-header-text h3,
+.cash-header-text h3 {
   font-size: 16px;
   font-weight: 800;
   color: #0c141e;
 }
 
-.sim-header-text p {
+.sim-header-text p,
+.cash-header-text p {
   font-size: 12px;
   color: #666;
 }
@@ -443,7 +555,7 @@
   background: #0056b3;
   cursor: pointer;
   border: 3px solid #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   transition: transform 0.15s;
 }
 
@@ -458,7 +570,7 @@
   background: #0056b3;
   cursor: pointer;
   border: 3px solid #fff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   transition: transform 0.15s;
 }
 
@@ -466,7 +578,8 @@
   transform: scale(1.15);
 }
 
-.sim-result-box {
+.sim-result-box,
+.cash-result-box {
   background: #f0f5fc;
   border-radius: 12px;
   padding: 20px;
@@ -474,7 +587,13 @@
   border: 1px solid rgba(0, 86, 179, 0.1);
 }
 
-.sim-result-label {
+.cash-result-box {
+  background: #f0fdf4;
+  border-color: rgba(22, 163, 74, 0.1);
+}
+
+.sim-result-label,
+.cash-result-label {
   font-size: 10px;
   font-weight: 800;
   color: #0056b3;
@@ -482,19 +601,29 @@
   margin-bottom: 2px;
 }
 
-.sim-result-value {
+.cash-result-label {
+  color: #16a34a;
+}
+
+.sim-result-value,
+.cash-result-value {
   font-size: 32px;
   font-weight: 900;
   color: #003d8a;
   margin-bottom: 2px;
 }
 
-.sim-result-note {
+.cash-result-value {
+  color: #14532d;
+}
+
+.sim-result-note,
+.cash-result-note {
   font-size: 11px;
   color: #666;
 }
 
-.financiacion-advantages {
+.compra-advantages {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -515,6 +644,10 @@
   flex-shrink: 0;
 }
 
+.cash-card .adv-item i {
+  color: #16a34a;
+}
+
 .adv-item strong {
   font-size: 12.5px;
   color: #0c141e;
@@ -529,14 +662,41 @@
 
 /* ===================== ANIMACIONES ===================== */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 768px) {
-  .financiacion-hero-text h1 { font-size: 26px; }
-  .financiacion-main { padding: 48px 16px; }
-  .section-title { font-size: 20px; }
-  .sim-card { padding: 20px; }
+  .compra-hero-text h1 {
+    font-size: 26px;
+  }
+
+  .compra-main {
+    padding: 48px 16px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  .sim-card,
+  .cash-card {
+    padding: 20px;
+  }
 }
