@@ -53,7 +53,7 @@
     <!-- VEHICLE GRID -->
     <section class="ocasion-grid-section">
         <div class="vehicle-grid">
-            
+
             <!-- Coche 1 -->
             <div class="vehicle-card animate-up">
                 <div class="badge-ocasion">Destacado</div>
@@ -82,7 +82,7 @@
                             <span class="price-promo">Desde 340€/mes</span>
                             <span class="price-main">32.900€</span>
                         </div>
-                        <a href="{{ route('financiacion') }}?car=BMW%20Serie%203%20320d&price=32900&brand=BMW&year=2021&km=45.000" class="btn-view">Comprar / Financiar</a>
+                        <a href="{{ route('compra') }}?car=BMW%20Serie%203%20320d&price=32900&brand=BMW&year=2021&km=45.000" class="btn-view">Comprar / Financiar</a>
                     </div>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                             <span class="price-promo">Financiado</span>
                             <span class="price-main">24.500€</span>
                         </div>
-                        <a href="{{ route('financiacion') }}?car=Audi%20A3%20Sportback&price=24500&brand=Audi&year=2020&km=58.200" class="btn-view">Comprar / Financiar</a>
+                        <a href="{{ route('compra') }}?car=Audi%20A3%20Sportback&price=24500&brand=Audi&year=2020&km=58.200" class="btn-view">Comprar / Financiar</a>
                     </div>
                 </div>
             </div>
@@ -147,7 +147,7 @@
                             <span class="price-promo">Oportunidad</span>
                             <span class="price-main">28.900€</span>
                         </div>
-                        <a href="{{ route('financiacion') }}?car=Volkswagen%20Golf%20GTI&price=28900&brand=Volkswagen&year=2019&km=72.000" class="btn-view">Comprar / Financiar</a>
+                        <a href="{{ route('compra') }}?car=Volkswagen%20Golf%20GTI&price=28900&brand=Volkswagen&year=2019&km=72.000" class="btn-view">Comprar / Financiar</a>
                     </div>
                 </div>
             </div>
@@ -179,7 +179,7 @@
                             <span class="price-promo">Seminuevo</span>
                             <span class="price-main">35.400€</span>
                         </div>
-                        <a href="{{ route('financiacion') }}?car=Mercedes%20Clase%20A%20200&price=35400&brand=Mercedes-Benz&year=2022&km=15.000" class="btn-view">Comprar / Financiar</a>
+                        <a href="{{ route('compra') }}?car=Mercedes%20Clase%20A%20200&price=35400&brand=Mercedes-Benz&year=2022&km=15.000" class="btn-view">Comprar / Financiar</a>
                     </div>
                 </div>
             </div>
@@ -211,7 +211,7 @@
                             <span class="price-promo">Bajo consumo</span>
                             <span class="price-main">16.800€</span>
                         </div>
-                        <a href="{{ route('financiacion') }}?car=Seat%20Arona%201.0%20TSI&price=16800&brand=Seat&year=2021&km=32.400" class="btn-view">Comprar / Financiar</a>
+                        <a href="{{ route('compra') }}?car=Seat%20Arona%201.0%20TSI&price=16800&brand=Seat&year=2021&km=32.400" class="btn-view">Comprar / Financiar</a>
                     </div>
                 </div>
             </div>
@@ -243,7 +243,7 @@
                             <span class="price-promo">Etiqueta 0</span>
                             <span class="price-main">29.900€</span>
                         </div>
-                        <a href="{{ route('financiacion') }}?car=Ford%20Kuga%20PHEV&price=29900&brand=Ford&year=2021&km=48.000" class="btn-view">Comprar / Financiar</a>
+                        <a href="{{ route('compra') }}?car=Ford%20Kuga%20PHEV&price=29900&brand=Ford&year=2021&km=48.000" class="btn-view">Comprar / Financiar</a>
                     </div>
                 </div>
             </div>
@@ -261,7 +261,9 @@
                 entry.target.classList.add('visible');
             }
         });
-    }, { threshold: 0.1 });
+    }, {
+        threshold: 0.1
+    });
 
     document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
 </script>

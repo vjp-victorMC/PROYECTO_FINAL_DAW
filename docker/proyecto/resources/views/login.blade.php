@@ -39,10 +39,10 @@
 <body class="text-slate-200 h-screen flex items-center justify-center p-4">
 
     <!-- Contenedor Principal -->
-    <div class="glass-card p-8 md:p-12 rounded-[2.5rem] w-full max-w-md transform transition-all">
+    <div id="auth-card" class="glass-card p-8 md:p-12 rounded-[2.5rem] w-full max-w-md transform transition-all duration-500">
 
         <!-- Header -->
-        <div class="text-center mb-10">
+        <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600/10 rounded-2xl mb-4 border border-blue-500/20">
                 <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
@@ -56,23 +56,30 @@
             </p>
         </div>
 
-        <form id="auth-form" class="space-y-5">
+        <form id="auth-form" class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
             <!-- Campo Nombre (Solo Registro) -->
-            <div id="group-nombre" class="hidden opacity-0 -translate-y-2 field-transition">
+            <div id="group-nombre" class="hidden opacity-0 -translate-y-2 field-transition col-span-1 md:col-span-2">
                 <label class="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1.5 ml-1">Nombre Propietario</label>
                 <input type="text" id="nombre" placeholder="Nombre completo"
                     class="w-full bg-slate-950/50 border border-slate-800 p-4 rounded-2xl outline-none neon-glow text-white placeholder-slate-600 transition-all">
             </div>
 
             <!-- Campo DNI (Solo Registro) -->
-            <div id="group-dni" class="hidden opacity-0 -translate-y-2 field-transition">
+            <div id="group-dni" class="hidden opacity-0 -translate-y-2 field-transition col-span-1">
                 <label class="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1.5 ml-1">DNI</label>
                 <input type="text" id="dni" placeholder="12345678A"
                     class="w-full bg-slate-950/50 border border-slate-800 p-4 rounded-2xl outline-none neon-glow text-white placeholder-slate-600 transition-all">
             </div>
 
+            <!-- Campo Teléfono (Solo Registro) -->
+            <div id="group-telefono" class="hidden opacity-0 -translate-y-2 field-transition col-span-1">
+                <label class="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1.5 ml-1">Teléfono (WhatsApp)</label>
+                <input type="tel" id="telefono" placeholder="Ej: 600 123 456"
+                    class="w-full bg-slate-950/50 border border-slate-800 p-4 rounded-2xl outline-none neon-glow text-white placeholder-slate-600 transition-all">
+            </div>
+
             <!-- Identificador (DNI o Email / Correo) -->
-            <div>
+            <div id="group-identificador" class="col-span-1 md:col-span-2">
                 <label id="label-identificador" class="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1.5 ml-1">DNI o Email</label>
                 <div class="relative">
                     <input type="text" id="identificador" required placeholder="tu@ejemplo.com"
@@ -81,7 +88,7 @@
             </div>
 
             <!-- Contraseña -->
-            <div>
+            <div id="group-password" class="col-span-1 md:col-span-2">
                 <div class="flex justify-between items-center mb-1.5 ml-1">
                     <label class="block text-[10px] font-black text-blue-400 uppercase tracking-widest">Contraseña</label>
                     <a href="#" id="forgot-password" class="text-[10px] font-bold text-slate-500 hover:text-blue-400 transition-colors uppercase">¿Olvidaste?</a>
@@ -99,7 +106,7 @@
             </div>
 
             <!-- Confirmar Contraseña (Solo Registro) -->
-            <div id="group-password-confirm" class="hidden opacity-0 -translate-y-2 field-transition">
+            <div id="group-password-confirm" class="hidden opacity-0 -translate-y-2 field-transition col-span-1">
                 <label class="block text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1.5 ml-1">Confirmar Contraseña</label>
                 <div class="relative">
                     <input type="password" id="password_confirmation" placeholder="••••••••"
@@ -115,13 +122,13 @@
 
             <!-- Botón Submit -->
             <button type="submit" id="btn-submit"
-                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-900/40 transform hover:-translate-y-1 active:scale-95 transition-all duration-200 uppercase tracking-widest text-sm">
+                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-2xl shadow-lg shadow-blue-900/40 transform hover:-translate-y-1 active:scale-95 transition-all duration-200 uppercase tracking-widest text-sm col-span-1 md:col-span-2">
                 Entrar al Taller
             </button>
         </form>
 
         <!-- Footer -->
-        <div class="mt-10 text-center">
+        <div class="mt-8 text-center">
             <button id="toggle-form" class="group text-slate-400 text-xs font-medium transition-all">
                 <span id="footer-text">¿No tienes cuenta?</span>
                 <span class="text-blue-400 font-bold group-hover:text-blue-300 ml-1 underline decoration-blue-500/30 underline-offset-4">Regístrate gratis</span>
@@ -133,6 +140,7 @@
         const toggleBtn = document.getElementById('toggle-form');
         const groupNombre = document.getElementById('group-nombre');
         const groupDni = document.getElementById('group-dni');
+        const groupTelefono = document.getElementById('group-telefono');
         const groupPasswordConfirm = document.getElementById('group-password-confirm');
         const forgotPassword = document.getElementById('forgot-password');
         const formTitle = document.getElementById('form-title');
@@ -141,8 +149,13 @@
         const labelId = document.getElementById('label-identificador');
         const inputIdentificador = document.getElementById('identificador');
         const inputDni = document.getElementById('dni');
+        const inputTelefono = document.getElementById('telefono');
         const inputPasswordConfirm = document.getElementById('password_confirmation');
         const inputNombre = document.getElementById('nombre');
+
+        // Nuevos selectores para transiciones de diseño responsivo de rejilla
+        const authCard = document.getElementById('auth-card');
+        const groupPassword = document.getElementById('group-password');
 
         // Lógica de tu compañero: Lee los parámetros de la URL (?action=register)
         const urlParams = new URLSearchParams(window.location.search);
@@ -152,8 +165,15 @@
         function updateFormUI(isLoginMode, isInitialLoad = false) {
             if (!isLoginMode) {
                 // MODO REGISTRO
+                authCard.classList.remove('max-w-md');
+                authCard.classList.add('md:max-w-xl');
+
+                groupPassword.classList.remove('md:col-span-2');
+                groupPassword.classList.add('col-span-1');
+
                 groupNombre.classList.remove('hidden');
                 groupDni.classList.remove('hidden');
+                groupTelefono.classList.remove('hidden');
                 groupPasswordConfirm.classList.remove('hidden');
                 forgotPassword.classList.add('hidden');
 
@@ -163,6 +183,8 @@
                     groupNombre.classList.add('opacity-100', 'translate-y-0');
                     groupDni.classList.remove('opacity-0', '-translate-y-2');
                     groupDni.classList.add('opacity-100', 'translate-y-0');
+                    groupTelefono.classList.remove('opacity-0', '-translate-y-2');
+                    groupTelefono.classList.add('opacity-100', 'translate-y-0');
                     groupPasswordConfirm.classList.remove('opacity-0', '-translate-y-2');
                     groupPasswordConfirm.classList.add('opacity-100', 'translate-y-0');
                 } else {
@@ -172,12 +194,15 @@
                         groupNombre.classList.add('opacity-100', 'translate-y-0');
                         groupDni.classList.remove('opacity-0', '-translate-y-2');
                         groupDni.classList.add('opacity-100', 'translate-y-0');
+                        groupTelefono.classList.remove('opacity-0', '-translate-y-2');
+                        groupTelefono.classList.add('opacity-100', 'translate-y-0');
                         groupPasswordConfirm.classList.remove('opacity-0', '-translate-y-2');
                         groupPasswordConfirm.classList.add('opacity-100', 'translate-y-0');
                     }, 10);
                 }
 
                 inputDni.required = true;
+                inputTelefono.required = true;
                 inputPasswordConfirm.required = true;
                 inputNombre.required = true;
                 inputIdentificador.type = 'email'; // Validación nativa de email en registro
@@ -189,24 +214,34 @@
                 labelId.innerText = 'Correo Electrónico';
             } else {
                 // MODO LOGIN
+                authCard.classList.remove('md:max-w-xl');
+                authCard.classList.add('max-w-md');
+
+                groupPassword.classList.remove('col-span-1');
+                groupPassword.classList.add('md:col-span-2');
+
                 groupNombre.classList.add('opacity-0', '-translate-y-2');
                 groupDni.classList.add('opacity-0', '-translate-y-2');
+                groupTelefono.classList.add('opacity-0', '-translate-y-2');
                 groupPasswordConfirm.classList.add('opacity-0', '-translate-y-2');
                 forgotPassword.classList.remove('hidden');
 
                 if (isInitialLoad) {
                     groupNombre.classList.add('hidden');
                     groupDni.classList.add('hidden');
+                    groupTelefono.classList.add('hidden');
                     groupPasswordConfirm.classList.add('hidden');
                 } else {
                     setTimeout(() => {
                         groupNombre.classList.add('hidden');
                         groupDni.classList.add('hidden');
+                        groupTelefono.classList.add('hidden');
                         groupPasswordConfirm.classList.add('hidden');
                     }, 400);
                 }
 
                 inputDni.required = false;
+                inputTelefono.required = false;
                 inputPasswordConfirm.required = false;
                 inputNombre.required = false;
                 inputIdentificador.type = 'text'; // Permite DNI o Email en Login
@@ -259,6 +294,7 @@
                     nombre: inputNombre.value,
                     email: inputIdentificador.value,
                     dni: inputDni.value,
+                    telefono: inputTelefono.value,
                     password: document.getElementById('password').value,
                     password_confirmation: inputPasswordConfirm.value
                 };

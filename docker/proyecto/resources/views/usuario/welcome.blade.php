@@ -205,7 +205,7 @@
                         <div class="stock-divider"></div>
                         <div class="stock-footer">
                             <span class="stock-price">18.900 €</span>
-                            <a href="{{ route('financiacion') }}?car=Seat%20León%20FR&price=18900&brand=Seat&year=2021&km=32.000" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+                            <a href="{{ route('compra') }}?car=Seat%20León%20FR&price=18900&brand=Seat&year=2021&km=32.000" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                         <div class="stock-divider"></div>
                         <div class="stock-footer">
                             <span class="stock-price">21.500 €</span>
-                            <a href="{{ route('financiacion') }}?car=Volkswagen%20Golf%201.5%20TSI&price=21500&brand=Volkswagen&year=2022&km=28.500" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+                            <a href="{{ route('compra') }}?car=Volkswagen%20Golf%201.5%20TSI&price=21500&brand=Volkswagen&year=2022&km=28.500" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -255,7 +255,7 @@
                         <div class="stock-divider"></div>
                         <div class="stock-footer">
                             <span class="stock-price">24.900 €</span>
-                            <a href="{{ route('financiacion') }}?car=Audi%20A3%20Sportback&price=24900&brand=Audi&year=2020&km=41.000" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+                            <a href="{{ route('compra') }}?car=Audi%20A3%20Sportback&price=24900&brand=Audi&year=2020&km=41.000" class="stock-btn-detail">Comprar / Financiar <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 </div>
@@ -327,7 +327,7 @@
                     <div class="sim-result-note">TAE 7,9% · Cuota orientativa</div>
                 </div>
 
-                <a href="{{ route('financiacion') }}" class="btn-primary sim-btn-submit" id="btn-solicitar">
+                <a href="{{ route('compra') }}" class="btn-primary sim-btn-submit" id="btn-solicitar">
                     <i class="ti ti-calculator" aria-hidden="true"></i> Solicitar Financiación
                 </a>
             </div>
@@ -524,7 +524,7 @@
         // Actualizar el enlace dinámicamente
         const btnSolicitar = document.getElementById('btn-solicitar');
         if (btnSolicitar) {
-            btnSolicitar.href = `{{ route('financiacion') }}?price=${amount}&months=${months}`;
+            btnSolicitar.href = `{{ route('compra') }}?price=${amount}&months=${months}`;
         }
     }
 
