@@ -3,8 +3,12 @@
 use App\Http\Controllers\CocheController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\Coche2manoController;
 
 //------ RUTAS PUBLICAS ------
+//Retorna todos los coches de 2 mano de la base de datos
+Route::get('/coche2mano', [Coche2manoController::class, 'getAll2HandCar']);
+
 //Retorna todos los usuarios de la base de dato
 Route::get('/usuario', [UsuarioController::class, 'getAllUser']);
 

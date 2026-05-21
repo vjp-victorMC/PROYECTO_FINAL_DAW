@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsuarioSeeder::class,          // sin dependencias
             ProveedorSeeder::class,        // sin dependencias
+            Coche2manoSeeder::class,        // sin dependencias
             CocheSeeder::class,            // depende de: clientes
             PiezaSeeder::class,            // depende de: proveedores
             ReparacionSeeder::class,       // depende de: coches, usuarios
