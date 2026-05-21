@@ -277,10 +277,15 @@
 
                 if (data.success) {
                     document.body.innerHTML = `
-                    <div style="color:white; text-align:center; margin-top:20vh; font-family:sans-serif">
-                        <h1>✅ Operación correcta</h1>
-                        <p>Bienvenido, <strong>${data.nombre || 'Usuario'}</strong></p>
+                    <div style="color:white; text-align:center; margin-top:30vh; font-family:'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;">
+                        <div style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(59,130,246,0.6));">🚗</div>
+                        <h1 style="font-size: 2rem; font-weight: 900; letter-spacing: -0.05em; color: #fff; text-transform: uppercase;">¡Acceso Concedido!</h1>
+                        <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.95rem;">Hola, <strong style="color: #60a5fa;">${data.nombre || 'Usuario'}</strong>. Redirigiendo al taller...</p>
                     </div>`;
+                    
+                    setTimeout(() => {
+                        window.location.href = "{{ route('welcome') }}";
+                    }, 1200);
                 } else {
                     alert(data.msg || JSON.stringify(data.errors));
                 }

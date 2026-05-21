@@ -1,17 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsuarioController;
+
 
 //------ RUTAS PUBLICAS ------
 
 //USUARIO
 Route::get('/', function () {
     return view('usuario.welcome');
-})-> name ('welcome');
+})->name('welcome');
 
 Route::get('/servicios', function () {
     return view('usuario.servicios');
-})-> name ('servicios');
+})->name('servicios');
 
 Route::get('/ocasion', function () {
     return view('usuario.ocasion');
@@ -19,7 +21,7 @@ Route::get('/ocasion', function () {
 
 Route::get('/nosotros', function () {
     return view('usuario.nosotros');
-})-> name ('nosotros');
+})->name('nosotros');
 
 Route::get('/financiacion', function () {
     return view('usuario.financiacion');
@@ -27,11 +29,13 @@ Route::get('/financiacion', function () {
 
 Route::get('/contacto', function () {
     return view('usuario.contacto');
-})-> name ('contacto');
+})->name('contacto');
 
 Route::get('login', function () {
     return view('login');
-})->name('login');
+})->name("login");
+
+Route::post('logout', [UsuarioController::class, 'logout'])->name('logout');
 
 // Route::get('/admin', function () {
 //     return view('administrativo.admin');
@@ -56,7 +60,5 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/admin', function () {
             return view('administrativo.admin');
         });
-        
     });
-
 });
