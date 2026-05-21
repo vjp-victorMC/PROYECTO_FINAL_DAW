@@ -72,6 +72,24 @@ class UsuarioController extends Controller
             'rol' => $usuario->rol
         ]);
     }
+
+    // Obtener ID de usuario mediante DNI
+    public function getIdByDni($dni) {
+        $usuario = Usuario::where('dni', $dni)->first();
+
+        if (!$usuario) {
+            return response()->json([
+                'success' => false,
+                'msg' => 'No se encontró ningún usuario con ese DNI'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'id_usuario' => $usuario->id_usuario
+        ], 200);
+    }
+
     // REGISTRO: nombre, email, dni, password (confirm), rol=cliente
     public function setNewUser(Request $request) {
         $validator = Validator::make($request->all(), [
