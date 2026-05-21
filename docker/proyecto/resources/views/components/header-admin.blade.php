@@ -8,19 +8,27 @@
             <span class="am-mail-item"><i class="ti ti-mail"></i>info@talleresrc.es</span>
         </div>
         <div class="am-auth">
-            <span class="am-welcome">
-                Bienvenido,
-                @auth
-                    {{ Auth::user()->name ?? 'Administrador' }}
-                @else
-                    Administrador
-                @endauth
-            </span>
+            @auth
+            <span class="am-user-name">Hola, <strong>{{ Auth::user()->nombre }}</strong></span>
             <span class="am-auth-sep">|</span>
-            <form method="POST" action="{{ route('logout') }}" style="display:inline">
+            <!-- <form action="{{ route('logout') }}" method="POST" style="display: none;" id="logout-form">
+        @csrf
+      </form> -->
+
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Cerrar sesión
+            </a>
+
+            <!-- Formulario oculto que procesa la petición POST -->
+            <form id="logout-form" action="{{ url('api/usuario/logout') }}" method="POST" style="display: none;">
                 @csrf
-                <button type="submit" class="am-auth-logout">Cerrar sesión</button>
             </form>
+
+            @else
+            <a href="{{ route ('login')}}">Iniciar sesión</a>
+            <span class="am-auth-sep">|</span>
+            <a href="{{ route ('login', ['action' => 'register']) }}">Registrarse</a>
+            @endauth
         </div>
     </div>
 
@@ -38,28 +46,8 @@
                 {{-- Reparación agrupa: solicitudes, mecánico, programar, piezas, pago, entrega --}}
                 <li class="am-dropdown">
                     <a href="#" id="anav-reparacion" onclick="adminNav(this,'reparacion');return false;">
-                        Reparación <span class="am-arrow">▾</span>
+                        Reparación
                     </a>
-                    <div class="am-dropdown-menu">
-                        <a href="#" onclick="adminNavSub('reparacion','solicitudes');return false;">
-                            <i class="ti ti-clipboard-list"></i> Revisar solicitud
-                        </a>
-                        <a href="#" onclick="adminNavSub('reparacion','mecanico');return false;">
-                            <i class="ti ti-user-cog"></i> Asignar mecánico
-                        </a>
-                        <a href="#" onclick="adminNavSub('reparacion','programar');return false;">
-                            <i class="ti ti-calendar-event"></i> Programar fecha
-                        </a>
-                        <a href="#" onclick="adminNavSub('reparacion','piezas-comp');return false;">
-                            <i class="ti ti-package"></i> Aprobar piezas
-                        </a>
-                        <a href="#" onclick="adminNavSub('reparacion','pago');return false;">
-                            <i class="ti ti-credit-card"></i> Confirmar pago
-                        </a>
-                        <a href="#" onclick="adminNavSub('reparacion','entrega');return false;">
-                            <i class="ti ti-circle-check"></i> Marcar entregado
-                        </a>
-                    </div>
                 </li>
 
                 <li>
@@ -98,11 +86,11 @@
     <nav class="am-mobile-menu" id="mobileMenu">
         <a href="#" onclick="adminNav(document.getElementById('anav-reparacion'),'reparacion');return false;">Reparación</a>
         <a href="#" onclick="adminNavSub('reparacion','solicitudes');return false;" class="am-mob-sub">└ Revisar solicitud</a>
-        <a href="#" onclick="adminNavSub('reparacion','mecanico');return false;"    class="am-mob-sub">└ Asignar mecánico</a>
-        <a href="#" onclick="adminNavSub('reparacion','programar');return false;"   class="am-mob-sub">└ Programar fecha</a>
+        <a href="#" onclick="adminNavSub('reparacion','mecanico');return false;" class="am-mob-sub">└ Asignar mecánico</a>
+        <a href="#" onclick="adminNavSub('reparacion','programar');return false;" class="am-mob-sub">└ Programar fecha</a>
         <a href="#" onclick="adminNavSub('reparacion','piezas-comp');return false;" class="am-mob-sub">└ Aprobar piezas</a>
-        <a href="#" onclick="adminNavSub('reparacion','pago');return false;"        class="am-mob-sub">└ Confirmar pago</a>
-        <a href="#" onclick="adminNavSub('reparacion','entrega');return false;"     class="am-mob-sub">└ Marcar entregado</a>
+        <a href="#" onclick="adminNavSub('reparacion','pago');return false;" class="am-mob-sub">└ Confirmar pago</a>
+        <a href="#" onclick="adminNavSub('reparacion','entrega');return false;" class="am-mob-sub">└ Marcar entregado</a>
         <a href="#" onclick="adminNav(document.getElementById('anav-vehiculos2'),'vehiculos2');return false;">2ª Mano</a>
         <a href="#" onclick="adminNav(document.getElementById('anav-piezas'),'piezas');return false;">Piezas</a>
         <a href="#" onclick="adminNav(document.getElementById('anav-usuarios'),'usuarios');return false;">Usuarios</a>
@@ -114,22 +102,22 @@
     // ─── Panel activo por sub-sección ───────────────────────────────────────────
     // Mapa: sub-id → panel real del admin + scroll/highlight opcional
     const SUB_PANEL_MAP = {
-        'solicitudes':  'reparacion',
-        'mecanico':     'reparacion',
-        'programar':    'reparacion',
-        'piezas-comp':  'reparacion',   // piezas de compra (distinto de panel piezas)
-        'pago':         'reparacion',
-        'entrega':      'reparacion',
+        'solicitudes': 'reparacion',
+        'mecanico': 'reparacion',
+        'programar': 'reparacion',
+        'piezas-comp': 'reparacion', // piezas de compra (distinto de panel piezas)
+        'pago': 'reparacion',
+        'entrega': 'reparacion',
     };
 
     // Anclas/IDs de sección dentro del panel reparación para hacer scroll
     const SUB_SCROLL_MAP = {
-        'solicitudes':  'solicitudesList',
-        'mecanico':     'vehiculosReparGrid',
-        'programar':    'vehiculosReparGrid',
-        'piezas-comp':  'vehiculosReparGrid',
-        'pago':         'vehiculosReparGrid',
-        'entrega':      'vehiculosReparGrid',
+        'solicitudes': 'solicitudesList',
+        'mecanico': 'vehiculosReparGrid',
+        'programar': 'vehiculosReparGrid',
+        'piezas-comp': 'vehiculosReparGrid',
+        'pago': 'vehiculosReparGrid',
+        'entrega': 'vehiculosReparGrid',
     };
 
     // ─── Navegación principal ────────────────────────────────────────────────────
@@ -139,7 +127,7 @@
 
         // Poner active en el li padre del link pulsado
         const parentLi = link.closest ? link.closest('li') : null;
-        const topLink  = (parentLi ? parentLi.querySelector(':scope > a') : null) || link;
+        const topLink = (parentLi ? parentLi.querySelector(':scope > a') : null) || link;
         if (topLink) topLink.classList.add('active');
 
         // Llamar a showPanel del admin
@@ -173,11 +161,16 @@
             setTimeout(() => {
                 const el = document.getElementById(scrollTargetId);
                 if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    el.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                     // Flash visual para indicar dónde estamos
                     el.style.transition = 'box-shadow .3s';
-                    el.style.boxShadow  = '0 0 0 2px #2878f0';
-                    setTimeout(() => { el.style.boxShadow = ''; }, 1600);
+                    el.style.boxShadow = '0 0 0 2px #2878f0';
+                    setTimeout(() => {
+                        el.style.boxShadow = '';
+                    }, 1600);
                 }
             }, 80);
         }
@@ -188,7 +181,7 @@
     }
 
     // ─── Hamburguesa ────────────────────────────────────────────────────────────
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const ham = document.getElementById('ham');
         const mob = document.getElementById('mobileMenu');
         if (ham && mob) {
