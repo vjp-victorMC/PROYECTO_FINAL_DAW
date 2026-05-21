@@ -3,9 +3,7 @@
 
 @section('content')
 
-@include('components.header-admin')
-
-<div class="admin-subtitle" style="padding:0 1.5rem 0 1.5rem;margin-top:8px;color:#9ca3af;font-size:13px">Panel de administrador</div>
+<div class="admin-subtitle">Panel de administrador</div>
 
 <section class="py-8 px-6">
     <div class="dash" style="grid-template-columns:1fr;">

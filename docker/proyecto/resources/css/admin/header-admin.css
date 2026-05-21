@@ -50,11 +50,6 @@
     transition: transform 0.22s ease;
     line-height: 1;
 }
-/* Suprimir el ::after underline en el <a> padre del dropdown
-   para que no haya conflicto con la flecha */
-.am-dropdown > a::after {
-    display: none !important;
-}
 /* Pero sí mostramos el underline cuando está activo */
 .am-dropdown > a.active {
     color: var(--primary);

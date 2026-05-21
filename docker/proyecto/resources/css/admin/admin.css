@@ -1421,9 +1421,17 @@
 
     /* ===== AJUSTES GLOBALES PARA PANEL ADMIN ===== */
     .admin-subtitle {
-        font-size: 13px;
-        color: #9ca3af;
-        margin-bottom: 8px;
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 800;
+        color: #ffffff;
+        margin: 12px 1.5rem;
+        padding: 10px 16px;
+        border-radius: 10px;
+        background: linear-gradient(90deg,#0b1220 0%,#10243a 100%);
+        box-shadow: 0 8px 24px rgba(2,8,23,0.6);
+        letter-spacing: 0.02em;
+        text-shadow: 0 1px 0 rgba(0,0,0,0.4);
     }
 
     /* Usuarios */
@@ -1510,6 +1518,7 @@
         .veh-grid { grid-template-columns: repeat(2,1fr) }
         .pieza-grid { grid-template-columns: 1fr }
         .user-table td { font-size:12px }
+        .admin-subtitle { font-size:16px; margin:10px 1rem; padding:8px 12px }
     }
 
 

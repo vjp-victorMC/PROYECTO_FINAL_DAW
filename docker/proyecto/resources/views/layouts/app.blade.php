@@ -4,10 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Talleres Rápidos y Curiosos</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite([
+        'resources/css/components/topbar.css',
+        'resources/css/admin/header-admin.css',
+    ])
 </head>
 <body class="bg-white text-gray-900 dark:bg-black dark:text-white min-h-screen flex flex-col transition-colors duration-300">
-    <x-topbar />
+    @auth
+        @if(isset(Auth::user()->rol) && (Auth::user()->rol === 'admin'))
+            @include('components.header-admin')
+        @else
+            <x-topbar />
+        @endif
+    @else
+        <x-topbar />
+    @endauth
     <main class="flex-1">
         @yield('content')
     </main>
