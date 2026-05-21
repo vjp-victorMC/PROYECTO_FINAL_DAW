@@ -78,6 +78,7 @@ class UsuarioController extends Controller
             'nombre' => 'required|string|max:100',
             'email' => 'required|email|unique:usuarios,email',
             'dni' => 'required|unique:usuarios,dni',
+            'telefono' => 'required|string|max:20',
             'password' => 'required|min:4|confirmed',
         ]);
 
@@ -92,6 +93,7 @@ class UsuarioController extends Controller
             'nombre' => $request->nombre,
             'email' => $request->email,
             'dni' => $request->dni,
+            'telefono' => $request->telefono,
             'contraseña' => Hash::make($request->password),
             'rol' => 'cliente'
         ]);
