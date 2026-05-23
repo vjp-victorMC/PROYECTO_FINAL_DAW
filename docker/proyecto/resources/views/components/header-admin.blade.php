@@ -85,12 +85,6 @@
 
     <nav class="am-mobile-menu" id="mobileMenu">
         <a href="#" onclick="adminNav(document.getElementById('anav-reparacion'),'reparacion');return false;">Reparación</a>
-        <a href="#" onclick="adminNavSub('reparacion','solicitudes');return false;" class="am-mob-sub">└ Revisar solicitud</a>
-        <a href="#" onclick="adminNavSub('reparacion','mecanico');return false;" class="am-mob-sub">└ Asignar mecánico</a>
-        <a href="#" onclick="adminNavSub('reparacion','programar');return false;" class="am-mob-sub">└ Programar fecha</a>
-        <a href="#" onclick="adminNavSub('reparacion','piezas-comp');return false;" class="am-mob-sub">└ Aprobar piezas</a>
-        <a href="#" onclick="adminNavSub('reparacion','pago');return false;" class="am-mob-sub">└ Confirmar pago</a>
-        <a href="#" onclick="adminNavSub('reparacion','entrega');return false;" class="am-mob-sub">└ Marcar entregado</a>
         <a href="#" onclick="adminNav(document.getElementById('anav-vehiculos2'),'vehiculos2');return false;">2ª Mano</a>
         <a href="#" onclick="adminNav(document.getElementById('anav-piezas'),'piezas');return false;">Piezas</a>
         <a href="#" onclick="adminNav(document.getElementById('anav-usuarios'),'usuarios');return false;">Usuarios</a>
@@ -99,27 +93,6 @@
 </div>
 
 <script>
-    // ─── Panel activo por sub-sección ───────────────────────────────────────────
-    // Mapa: sub-id → panel real del admin + scroll/highlight opcional
-    const SUB_PANEL_MAP = {
-        'solicitudes': 'reparacion',
-        'mecanico': 'reparacion',
-        'programar': 'reparacion',
-        'piezas-comp': 'reparacion', // piezas de compra (distinto de panel piezas)
-        'pago': 'reparacion',
-        'entrega': 'reparacion',
-    };
-
-    // Anclas/IDs de sección dentro del panel reparación para hacer scroll
-    const SUB_SCROLL_MAP = {
-        'solicitudes': 'solicitudesList',
-        'mecanico': 'vehiculosReparGrid',
-        'programar': 'vehiculosReparGrid',
-        'piezas-comp': 'vehiculosReparGrid',
-        'pago': 'vehiculosReparGrid',
-        'entrega': 'vehiculosReparGrid',
-    };
-
     // ─── Navegación principal ────────────────────────────────────────────────────
     function adminNav(link, panelId) {
         // Quitar active de todos los top-links
@@ -136,46 +109,6 @@
         }
 
         // Cerrar menú móvil
-        const mob = document.getElementById('mobileMenu');
-        if (mob) mob.classList.remove('open');
-    }
-
-    // ─── Navegación sub-ítem (dropdown / móvil) ──────────────────────────────
-    function adminNavSub(panelId, subId) {
-        // 1. Activar el link padre en el menú principal
-        const parentLink = document.getElementById('anav-' + panelId);
-        if (parentLink) {
-            document.querySelectorAll('#adminMenu > li > a').forEach(a => a.classList.remove('active'));
-            parentLink.classList.add('active');
-        }
-
-        // 2. Navegar al panel principal
-        if (typeof showPanel === 'function') {
-            showPanel(panelId);
-        }
-
-        // 3. Resaltar / hacer scroll a la sección concreta
-        const scrollTargetId = SUB_SCROLL_MAP[subId];
-        if (scrollTargetId) {
-            // Esperamos un tick para que el panel sea visible antes de scrollar
-            setTimeout(() => {
-                const el = document.getElementById(scrollTargetId);
-                if (el) {
-                    el.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Flash visual para indicar dónde estamos
-                    el.style.transition = 'box-shadow .3s';
-                    el.style.boxShadow = '0 0 0 2px #2878f0';
-                    setTimeout(() => {
-                        el.style.boxShadow = '';
-                    }, 1600);
-                }
-            }, 80);
-        }
-
-        // 4. Cerrar menú móvil
         const mob = document.getElementById('mobileMenu');
         if (mob) mob.classList.remove('open');
     }
