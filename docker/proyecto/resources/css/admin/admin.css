@@ -256,6 +256,7 @@
 
     .kpi-delta {
         font-size: 12px;
+        color: white;
     }
 
     .kpi-delta.up {

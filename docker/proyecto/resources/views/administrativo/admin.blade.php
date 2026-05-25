@@ -383,7 +383,7 @@
             precio: 6500,
             specs: '2015 · 120.000 km · Diésel · Manual · 115 CV',
             en_venta: true,
-            imagen: 'https://upload.wikimedia.org/wikipedia/commons/6/6c/2014_Ford_Focus_%28AM5%29_Trend_5-door_hatchback_%282015-11-06%29_01.jpg'
+            imagen: 'https://hips.hearstapps.com/es.h-cdn.co/cades/contenidos/52502/ford_focus_rs2.png'
         },
         {
             id: 2,
@@ -393,27 +393,17 @@
             precio: 8900,
             specs: '2018 · 65.000 km · Gasolina · Manual · 69 CV',
             en_venta: true,
-            imagen: 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Toyota_Yaris_III_%28E150%29_–_Frontansicht%2C_23._August_2014%2C_Wülfrath.jpg'
+            imagen: 'https://kobemotor.es/wp-content/uploads/2024/05/Toyota-GR-Yaris-2024.jpg'
         },
         {
             id: 3,
             matricula: '2234KPL',
-            marca: 'Seat',
-            modelo: 'Ibiza 1.2 TSI',
+            marca: 'Volkswagen',
+            modelo: 'Golf 1.2 TSI',
             precio: 7200,
             specs: '2016 · 98.000 km · Gasolina · Manual · 85 CV',
             en_venta: false,
-            imagen: 'https://upload.wikimedia.org/wikipedia/commons/9/98/SEAT_Ibiza_IV_20090808_front.jpg'
-        },
-        {
-            id: 4,
-            matricula: '5500MNA',
-            marca: 'Peugeot',
-            modelo: '308 1.6 HDi',
-            precio: 5800,
-            specs: '2014 · 148.000 km · Diésel · Auto · 92 CV',
-            en_venta: true,
-            imagen: 'https://upload.wikimedia.org/wikipedia/commons/2/29/Peugeot_308_SW_2008.jpg'
+            imagen: 'https://alz-motors.es/wp-content/uploads/2021/01/VOLKSWAGEN-Golf-GTI-Clubsport.jpg'
         },
     ];
 
