@@ -50,7 +50,7 @@
             <img src="{{ asset('images/Logos svg/toyota.svg') }}" alt="Toyota">
             <img src="{{ asset('images/Logos svg/volkswagen.svg') }}" alt="Volkswagen">
             <img src="{{ asset('images/Logos svg/volvo.svg') }}" alt="Volvo">
-            
+
             <!-- Segundo set idéntico para el loop infinito perfecto -->
             <img src="{{ asset('images/Logos svg/audi.svg') }}" alt="Audi">
             <img src="{{ asset('images/Logos svg/bmw.svg') }}" alt="BMW">
@@ -365,37 +365,6 @@
         </div>
     </section>
 
-    <!-- PEDIR CITA -->
-    <section class="cita-section" id="cita">
-        <div class="cita-inner animate-up">
-            <div class="cita-info">
-                <span class="section-label" style="color:var(--primary-light)">Reserva online</span>
-                <h2>Pide tu cita ahora</h2>
-                <p>Reserva en menos de 2 minutos. Confirmamos tu cita por WhatsApp en menos de 1 hora.</p>
-                <div class="cita-detail"><i class="ti ti-clock"></i> Lun–Vie: 8:00 – 19:00 | Sáb: 9:00 – 14:00</div>
-                <div class="cita-detail"><i class="ti ti-map-pin"></i> Av. de España, 45 · Plasencia</div>
-                <div class="cita-detail"><i class="ti ti-phone"></i> 924 000 000</div>
-            </div>
-            <div class="cita-form">
-                <input type="text" placeholder="Nombre completo">
-                <input type="tel" placeholder="Teléfono WhatsApp">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <input type="text" placeholder="Matrícula">
-                    <input type="date">
-                </div>
-                <select>
-                    <option value="">Tipo de servicio</option>
-                    <option>Revisión general</option>
-                    <option>Mecánica compleja</option>
-                    <option>Neumáticos</option>
-                    <option>Electricidad</option>
-                </select>
-                <textarea placeholder="Cuéntanos qué necesita tu coche..."></textarea>
-                <button class="btn-primary" style="width:100%; justify-content:center;">Confirmar Reserva</button>
-            </div>
-        </div>
-    </section>
-
     <!-- TESTIMONIOS -->
     <section class="testi">
         <div class="animate-up">
@@ -478,7 +447,7 @@
         const panel = document.getElementById('xray-info-panel');
         panel.style.opacity = '0';
         panel.style.transform = 'translateY(10px)';
-        
+
         setTimeout(() => {
             document.getElementById('xray-info-title').textContent = svc.label;
             document.getElementById('xray-info-desc').textContent = svc.desc;
@@ -508,7 +477,7 @@
         if (!rangeImporte || !rangePlazo) return;
         const amount = parseFloat(rangeImporte.value);
         const months = parseInt(rangePlazo.value);
-        
+
         // Format displayed inputs
         valImporte.textContent = amount.toLocaleString('es-ES') + ' €';
         valPlazo.textContent = `${months} meses`;
@@ -516,9 +485,9 @@
         // Standard Amortization Formula (TIN ~5.4% yields ~285€ for 15000€ at 60 months)
         const annualRate = 0.054;
         const monthlyRate = annualRate / 12;
-        
+
         const monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-        
+
         valCuota.textContent = `${Math.round(monthlyPayment)} €`;
 
         // Actualizar el enlace dinámicamente

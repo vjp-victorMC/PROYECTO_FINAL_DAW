@@ -4,6 +4,7 @@ use App\Http\Controllers\CocheController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\Coche2manoController;
+use App\Http\Controllers\MensajeController;
 
 //------ RUTAS PUBLICAS ------
 //Retorna todos los coches de 2 mano de la base de datos
@@ -24,8 +25,14 @@ Route::post('/usuario/newUser', [UsuarioController::class, 'setNewUser']);
 //Crear un nuevo coche para un usuario
 Route::post('/usuario/newCar', [CocheController::class, 'setNewCar']);
 
+//Metodo para enviar un mensaje de reparaicon al admin
+Route::post('/usuario/mensaje', [MensajeController::class, 'mensajesCliente']);
+
 //Retorna el id del usuario por su dni
 Route::get('/usuario/getId/{dni}', [UsuarioController::class, 'getIdByDni']);
+
+//Obtiene los coches de un usuario
+Route::get('/usuario/cars/{id}', [CocheController::class, 'getUsuarioCars']);
 
 //Retorna el usuario pedido por el id
 Route::get('/usuario/{id}', [UsuarioController::class, 'getUserByID']);

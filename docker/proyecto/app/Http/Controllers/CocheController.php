@@ -50,4 +50,12 @@ class CocheController extends Controller
 
         return view('coches.index', compact('coches'));
     }
+
+    // Devuelve los coches de un usuario en formato JSON (matrícula y modelo)
+    public function getUsuarioCars($id_usuario)
+    {
+        $coches = \App\Models\Coche::where('id_usuario', $id_usuario)
+            ->get(['matricula', 'modelo']);
+        return response()->json($coches);
+    }
 }

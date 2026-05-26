@@ -11,13 +11,14 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsuarioSeeder::class,          // sin dependencias
             ProveedorSeeder::class,        // sin dependencias
-            Coche2manoSeeder::class,        // sin dependencias
+            Coche2manoSeeder::class,       // sin dependencias
+            SaldoTallerSeeder::class,      // sin dependencias
             CocheSeeder::class,            // depende de: clientes
             PiezaSeeder::class,            // depende de: proveedores
             ReparacionSeeder::class,       // depende de: coches, usuarios
             ReparacionPiezaSeeder::class,  // depende de: reparaciones, piezas, usuarios
             ContabilidadSeeder::class,     // depende de: usuarios
-            SaldoTallerSeeder::class,      // sin dependencias
+            MensajesSeeder::class,          // depende de: usuarios
         ]);
     }
 }

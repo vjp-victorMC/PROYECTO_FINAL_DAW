@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\CitaController;
 
 
 //------ RUTAS PUBLICAS ------
@@ -45,9 +46,9 @@ Route::post('logout', [UsuarioController::class, 'logout'])->name('logout');
 //     return view('administrativo.admin');
 // });
 
-        Route::get('/mecanico', function () {
-            return view('mecanico.mecanico');
-        })->name("mecanico");
+Route::get('/mecanico', function () {
+    return view('mecanico.mecanico');
+})->name("mecanico");
 
 
 //------ RUTAS PRIVADAS ------
@@ -70,4 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
             return view('administrativo.admin');
         });
     });
+
+    // Ruta protegida para pedir cita
+    Route::get('/cita', [CitaController::class, 'showForm'])->name('cita');
 });
