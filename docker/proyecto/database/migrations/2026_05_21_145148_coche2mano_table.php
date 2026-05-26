@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('modelo', 50);
             $table->string('imagen', 255)->nullable();
             $table->decimal('precio', 10, 2); // Hasta 99.999.999,99
+            $table->year('anio_matriculacion');
+            $table->string('motorizacion', 50);
             $table->text('especificaciones')->nullable(); // Para descripciones largas
             $table->integer('km');
             $table->timestamps();
