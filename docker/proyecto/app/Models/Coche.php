@@ -30,4 +30,9 @@ class Coche extends Model
     {
         return $this->belongsTo(Usuario::class, 'id_usuario');
     }
+
+    public function reparaciones()
+    {
+        return $this->hasMany(Reparacion::class, 'id_coche', 'id_coche');
+    }
 }

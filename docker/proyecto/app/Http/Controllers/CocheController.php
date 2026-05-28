@@ -58,4 +58,34 @@ class CocheController extends Controller
             ->get(['matricula', 'modelo']);
         return response()->json($coches);
     }
+
+    public function getCochesEnGaraje()
+    {
+        // 1. Consultar los coches filtrando por el estado en_garaje
+        $coches = Coche::where('en_garaje', 1)->get();
+
+        // 2. Retornar la respuesta en formato JSON
+        return response()->json([
+            'status'  => 'success',
+            'count'   => $coches->count(),
+            'data'    => $coches
+        ], 200);
+    }
+
+    public function getCochesParaPagar()
+    {
+        // Buscamos los coches que están en el garaje (en_garaje = 1)
+        // Y que tienen al menos una relación con reparaciones en estado 'finalizada'
+        $coches = Coche::where('en_garaje', 1)
+            ->whereHas('reparaciones', function ($query) {
+                $query->where('estado', 'finalizada');
+            })
+            ->get();
+
+        return response()->json([
+            'status'  => 'success',
+            'count'   => $coches->count(),
+            'data'    => $coches
+        ], 200);
+    }
 }
