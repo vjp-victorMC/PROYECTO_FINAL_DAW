@@ -263,76 +263,6 @@
         </div>
     </section>
 
-    <!-- FINANCIACIÓN A MEDIDA -->
-    <section class="finance-section animate-up">
-        <div class="finance-container">
-            <!-- Left Info column -->
-            <div class="finance-info">
-                <span class="section-label">Financiación a Medida</span>
-                <h2 class="finance-title">Conduce hoy,<br>paga <span>a tu ritmo</span></h2>
-                <p class="finance-desc">Te ayudamos a financiar tu vehículo con las mejores condiciones del mercado. Cuotas adaptadas a tu economía, sin sorpresas.</p>
-                <ul class="finance-bullets">
-                    <li><span class="finance-bullet-dot"></span>Respuesta en menos de 24 horas</li>
-                    <li><span class="finance-bullet-dot"></span>Sin comisiones de apertura</li>
-                    <li><span class="finance-bullet-dot"></span>Cuotas desde 99 €/mes</li>
-                    <li><span class="finance-bullet-dot"></span>Hasta 96 meses de plazo</li>
-                </ul>
-            </div>
-
-            <!-- Right Calculator Card -->
-            <div class="sim-card animate-up delay-1">
-                <div class="sim-header">
-                    <div class="sim-icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
-                            <line x1="9" y1="22" x2="9" y2="16" />
-                            <line x1="8" y1="6" x2="16" y2="6" />
-                            <line x1="16" y1="16" x2="16" y2="22" />
-                            <line x1="12" y1="16" x2="12" y2="22" />
-                            <circle cx="9" cy="11" r="1" />
-                            <circle cx="15" cy="11" r="1" />
-                            <circle cx="12" cy="11" r="1" />
-                        </svg>
-                    </div>
-                    <div class="sim-header-text">
-                        <h3>Simulador de cuota</h3>
-                        <p>Calcula tu financiación al instante</p>
-                    </div>
-                </div>
-
-                <div class="sim-sliders">
-                    <!-- Importe Slider -->
-                    <div class="sim-slider-group">
-                        <div class="sim-slider-labels">
-                            <label for="range-importe">Importe</label>
-                            <span class="sim-value" id="val-importe">15.000 €</span>
-                        </div>
-                        <input type="range" class="sim-slider-input" id="range-importe" min="3000" max="50000" step="500" value="15000">
-                    </div>
-
-                    <!-- Plazo Slider -->
-                    <div class="sim-slider-group">
-                        <div class="sim-slider-labels">
-                            <label for="range-plazo">Plazo</label>
-                            <span class="sim-value" id="val-plazo">60 meses</span>
-                        </div>
-                        <input type="range" class="sim-slider-input" id="range-plazo" min="12" max="96" step="12" value="60">
-                    </div>
-                </div>
-
-                <!-- Shaded Result Box -->
-                <div class="sim-result-box">
-                    <div class="sim-result-label">TU CUOTA MENSUAL</div>
-                    <div class="sim-result-value" id="val-cuota">285 €</div>
-                    <div class="sim-result-note">TAE 7,9% · Cuota orientativa</div>
-                </div>
-
-                <a href="{{ route('compra') }}" class="btn-primary sim-btn-submit" id="btn-solicitar">
-                    <i class="ti ti-calculator" aria-hidden="true"></i> Solicitar Financiación
-                </a>
-            </div>
-        </div>
-    </section>
 
     <!-- POR QUÉ ELEGIRNOS -->
     <section class="why">
@@ -361,6 +291,51 @@
                 <span class="why-num">04</span>
                 <h4>Recambios Originales</h4>
                 <p>Solo utilizamos piezas de primer equipo que aseguran la máxima longevidad de tu vehículo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓMO TRABAJAMOS -->
+    <section class="process-section">
+        <div class="process-container">
+            <div class="animate-up">
+                <span class="section-label">Nuestro Método</span>
+                <h2 class="section-title">Cómo trabajamos paso a paso</h2>
+                <p class="section-sub">Diseñamos una experiencia ágil y transparente para que tu visita sea lo más cómoda posible.</p>
+            </div>
+            <div class="process-grid">
+                <div class="process-card animate-up">
+                    <span class="process-step">Paso 1</span>
+                    <div class="process-icon-box">
+                        <i class="ti ti-calendar-event"></i>
+                    </div>
+                    <h3>1. Cita Online</h3>
+                    <p>Elige el día y la hora que mejor te vengan desde nuestro simulador o llámanos directamente en pocos segundos.</p>
+                </div>
+                <div class="process-card animate-up delay-1">
+                    <span class="process-step">Paso 2</span>
+                    <div class="process-icon-box">
+                        <i class="ti ti-report-analytics"></i>
+                    </div>
+                    <h3>2. Recepción y Diagnóstico</h3>
+                    <p>Revisamos tu coche con software de vanguardia y te preparamos un presupuesto cerrado al momento.</p>
+                </div>
+                <div class="process-card animate-up delay-2">
+                    <span class="process-step">Paso 3</span>
+                    <div class="process-icon-box">
+                        <i class="ti ti-settings-automation"></i>
+                    </div>
+                    <h3>3. Reparación Premium</h3>
+                    <p>Nuestros mecánicos expertos efectúan el servicio utilizando recambios oficiales certificados y con total limpieza.</p>
+                </div>
+                <div class="process-card animate-up delay-3">
+                    <span class="process-step">Paso 4</span>
+                    <div class="process-icon-box">
+                        <i class="ti ti-discount-check"></i>
+                    </div>
+                    <h3>4. Control y Entrega</h3>
+                    <p>Probamos el coche a fondo, te explicamos el trabajo realizado y te entregamos las llaves con tu garantía de 12 meses.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -409,7 +384,57 @@
         </div>
     </section>
 
+    <!-- PREGUNTAS FRECUENTES (FAQ) -->
+    <section class="faq-section">
+        <div class="faq-container">
+            <div class="animate-up">
+                <span class="section-label">Soporte rápido</span>
+                <h2 class="section-title" style="text-align: center;">Preguntas Frecuentes</h2>
+                <p class="section-sub" style="text-align: center; margin: 0 auto 48px;">Resolvemos todas tus dudas sobre nuestro taller, citas y procesos de revisión.</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item animate-up">
+                    <button class="faq-trigger" onclick="toggleFaq(this)">
+                        <span class="faq-question">¿Necesito pedir cita previa obligatoriamente?</span>
+                        <span class="faq-icon"><i class="ti ti-plus"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p>Aunque te recomendamos solicitar cita previa online o por teléfono para asegurarte la recepción inmediata de tu vehículo, también atendemos urgencias y diagnósticos rápidos de forma directa en nuestras instalaciones.</p>
+                    </div>
+                </div>
+                <div class="faq-item animate-up delay-1">
+                    <button class="faq-trigger" onclick="toggleFaq(this)">
+                        <span class="faq-question">¿Cuánto tiempo se tarda en realizar una revisión general?</span>
+                        <span class="faq-icon"><i class="ti ti-plus"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p>Una revisión de mantenimiento estándar (cambio de aceite, filtros y chequeo de seguridad de 40 puntos) suele demorarse entre 1 y 2 horas. Te avisaremos mediante un SMS en cuanto tu vehículo esté listo para recoger.</p>
+                    </div>
+                </div>
+                <div class="faq-item animate-up delay-2">
+                    <button class="faq-trigger" onclick="toggleFaq(this)">
+                        <span class="faq-question">¿Qué garantía tienen las reparaciones realizadas?</span>
+                        <span class="faq-icon"><i class="ti ti-plus"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p>Todas las reparaciones y sustituciones que realizamos en nuestro taller cuentan con una garantía total de 12 meses o 20.000 kilómetros recorridos (lo que ocurra primero), duplicando la garantía mínima legal exigida.</p>
+                    </div>
+                </div>
+                <div class="faq-item animate-up delay-3">
+                    <button class="faq-trigger" onclick="toggleFaq(this)">
+                        <span class="faq-question">¿Disponéis de vehículo de sustitución?</span>
+                        <span class="faq-icon"><i class="ti ti-plus"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p>Sí, ofrecemos vehículos de cortesía completamente gratuitos para reparaciones que requieran más de 4 horas de taller. Te aconsejamos solicitarlo al reservar tu cita previa debido a la disponibilidad limitada.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </div>
+
 
 <script>
     const xrayServices = {
@@ -466,42 +491,31 @@
         });
     }
 
-    // Finance Calculator
-    const rangeImporte = document.getElementById('range-importe');
-    const rangePlazo = document.getElementById('range-plazo');
-    const valImporte = document.getElementById('val-importe');
-    const valPlazo = document.getElementById('val-plazo');
-    const valCuota = document.getElementById('val-cuota');
-
-    function calculateFinance() {
-        if (!rangeImporte || !rangePlazo) return;
-        const amount = parseFloat(rangeImporte.value);
-        const months = parseInt(rangePlazo.value);
-
-        // Format displayed inputs
-        valImporte.textContent = amount.toLocaleString('es-ES') + ' €';
-        valPlazo.textContent = `${months} meses`;
-
-        // Standard Amortization Formula (TIN ~5.4% yields ~285€ for 15000€ at 60 months)
-        const annualRate = 0.054;
-        const monthlyRate = annualRate / 12;
-
-        const monthlyPayment = (amount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-
-        valCuota.textContent = `${Math.round(monthlyPayment)} €`;
-
-        // Actualizar el enlace dinámicamente
-        const btnSolicitar = document.getElementById('btn-solicitar');
-        if (btnSolicitar) {
-            btnSolicitar.href = `{{ route('compra') }}?price=${amount}&months=${months}`;
+    // FAQ Accordion
+    function toggleFaq(button) {
+        const item = button.parentElement;
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.faq-icon i');
+        
+        // Cerrar otros
+        document.querySelectorAll('.faq-item').forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+                otherItem.classList.remove('active');
+                otherItem.querySelector('.faq-content').style.maxHeight = null;
+                otherItem.querySelector('.faq-icon i').className = 'ti ti-plus';
+            }
+        });
+        
+        // Alternar el actual
+        if (item.classList.contains('active')) {
+            item.classList.remove('active');
+            content.style.maxHeight = null;
+            icon.className = 'ti ti-plus';
+        } else {
+            item.classList.add('active');
+            content.style.maxHeight = content.scrollHeight + "px";
+            icon.className = 'ti ti-minus';
         }
-    }
-
-    if (rangeImporte && rangePlazo) {
-        rangeImporte.addEventListener('input', calculateFinance);
-        rangePlazo.addEventListener('input', calculateFinance);
-        // Initial run
-        calculateFinance();
     }
 
     // Scroll Reveal Intersection Observer

@@ -40,6 +40,15 @@ Route::get('/vehiculo', function () {
     return view('usuario.vehiculo');
 })->name('vehiculo');
 
+Route::get('/datos-usuario', function () {
+    if (!Illuminate\Support\Facades\Auth::check()) {
+        return redirect()->route('login');
+    }
+    $usuario = Illuminate\Support\Facades\Auth::user();
+    $coches = $usuario->coches;
+    return view('usuario.datosUsuario', compact('usuario', 'coches'));
+})->name('datosUsuario');
+
 Route::post('logout', [UsuarioController::class, 'logout'])->name('logout');
 
 // Route::get('/admin', function () {

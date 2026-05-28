@@ -36,4 +36,9 @@ class Usuario extends Authenticatable
     {
         return $this->contraseña;
     }
+
+    public function coches()
+    {
+        return $this->hasMany(Coche::class, 'id_usuario');
+    }
 }

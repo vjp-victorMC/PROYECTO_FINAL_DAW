@@ -13,259 +13,153 @@
         </div>
     </section>
 
-    <!-- FILTERS -->
-    <div class="filters-bar">
-        <div class="filters-inner">
-            <div class="filter-group">
-                <select name="marca">
-                    <option value="">Todas las marcas</option>
-                    <option value="audi">Audi</option>
-                    <option value="bmw">BMW</option>
-                    <option value="mercedes">Mercedes-Benz</option>
-                    <option value="seat">Seat</option>
-                    <option value="vw">Volkswagen</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <select name="tipo">
-                    <option value="">Tipo de vehículo</option>
-                    <option value="suv">SUV</option>
-                    <option value="sedan">Sedán</option>
-                    <option value="compacto">Compacto</option>
-                    <option value="furgoneta">Furgoneta</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <select name="precio">
-                    <option value="">Precio máximo</option>
-                    <option value="10000">Hasta 10.000€</option>
-                    <option value="20000">Hasta 20.000€</option>
-                    <option value="30000">Hasta 30.000€</option>
-                    <option value="50000">Más de 30.000€</option>
-                </select>
-            </div>
-            <button class="btn-search">
-                <i class="ti ti-search"></i> Buscar
-            </button>
-        </div>
-    </div>
-
     <!-- VEHICLE GRID -->
     <section class="ocasion-grid-section">
-        <div class="vehicle-grid">
-
-            <!-- Coche 1 -->
-            <div class="vehicle-card animate-up">
-                <div class="badge-ocasion">Destacado</div>
-                <div class="vehicle-image">
-                    <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=800" alt="BMW Serie 3">
-                </div>
-                <div class="vehicle-content">
-                    <h3 class="vehicle-title">BMW Serie 3 320d</h3>
-                    <p class="vehicle-subtitle">M Sport Edition · Automático</p>
-                    <div class="vehicle-specs">
-                        <div class="spec-item">
-                            <span>Año</span>
-                            <strong>2021</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Kms</span>
-                            <strong>45.000</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Motor</span>
-                            <strong>Diesel</strong>
-                        </div>
-                    </div>
-                    <div class="vehicle-footer">
-                        <div class="vehicle-price">
-                            <span class="price-promo">Desde 340€/mes</span>
-                            <span class="price-main">32.900€</span>
-                        </div>
-                        <a href="{{ route('compra') }}?car=BMW%20Serie%203%20320d&price=32900&brand=BMW&year=2021&km=45.000" class="btn-view">Comprar / Financiar</a>
-                    </div>
-                </div>
+        <div class="vehicle-grid" id="vehicle-grid">
+            <!-- Cargado dinámicamente mediante JS -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);" id="loading-spinner">
+                <i class="ti ti-loader" style="font-size: 40px; display: inline-block; animation: spin 1.5s linear infinite; color: var(--primary);"></i>
+                <p style="margin-top: 15px; font-weight: 600;">Cargando catálogo premium...</p>
             </div>
-
-            <!-- Coche 2 -->
-            <div class="vehicle-card animate-up delay-1">
-                <div class="badge-ocasion" style="background:#16a34a">Garantía +</div>
-                <div class="vehicle-image">
-                    <img src="https://images.unsplash.com/photo-1617531653332-bd46c24f2068?auto=format&fit=crop&q=80&w=800" alt="Audi A3">
-                </div>
-                <div class="vehicle-content">
-                    <h3 class="vehicle-title">Audi A3 Sportback</h3>
-                    <p class="vehicle-subtitle">35 TFSI S-Line · Manual</p>
-                    <div class="vehicle-specs">
-                        <div class="spec-item">
-                            <span>Año</span>
-                            <strong>2020</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Kms</span>
-                            <strong>58.200</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Motor</span>
-                            <strong>Gasolina</strong>
-                        </div>
-                    </div>
-                    <div class="vehicle-footer">
-                        <div class="vehicle-price">
-                            <span class="price-promo">Financiado</span>
-                            <span class="price-main">24.500€</span>
-                        </div>
-                        <a href="{{ route('compra') }}?car=Audi%20A3%20Sportback&price=24500&brand=Audi&year=2020&km=58.200" class="btn-view">Comprar / Financiar</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Coche 3 -->
-            <div class="vehicle-card animate-up delay-2">
-                <div class="vehicle-image">
-                    <img src="https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&q=80&w=800" alt="VW Golf">
-                </div>
-                <div class="vehicle-content">
-                    <h3 class="vehicle-title">Volkswagen Golf GTI</h3>
-                    <p class="vehicle-subtitle">Performance 245cv · DSG</p>
-                    <div class="vehicle-specs">
-                        <div class="spec-item">
-                            <span>Año</span>
-                            <strong>2019</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Kms</span>
-                            <strong>72.000</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Motor</span>
-                            <strong>Gasolina</strong>
-                        </div>
-                    </div>
-                    <div class="vehicle-footer">
-                        <div class="vehicle-price">
-                            <span class="price-promo">Oportunidad</span>
-                            <span class="price-main">28.900€</span>
-                        </div>
-                        <a href="{{ route('compra') }}?car=Volkswagen%20Golf%20GTI&price=28900&brand=Volkswagen&year=2019&km=72.000" class="btn-view">Comprar / Financiar</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Coche 4 -->
-            <div class="vehicle-card animate-up">
-                <div class="vehicle-image">
-                    <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&q=80&w=800" alt="Mercedes Clase A">
-                </div>
-                <div class="vehicle-content">
-                    <h3 class="vehicle-title">Mercedes Clase A 200</h3>
-                    <p class="vehicle-subtitle">AMG Line · 7G-DCT</p>
-                    <div class="vehicle-specs">
-                        <div class="spec-item">
-                            <span>Año</span>
-                            <strong>2022</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Kms</span>
-                            <strong>15.000</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Motor</span>
-                            <strong>Híbrido</strong>
-                        </div>
-                    </div>
-                    <div class="vehicle-footer">
-                        <div class="vehicle-price">
-                            <span class="price-promo">Seminuevo</span>
-                            <span class="price-main">35.400€</span>
-                        </div>
-                        <a href="{{ route('compra') }}?car=Mercedes%20Clase%20A%20200&price=35400&brand=Mercedes-Benz&year=2022&km=15.000" class="btn-view">Comprar / Financiar</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Coche 5 -->
-            <div class="vehicle-card animate-up delay-1">
-                <div class="vehicle-image">
-                    <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c34b?auto=format&fit=crop&q=80&w=800" alt="Seat Arona">
-                </div>
-                <div class="vehicle-content">
-                    <h3 class="vehicle-title">Seat Arona 1.0 TSI</h3>
-                    <p class="vehicle-subtitle">Style Edition · SUV</p>
-                    <div class="vehicle-specs">
-                        <div class="spec-item">
-                            <span>Año</span>
-                            <strong>2021</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Kms</span>
-                            <strong>32.400</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Motor</span>
-                            <strong>Gasolina</strong>
-                        </div>
-                    </div>
-                    <div class="vehicle-footer">
-                        <div class="vehicle-price">
-                            <span class="price-promo">Bajo consumo</span>
-                            <span class="price-main">16.800€</span>
-                        </div>
-                        <a href="{{ route('compra') }}?car=Seat%20Arona%201.0%20TSI&price=16800&brand=Seat&year=2021&km=32.400" class="btn-view">Comprar / Financiar</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Coche 6 -->
-            <div class="vehicle-card animate-up delay-2">
-                <div class="vehicle-image">
-                    <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=800" alt="Ford Kuga">
-                </div>
-                <div class="vehicle-content">
-                    <h3 class="vehicle-title">Ford Kuga PHEV</h3>
-                    <p class="vehicle-subtitle">ST-Line X · Etiqueta 0</p>
-                    <div class="vehicle-specs">
-                        <div class="spec-item">
-                            <span>Año</span>
-                            <strong>2021</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Kms</span>
-                            <strong>48.000</strong>
-                        </div>
-                        <div class="spec-item">
-                            <span>Motor</span>
-                            <strong>Híbrido Ench.</strong>
-                        </div>
-                    </div>
-                    <div class="vehicle-footer">
-                        <div class="vehicle-price">
-                            <span class="price-promo">Etiqueta 0</span>
-                            <span class="price-main">29.900€</span>
-                        </div>
-                        <a href="{{ route('compra') }}?car=Ford%20Kuga%20PHEV&price=29900&brand=Ford&year=2021&km=48.000" class="btn-view">Comprar / Financiar</a>
-                    </div>
-                </div>
-            </div>
-
         </div>
-
     </section>
 </div>
 
-<script>
-    // Intersection Observer para animaciones
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
+<style>
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
 
-    document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const grid = document.getElementById('vehicle-grid');
+        const spinner = document.getElementById('loading-spinner');
+        
+        // Cargar coches de ocasión desde la API
+        fetch('/api/coche2mano')
+            .then(response => response.json())
+            .then(res => {
+                if (spinner) spinner.remove();
+                
+                if (!res.success || !res.data || res.data.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                            <i class="ti ti-alert-circle" style="font-size: 50px; color: var(--primary);"></i>
+                            <h3 style="margin-top: 15px; font-size: 20px; font-weight: 700; color: var(--secondary);">No hay vehículos disponibles</h3>
+                            <p style="color: var(--text-muted); margin-top: 8px;">En este momento no disponemos de vehículos de ocasión en stock. Vuelve a consultar más tarde.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                res.data.forEach((veh, index) => {
+                    const delayClass = index % 3 === 0 ? '' : (index % 3 === 1 ? 'delay-1' : 'delay-2');
+                    
+                    // Comprobar la URL de la imagen
+                    let imgUrl = '';
+                    if (veh.imagen) {
+                        imgUrl = (veh.imagen.startsWith('http://') || veh.imagen.startsWith('https://')) 
+                            ? veh.imagen 
+                            : `/storage/${veh.imagen}`;
+                    } else {
+                        // Imagen por defecto (silueta SVG de auto)
+                        imgUrl = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50' fill='none' stroke='%23A9B8CE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 30 H25 C28 20, 36 12, 50 12 H65 C73 12, 80 18, 83 25 L86 30 H90 C92 30, 94 32, 94 34 V38 C94 40, 92 41, 90 41 H84' /><path d='M16 41 H10 C8 41, 6 40, 6 38 V34 C6 32, 8 30, 10 30 H15' /><circle cx='25' cy='41' r='5.5' stroke='%23A9B8CE' stroke-width='2' fill='%23F0F4FA' /><circle cx='75' cy='41' r='5.5' stroke='%23A9B8CE' stroke-width='2' fill='%23F0F4FA' /><path d='M31 41 H69' /><path d='M48 18 H63 C68 18, 73 22, 75 27 L76 30 H48 V18 Z' fill='%23A9B8CE' fill-opacity='0.1' stroke='%23A9B8CE' stroke-width='1.5' /><path d='M33 30 H44 V18 H38 C34 18, 30 22, 29 27 Z' fill='%23A9B8CE' fill-opacity='0.1' stroke='%23A9B8CE' stroke-width='1.5' /></svg>";
+                    }
+                    
+                    // Procesar especificaciones (separar por puntos/barras si es necesario)
+                    let specsHtml = '';
+                    if (veh.especificaciones) {
+                        const parts = veh.especificaciones.split('·').map(p => p.trim());
+                        const anio = parts[0] || 'N/A';
+                        const kms = parts[1] || `${veh.km ? veh.km.toLocaleString('es-ES') : 0} km`;
+                        const combustible = parts[2] || 'Gasolina';
+                        
+                        specsHtml = `
+                            <div class="spec-item">
+                                <span>Año</span>
+                                <strong>${anio}</strong>
+                            </div>
+                            <div class="spec-item">
+                                <span>Kms</span>
+                                <strong>${kms}</strong>
+                            </div>
+                            <div class="spec-item">
+                                <span>Motor</span>
+                                <strong>${combustible}</strong>
+                            </div>
+                        `;
+                    } else {
+                        // Fallback con datos directos si no hay string de especificaciones
+                        specsHtml = `
+                            <div class="spec-item">
+                                <span>Matrícula</span>
+                                <strong>${veh.matricula ? veh.matricula.substring(0, 4) + '...' : 'N/A'}</strong>
+                            </div>
+                            <div class="spec-item">
+                                <span>Kms</span>
+                                <strong>${veh.km ? veh.km.toLocaleString('es-ES') : '0'}</strong>
+                            </div>
+                            <div class="spec-item">
+                                <span>Garantía</span>
+                                <strong>12 Meses</strong>
+                            </div>
+                        `;
+                    }
+                    
+                    const priceFormatted = veh.precio ? `${parseFloat(veh.precio).toLocaleString('es-ES')}€` : 'Consultar';
+                    
+                    html += `
+                        <div class="vehicle-card animate-up ${delayClass}">
+                            <div class="badge-ocasion">Ocasión</div>
+                            <div class="vehicle-image" style="background: #F4F7FB; display: flex; align-items: center; justify-content: center; height: 220px; overflow: hidden;">
+                                <img src="${imgUrl}" alt="${veh.marca} ${veh.modelo}" style="width:100%; height:100%; object-fit:cover;">
+                            </div>
+                            <div class="vehicle-content">
+                                <h3 class="vehicle-title">${veh.marca} ${veh.modelo}</h3>
+                                <p class="vehicle-subtitle">Revisado con certificado oficial</p>
+                                <div class="vehicle-specs">
+                                    ${specsHtml}
+                                </div>
+                                <div class="vehicle-footer">
+                                    <div class="vehicle-price">
+                                        <span class="price-promo">Entrega Inmediata</span>
+                                        <span class="price-main">${priceFormatted}</span>
+                                    </div>
+                                    <a href="/compra?car=${encodeURIComponent(veh.marca + ' ' + veh.modelo)}&price=${veh.precio}&brand=${encodeURIComponent(veh.marca)}&km=${veh.km || 0}" class="btn-view">Comprar / Financiar</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                grid.innerHTML = html;
+                
+                // Inicializar observador de animaciones tras renderizar
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, { threshold: 0.1 });
+                
+                document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
+            })
+            .catch(error => {
+                console.error("Error al cargar los vehículos de ocasión:", error);
+                if (spinner) spinner.remove();
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--accent);">
+                        <i class="ti ti-alert-triangle" style="font-size: 50px;"></i>
+                        <h3 style="margin-top: 15px; font-size: 20px; font-weight: 700;">Error de conexión</h3>
+                        <p style="color: var(--text-muted); margin-top: 8px;">No se ha podido conectar con el servidor para cargar el catálogo. Por favor, recarga la página.</p>
+                    </div>
+                `;
+            });
+    });
 </script>
 
 @endsection

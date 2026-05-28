@@ -14,6 +14,8 @@
       <span class="am-auth-sep">|</span>
       <a href="{{ route('vehiculo') }}" class="am-nav-link {{ request()->routeIs('vehiculo') ? 'active' : '' }}" style="padding: 8px 0; font-size: 14px; font-weight: 600;">Añadir Vehículos</a>
       <span class="am-auth-sep">|</span>
+      <a href="{{ route('datosUsuario') }}" class="am-nav-link {{ request()->routeIs('datosUsuario') ? 'active' : '' }}" style="padding: 8px 0; font-size: 14px; font-weight: 600;">Mis Datos</a>
+      <span class="am-auth-sep">|</span>
 
       <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
         Cerrar sesión
@@ -63,6 +65,9 @@
     <div class="am-mobile-auth" style="margin-top: 15px; padding: 10px 20px; border-top: 1px solid rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 8px;">
       @auth
       <span class="am-user-name-mob" style="font-size: 14px; color: var(--text-main); font-weight: 500;">Hola, <strong style="color: var(--primary);">{{ Auth::user()->nombre }}</strong></span>
+      
+      <a href="{{ route('vehiculo') }}" class="{{ request()->routeIs('vehiculo') ? 'active' : '' }}" style="font-size: 14px; font-weight: 600; text-decoration: none; color: var(--text-main); padding: 4px 0;">Añadir Vehículos</a>
+      <a href="{{ route('datosUsuario') }}" class="{{ request()->routeIs('datosUsuario') ? 'active' : '' }}" style="font-size: 14px; font-weight: 600; text-decoration: none; color: var(--text-main); padding: 4px 0;">Mis Datos</a>
 
       <form action="{{ route('logout') }}" method="POST" style="display: none;" id="logout-form-mob">
         @csrf
