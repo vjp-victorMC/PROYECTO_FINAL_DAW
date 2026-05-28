@@ -498,8 +498,12 @@
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         const panel = document.getElementById('panel-' + id);
         if (panel) panel.classList.add('active');
+
         const title = document.getElementById('panel-title');
-        if (title) title.textContent = panelTitles[id] || id;
+        if (title) {
+            title.textContent = panelTitles[id] || id;
+            title.style.color = 'black'; // <-- Añade esta línea aquí
+        }
         // Topbar actions
         const ta = document.getElementById('topbarActions');
         const acts = {
