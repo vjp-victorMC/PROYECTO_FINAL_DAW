@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\Coche2manoController;
 use App\Http\Controllers\MensajeController;
+use App\Http\Controllers\ReparacionController;
 
 //------ RUTAS PUBLICAS ------
 //Retorna todos los coches de 2 mano de la base de datos
@@ -38,8 +39,6 @@ Route::get('/usuario/cars/{id}', [CocheController::class, 'getUsuarioCars']);
 Route::get('/usuario/{id}', [UsuarioController::class, 'getUserByID']);
 
 
-
-
 //------ RUTAS PRIVADAS ------
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -49,5 +48,24 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Solo administradores
     Route::middleware('role:admin')->group(function () {
+
+        //Retorna el numero de coches que faltan por pagar
+        Route::get('/admin/coches/para-pagar', [CocheController::class, 'getCochesParaPagar']);
+
+        //Retorna el numero de coches que estan reparandose
+        Route::get('/admin/reparaciones/en-proceso/count', [ReparacionController::class, 'getReparacionesEnProcesoCount']);
+
+        //Retorna los coches que estan en el garaje
+        Route::get('/admin/coches/garaje', [CocheController::class, 'getCochesEnGaraje']);
+
+        //Crea una reparacion
+        Route::post('/admin/reparaciones', [ReparacionController::class, 'setNewReparacion']);
+
+        //Retorna los mensajes recibidos de un id de usuario
+        Route::get('/admin/mensajes/recibidos/{id_recibo}', [MensajeController::class, 'obtenerMensajesRecibidos']);
+
+        //Elimina un mensaje por su id
+        Route::delete('/admin/mensaje/{id_mensaje}', [MensajeController::class, 'eliminarMensaje']);
+
     });
 });
