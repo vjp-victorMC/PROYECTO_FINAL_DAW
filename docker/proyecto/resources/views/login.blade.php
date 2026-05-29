@@ -285,19 +285,17 @@
 
             const url = isLogin ? '/api/usuario/login' : '/api/usuario/newUser';
 
-            const formData = isLogin ?
-                {
-                    identificador: inputIdentificador.value,
-                    password: document.getElementById('password').value
-                } :
-                {
-                    nombre: inputNombre.value,
-                    email: inputIdentificador.value,
-                    dni: inputDni.value,
-                    telefono: inputTelefono.value,
-                    password: document.getElementById('password').value,
-                    password_confirmation: inputPasswordConfirm.value
-                };
+            const formData = isLogin ? {
+                identificador: inputIdentificador.value,
+                password: document.getElementById('password').value
+            } : {
+                nombre: inputNombre.value,
+                email: inputIdentificador.value,
+                dni: inputDni.value,
+                telefono: inputTelefono.value,
+                password: document.getElementById('password').value,
+                password_confirmation: inputPasswordConfirm.value
+            };
 
             try {
                 const response = await fetch(url, {
@@ -318,9 +316,13 @@
                         <h1 style="font-size: 2rem; font-weight: 900; letter-spacing: -0.05em; color: #fff; text-transform: uppercase;">¡Acceso Concedido!</h1>
                         <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.95rem;">Hola, <strong style="color: #60a5fa;">${data.nombre || 'Usuario'}</strong>. Redirigiendo al taller...</p>
                     </div>`;
-                    
+
                     setTimeout(() => {
-                        window.location.href = "{{ route('welcome') }}";
+                        if (data.rol === 'admin') {
+                            window.location.href = "/admin";
+                        } else {
+                            window.location.href = "{{ route('welcome') }}";
+                        }
                     }, 1200);
                 } else {
                     alert(data.msg || JSON.stringify(data.errors));
