@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Coche;
 use App\Models\Contabilidad;
 use App\Models\SaldoTaller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -84,13 +85,56 @@ class ContabilidadController extends Controller
         })->count();
 
 
-        // 2. CÁLCULO DE LAS GRÁFICAS (Desglose mensual de Enero a Diciembre)
-        // Inicializamos arrays con los 12 meses en 0 para asegurar que la gráfica reciba datos limpios
+        // 2. CÁLCULO DE LAS GRÁFICAS
+        $driver = DB::getDriverName();
+        $yearExpr = $driver === 'sqlite'
+            ? "CAST(strftime('%Y', fecha) AS INTEGER)"
+            : 'YEAR(fecha)';
+        $reparacionYearExpr = $driver === 'sqlite'
+            ? "CAST(strftime('%Y', fecha_entrada) AS INTEGER)"
+            : 'YEAR(fecha_entrada)';
+        $monthExpr = $driver === 'sqlite'
+            ? "CAST(strftime('%m', fecha) AS INTEGER)"
+            : 'MONTH(fecha)';
+        $reparacionMonthExpr = $driver === 'sqlite'
+            ? "CAST(strftime('%m', fecha_entrada) AS INTEGER)"
+            : 'MONTH(fecha_entrada)';
+
+        // Totales anuales para todos los años disponibles
+        $datosGastosAnios = Contabilidad::selectRaw("{$yearExpr} as anio, SUM(cantidad) as total")
+            ->where('tipo', 'gasto')
+            ->groupBy('anio')
+            ->orderBy('anio')
+            ->pluck('total', 'anio');
+
+        $datosCochesAnios = DB::table('reparaciones')
+            ->selectRaw("{$reparacionYearExpr} as anio, COUNT(DISTINCT id_coche) as total")
+            ->groupBy('anio')
+            ->orderBy('anio')
+            ->pluck('total', 'anio');
+
+        $yearKeys = collect(array_merge(array_keys($datosGastosAnios->toArray()), array_keys($datosCochesAnios->toArray())))
+            ->map(fn($year) => (int)$year)
+            ->unique()
+            ->sort()
+            ->values()
+            ->all();
+
+        $gastosAnuales = array_fill_keys($yearKeys, 0);
+        $cochesAnuales = array_fill_keys($yearKeys, 0);
+
+        foreach ($datosGastosAnios as $anioDb => $total) {
+            $gastosAnuales[(int)$anioDb] = round($total, 2);
+        }
+        foreach ($datosCochesAnios as $anioDb => $total) {
+            $cochesAnuales[(int)$anioDb] = (int)$total;
+        }
+
+        // Datos mensuales del año seleccionado
         $gastosMensuales = array_fill(1, 12, 0);
         $cochesMensuales = array_fill(1, 12, 0);
 
-        // Agrupamos los gastos por mes directamente desde la base de datos
-        $datosGastosDb = Contabilidad::selectRaw('MONTH(fecha) as mes, SUM(cantidad) as total')
+        $datosGastosDb = Contabilidad::selectRaw("{$monthExpr} as mes, SUM(cantidad) as total")
             ->where('tipo', 'gasto')
             ->whereYear('fecha', $anio)
             ->groupBy('mes')
@@ -100,9 +144,8 @@ class ContabilidadController extends Controller
             $gastosMensuales[$mes] = round($total, 2);
         }
 
-        // Agrupamos los coches atendidos por mes usando la relación de reparaciones
         $datosCochesDb = DB::table('reparaciones')
-            ->selectRaw('MONTH(fecha_entrada) as mes, COUNT(DISTINCT id_coche) as total')
+            ->selectRaw("{$reparacionMonthExpr} as mes, COUNT(DISTINCT id_coche) as total")
             ->whereYear('fecha_entrada', $anio)
             ->groupBy('mes')
             ->pluck('total', 'mes');
@@ -135,9 +178,12 @@ class ContabilidadController extends Controller
                 ]
             ],
             'graficas' => [
+                'etiquetas_anios' => array_values($yearKeys),
+                'gastos_por_anio' => array_values($gastosAnuales),
+                'coches_por_anio' => array_values($cochesAnuales),
                 'etiquetas_meses' => ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-                'gastos_por_mes'  => array_values($gastosMensuales), // Devuelve lista limpia del 0 al 11
-                'coches_por_mes'  => array_values($cochesMensuales)
+                'gastos_por_mes'  => array_values($gastosMensuales),
+                'coches_por_mes'  => array_values($cochesMensuales),
             ]
         ], 200);
     }

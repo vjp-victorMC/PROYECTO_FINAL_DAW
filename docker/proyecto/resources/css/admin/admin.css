@@ -1509,7 +1509,12 @@
     .mfg { display:grid;grid-template-columns:1fr 1fr;gap:10px }
     .mfg-full { grid-column:1/-1 }
     .mlabel { display:block;font-size:12px;color:#9ca3af;margin-bottom:6px }
-    .minput { width:100%;padding:8px;border-radius:8px;border:1px solid #374151;background:transparent;color:#f9fafb }
+    .minput { width:100%;padding:8px;border-radius:8px;border:1px solid #374151;background:#111827;color:#f9fafb }
+    .minput select,
+    .minput option {
+        background: #111827;
+        color: #f9fafb;
+    }
     .minput:focus { outline:none;border-color:#3b82f6 }
 
     /* Ajustes modal */

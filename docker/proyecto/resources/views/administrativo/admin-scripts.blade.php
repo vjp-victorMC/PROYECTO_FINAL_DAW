@@ -53,6 +53,7 @@ let cochesRep = [];
 let coches2   = [];
 let piezas    = [];
 let usuarios  = [];
+let proveedores = [];
 
 // ============================================================
 // CONFIGURACIÓN DE PANELES
@@ -85,33 +86,51 @@ function showPanel(id) {
 // ============================================================
 // CHARTS
 // ============================================================
-function renderBarChart(svgId, data, labels, color) {
+function renderLineChart(svgId, data, labels, color) {
     const svg = document.getElementById(svgId);
-    if (!svg) return;
+    if (!svg || !data?.length || !labels?.length) return;
     const vb = svg.viewBox.baseVal;
     const W = vb.width, H = vb.height;
-    const P = { t: 10, r: 10, b: 26, l: 42 };
+    const P = { t: 16, r: 14, b: 30, l: 34 };
     const cW = W - P.l - P.r, cH = H - P.t - P.b;
-    const mx = Math.max(...data, 1) * 1.15;
-    const slot = cW / data.length;
-    const bw = slot * 0.56;
+    const count = Math.min(data.length, labels.length);
+    if (count === 0) { svg.innerHTML = ''; return; }
+
+    const maxV = Math.max(...data.slice(0, count), 1);
+    const axisMax = Math.ceil(maxV * 1.1);
+    const step = axisMax / 4;
+
     let h = '';
-    [0, 0.25, 0.5, 0.75, 1].forEach(f => {
+    [0, 1, 2, 3, 4].forEach(i => {
+        const f = i / 4;
         const y = P.t + cH * (1 - f);
-        const v = Math.round(mx * f);
-        const lbl = v >= 1000 ? (v >= 10000 ? '€' + (v / 1000).toFixed(0) + 'k' : v) : v;
+        const value = Math.round(step * i);
+        const label = axisMax >= 1000 ? `${Math.round(value / 1000)}k` : value;
         h += `<line x1="${P.l}" y1="${y.toFixed(1)}" x2="${W - P.r}" y2="${y.toFixed(1)}" stroke="#1a3050" stroke-width="1"/>`;
-        h += `<text x="${P.l - 4}" y="${(y + 3.5).toFixed(1)}" text-anchor="end" font-size="9" fill="#4a6e9a">${lbl}</text>`;
+        h += `<text x="${P.l - 6}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-size="9" fill="#4a6e9a">${label}</text>`;
     });
-    const maxV = Math.max(...data, 1);
-    data.forEach((v, i) => {
-        const barH = (v / mx) * cH;
-        const x = P.l + i * slot + (slot - bw) / 2;
-        const y = P.t + cH - barH;
-        const alpha = (0.45 + 0.55 * (v / maxV)).toFixed(2);
-        h += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${barH.toFixed(1)}" rx="3" fill="${color}" opacity="${alpha}"/>`;
-        h += `<text x="${(x + bw / 2).toFixed(1)}" y="${(H - P.b + 13).toFixed(1)}" text-anchor="middle" font-size="9" fill="#4a6e9a">${labels[i]}</text>`;
+
+    const points = [];
+    for (let i = 0; i < count; i++) {
+        const value = Number(data[i]) || 0;
+        const x = P.l + (count === 1 ? cW / 2 : (cW * i) / (count - 1));
+        const y = P.t + cH * (1 - (value / axisMax));
+        points.push({ x, y, value });
+    }
+
+    const path = points.map((pt, idx) => `${idx === 0 ? 'M' : 'L'}${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`).join(' ');
+    const area = `${path} L ${points[count - 1].x.toFixed(1)} ${P.t + cH} L ${points[0].x.toFixed(1)} ${P.t + cH} Z`;
+    h += `<path d="${area}" fill="${color}" opacity="0.12"/>`;
+    h += `<path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+    points.forEach(pt => {
+        h += `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.5" fill="${color}" stroke="#0f172a" stroke-width="1.5"/>`;
     });
+
+    points.forEach((pt, i) => {
+        h += `<text x="${pt.x.toFixed(1)}" y="${H - P.b + 16}" text-anchor="middle" font-size="9" fill="#4a6e9a">${labels[i]}</text>`;
+    });
+
     svg.innerHTML = h;
 }
 
@@ -139,20 +158,13 @@ async function loadDashboard() {
         document.getElementById('kpi-coches-anio').textContent= t.coches_atendidos.total;
         document.getElementById('kpi-margen').textContent     = t.margen_bruto.valor_formateado;
 
+        const Y = g.etiquetas_anios || [];
         const M = g.etiquetas_meses;
-        const W = ['S1', 'S2', 'S3', 'S4'];
 
-        renderBarChart('chart-gastos-anual',  g.gastos_por_mes,  M, '#2878f0');
-        renderBarChart('chart-coches-anual',  g.coches_por_mes,  M, '#22c55e');
-
-        // Semanas: si la API no las devuelve, distribuimos el mes actual equitativamente
-        const mesActual = new Date().getMonth(); // 0-based
-        const gastosMes = g.gastos_por_mes[mesActual] || 0;
-        const cochesMes = g.coches_por_mes[mesActual] || 0;
-        const distG = [0.22, 0.27, 0.25, 0.26].map(f => Math.round(gastosMes * f));
-        const distC = [0.23, 0.28, 0.24, 0.25].map(f => Math.round(cochesMes * f));
-        renderBarChart('chart-gastos-mensual', distG, W, '#2878f0');
-        renderBarChart('chart-coches-mensual', distC, W, '#22c55e');
+        renderLineChart('chart-gastos-anual', g.gastos_por_anio || [], Y, '#2878f0');
+        renderLineChart('chart-coches-anual', g.coches_por_anio || [], Y, '#22c55e');
+        renderLineChart('chart-gastos-mensual', g.gastos_por_mes || [], M, '#2878f0');
+        renderLineChart('chart-coches-mensual', g.coches_por_mes || [], M, '#22c55e');
 
     } catch (e) {
         console.error('Dashboard error:', e);
@@ -162,7 +174,7 @@ async function loadDashboard() {
 // ============================================================
 // USUARIOS
 // ============================================================
-const roleClass = { 'administrador': 'role-admin', 'mecanico': 'role-mec', 'cliente': 'role-cli' };
+const roleClass = { 'admin': 'role-admin', 'administrador': 'role-admin', 'mecanico': 'role-mec', 'cliente': 'role-cli' };
 
 async function loadUsuarios() {
     try {
@@ -190,11 +202,11 @@ function renderUsuarios() {
     }
     tb.innerHTML = usuarios.map(u => `
         <tr>
-            <td style="color:#4a6e9a;font-size:11px">#${u.id_usuario ?? u.id}</td>
+            <td style="color:#4a6e9a;font-size:11px">${u.dni ?? '—'}</td>
             <td style="font-weight:600;color:#deeeff">${u.nombre}</td>
             <td>${u.email}</td>
             <td>${u.telefono ?? '—'}</td>
-            <td><span class="role-badge ${roleClass[u.rol] || 'role-cli'}">${u.rol}</span></td>
+            <td><span class="role-badge ${roleClass[u.rol] || 'role-cli'}">${u.rol === 'admin' || u.rol === 'administrador' ? 'Administrador' : u.rol}</span></td>
             <td><div style="display:flex;gap:6px">
                 <button class="btn btn-sm" onclick="editUsuario(${u.id_usuario ?? u.id})">✏️ Editar</button>
                 <button class="btn btn-sm btn-danger" onclick="confirmDeleteUsuario(${u.id_usuario ?? u.id})">✕</button>
@@ -213,7 +225,7 @@ function editUsuario(id) {
             <div class="mfg-full"><label class="mlabel">Email</label><input class="minput" id="eu-e" value="${u.email}"></div>
             <div><label class="mlabel">Rol</label>
                 <select class="minput" id="eu-r">
-                    <option ${u.rol === 'administrador' ? 'selected' : ''} value="administrador">Administrador</option>
+                    <option ${u.rol === 'admin' || u.rol === 'administrador' ? 'selected' : ''} value="admin">Administrador</option>
                     <option ${u.rol === 'mecanico'      ? 'selected' : ''} value="mecanico">Mecánico</option>
                     <option ${u.rol === 'cliente'       ? 'selected' : ''} value="cliente">Cliente</option>
                 </select>
@@ -574,12 +586,14 @@ function venderVeh(id) {
 // ============================================================
 async function loadPiezas() {
     try {
-        const [pRes, sinStockRes, bajoRes] = await Promise.all([
+        const [pRes, sinStockRes, bajoRes, provRes] = await Promise.all([
             apiFetch('/piezas'),
             apiFetch('/piezas/sin-stock/total'),
             apiFetch('/piezas/bajo-minimo'),
+            apiFetch('/proveedores'),
         ]);
         piezas = pRes.data || [];
+        proveedores = provRes.data || [];
 
         document.getElementById('kpi-piezas-total').textContent = piezas.length;
         document.getElementById('kpi-sin-stock').textContent    = sinStockRes.total_sin_stock ?? 0;
@@ -590,6 +604,12 @@ async function loadPiezas() {
 
         renderPiezas();
     } catch(e) { console.error('loadPiezas:', e); }
+}
+
+function getProveedorNombre(idProveedor) {
+    if (!idProveedor) return '—';
+    const proveedor = proveedores.find(p => (p.id_proveedor ?? p.id) == idProveedor);
+    return proveedor ? proveedor.nombre : `#${idProveedor}`;
 }
 
 function renderPiezas() {
@@ -610,13 +630,14 @@ function renderPiezas() {
             : stock <= smin
             ? `<span class="stock-low">⚠ Stock bajo (${stock} ud.)</span>`
             : `<span class="stock-ok">✓ En stock (${stock} ud.)</span>`;
+        const proveedorNombre = getProveedorNombre(p.id_proveedor);
         return `<div class="pieza-card">
             <div class="pieza-nombre">${p.nombre_pieza}</div>
             <div class="pieza-meta">
                 ${stockHtml}
                 <span>Mínimo: <strong>${smin} ud.</strong></span>
                 <span>P. Compra: <strong>€${pc.toFixed(2)}</strong></span>
-                <span>Proveedor: <strong>#${p.id_proveedor ?? '—'}</strong></span>
+                <span>Proveedor: <strong>${proveedorNombre}</strong></span>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid #1a3050">
                 <span class="pieza-pvp">€${pv.toFixed(2)}</span>
@@ -684,7 +705,7 @@ function showModal(type) {
                     <select class="minput" id="nu-r">
                         <option value="cliente">Cliente</option>
                         <option value="mecanico">Mecánico</option>
-                        <option value="administrador">Administrador</option>
+                        <option value="admin">Administrador</option>
                     </select>
                 </div>
                 <div><label class="mlabel">Contraseña</label><input class="minput" type="password" id="nu-p" placeholder="••••••••"></div>
@@ -758,6 +779,12 @@ function showModal(type) {
                 <div><label class="mlabel">Stock mínimo</label><input class="minput" type="number" id="np-sm" placeholder="5" min="1"></div>
                 <div><label class="mlabel">Precio compra (€)</label><input class="minput" type="number" id="np-pc" placeholder="15.00" step="0.01"></div>
                 <div><label class="mlabel">Precio venta (€)</label><input class="minput" type="number" id="np-pv" placeholder="30.00" step="0.01"></div>
+                <div><label class="mlabel">Proveedor</label>
+                    <select class="minput" id="np-pr">
+                        <option value="">Sin proveedor</option>
+                        ${proveedores.map(pr => `<option value="${pr.id_proveedor ?? pr.id}">${pr.nombre}</option>`).join('')}
+                    </select>
+                </div>
             </div>`;
         const btn = document.getElementById('modal-confirm');
         btn.textContent = '+ Crear pieza';
@@ -768,12 +795,14 @@ function showModal(type) {
                 stock_minimo       : parseInt(document.getElementById('np-sm').value) || 5,
                 precio_compra      : parseFloat(document.getElementById('np-pc').value) || 0,
                 precio_venta       : parseFloat(document.getElementById('np-pv').value) || 0,
+                id_proveedor       : document.getElementById('np-pr').value || null,
             };
             if (!body.nombre_pieza) return;
             try {
-                await apiFetch('/piezas', { method: 'POST', body: JSON.stringify(body) });
+                const res = await apiFetch('/piezas', { method: 'POST', body: JSON.stringify(body) });
                 await loadPiezas();
                 hideModal();
+                alert(res.message || 'Pieza creada con éxito.');
             } catch(e) { alert('Error al crear pieza: ' + e.message); }
             btn.textContent = 'Confirmar';
         };
