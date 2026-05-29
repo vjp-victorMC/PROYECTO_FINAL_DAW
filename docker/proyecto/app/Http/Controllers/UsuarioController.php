@@ -138,4 +138,108 @@ class UsuarioController extends Controller
         }
         return redirect()->route('welcome');
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nombre'     => 'required|string|max:255',
+            'email'      => 'required|email|max:100|unique:usuarios,email',
+            'dni'        => 'required|string|max:20|unique:usuarios,dni',
+            'telefono'   => 'nullable|string|max:15',
+            'contraseña' => 'required|string|min:6',
+            'rol'        => 'required|string|in:mecanico,cliente,administrador', // Adapta los roles si usas otros nombres
+        ]);
+
+        $usuario = Usuario::create([
+            'nombre'     => $request->nombre,
+            'email'      => $request->email,
+            'dni'        => $request->dni,
+            'telefono'   => $request->telefono,
+            'contraseña' => Hash::make($request->contraseña), // Encriptación segura para Auth
+            'rol'        => $request->rol,
+        ]);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Usuario creado con éxito.',
+            'data'    => $usuario
+        ], 201);
+    }
+
+    // 2. Editar un usuario por su ID
+    public function update(Request $request, $id_usuario)
+    {
+        $usuario = Usuario::find($id_usuario);
+
+        if (!$usuario) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Usuario no encontrado.'
+            ], 404);
+        }
+
+        $request->validate([
+            'nombre'     => 'sometimes|required|string|max:255',
+            'email'      => 'sometimes|required|email|max:100|unique:usuarios,email,' . $id_usuario . ',id_usuario',
+            'dni'        => 'sometimes|required|string|max:20|unique:usuarios,dni,' . $id_usuario . ',id_usuario',
+            'telefono'   => 'nullable|string|max:15',
+            'contraseña' => 'sometimes|required|string|min:6',
+            'rol'        => 'sometimes|required|string|in:mecanico,cliente,administrador',
+        ]);
+
+        // Recogemos todos los datos excepto la contraseña inicialmente
+        $data = $request->except(['contraseña']);
+
+        // Si se envía una nueva contraseña, la encriptamos antes de guardar
+        if ($request->filled('contraseña')) {
+            $data['contraseña'] = Hash::make($request->contraseña);
+        }
+
+        $usuario->update($data);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Usuario actualizado con éxito.',
+            'data'    => $usuario
+        ], 200);
+    }
+
+    // 3. Eliminar un usuario por su ID
+    public function destroy($id_usuario)
+    {
+        $usuario = Usuario::find($id_usuario);
+
+        if (!$usuario) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Usuario no encontrado.'
+            ], 404);
+        }
+
+        $usuario->delete();
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Usuario eliminado correctamente.'
+        ], 200);
+    }
+
+    // 4. Obtener las métricas totales agrupadas por cada tipo de rol
+    public function getMetricasRoles()
+    {
+        // Contamos cada rol de forma independiente en la base de datos
+        $mecanicos       = Usuario::where('rol', 'mecanico')->count();
+        $clientes        = Usuario::where('rol', 'cliente')->count();
+        $administradores = Usuario::where('rol', 'administrador')->count();
+
+        return response()->json([
+            'status' => 'success',
+            'data'   => [
+                'total_mecanicos'       => $mecanicos,
+                'total_clientes'        => $clientes,
+                'total_administradores' => $administradores,
+                'total_usuarios'        => $mecanicos + $clientes + $administradores
+            ]
+        ], 200);
+    }
 }

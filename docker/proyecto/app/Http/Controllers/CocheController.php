@@ -88,4 +88,60 @@ class CocheController extends Controller
             'data'    => $coches
         ], 200);
     }
+
+    public function getDetalleVehiculo($id_coche)
+    {
+        // 1. Buscamos el coche por su ID cargando el usuario y solo la última reparación
+        $coche = Coche::with([
+            'usuario',
+            'reparaciones' => function ($query) {
+                $query->latest('id_reparacion')->first();
+            }
+        ])->find($id_coche);
+
+        // 2. Si el coche no existe, devolvemos un error 404
+        if (!$coche) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Vehículo no encontrado.'
+            ], 404);
+        }
+
+        // 3. Modificamos la colección para que devuelva "ultima_reparacion" como un objeto directo en vez de un array
+        $cocheData = $coche->toArray();
+
+        // Extraemos la última reparación si existe
+        $ultimaReparacion = $coche->reparaciones->first();
+
+        // Reestructuramos la respuesta JSON para que sea limpia
+        unset($cocheData['reparaciones']);
+        $cocheData['ultima_reparacion'] = $ultimaReparacion ? $ultimaReparacion : null;
+
+        // 4. Retornamos la respuesta con éxito
+        return response()->json([
+            'status' => 'success',
+            'data'   => $cocheData
+        ], 200);
+    }
+
+    public function getIdPorMatricula($matricula)
+    {
+        // 1. Buscamos el coche por su matrícula y seleccionamos solo el ID
+        $coche = Coche::where('matricula', $matricula)->first(['id_coche']);
+
+        // 2. Si el coche no existe, devolvemos un error 404
+        if (!$coche) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Vehículo con esa matrícula no encontrado.'
+            ], 404);
+        }
+
+        // 3. Retornamos directamente el ID del coche
+        return response()->json([
+            'status'   => 'success',
+            'id_coche' => $coche->id_coche
+        ], 200);
+    }
+
 }

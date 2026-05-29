@@ -1,71 +1,86 @@
 <?php
+// =====================================
+// API DE TALLER MECÁNICO - RUTAS REST
+// =====================================
+// Este archivo define todas las rutas de la API, agrupadas y comentadas por lógica de negocio.
 
 use App\Http\Controllers\CocheController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\Coche2manoController;
+use App\Http\Controllers\ContabilidadController;
 use App\Http\Controllers\MensajeController;
+use App\Http\Controllers\PiezaController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ReparacionController;
 
-//------ RUTAS PUBLICAS ------
-//Retorna todos los coches de 2 mano de la base de datos
-Route::get('/coche2mano', [Coche2manoController::class, 'getAll2HandCar']);
+// =============================
+// 1. USUARIOS Y AUTENTICACIÓN
+// =============================
+    Route::get('/usuario', [UsuarioController::class, 'getAllUser']);
+    Route::post('/usuario/login', [UsuarioController::class, 'login']);
+    Route::post('/usuario/logout', [UsuarioController::class, 'logout']);
+    Route::post('/usuario/newUser', [UsuarioController::class, 'setNewUser']);
+    Route::get('/usuario/getId/{dni}', [UsuarioController::class, 'getIdByDni']);
+    Route::get('/usuario/cars/{id}', [CocheController::class, 'getUsuarioCars']);
+    Route::get('/usuario/{id}', [UsuarioController::class, 'getUserByID']);
+    Route::post('/usuarios', [UsuarioController::class, 'store']);
+    Route::put('/usuarios/{id_usuario}', [UsuarioController::class, 'update']);
+    Route::delete('/usuarios/{id_usuario}', [UsuarioController::class, 'destroy']);
+    Route::get('/usuarios/metricas/roles', [UsuarioController::class, 'getMetricasRoles']);
 
-//Retorna todos los usuarios de la base de dato
-Route::get('/usuario', [UsuarioController::class, 'getAllUser']);
+// =============================
+// 2. COCHES Y COCHES DE 2ª MANO
+// =============================
+    Route::post('/usuario/newCar', [CocheController::class, 'setNewCar']);
+    Route::post('/usuario/mensaje', [MensajeController::class, 'mensajesCliente']);
+    Route::get('/coches/{id_coche}/detalle', [CocheController::class, 'getDetalleVehiculo']);
+    Route::get('/coches/matricula/{matricula}', [CocheController::class, 'getIdPorMatricula']);
+    Route::get('/coche2mano', [Coche2manoController::class, 'getAll2HandCar']);
+    Route::get('/coche2mano/matricula/{matricula}', [Coche2manoController::class, 'getIdPorMatricula']);
+    Route::post('/contabilidad/transaccion', [ContabilidadController::class, 'store']);
+    Route::get('/contabilidad/estado', [ContabilidadController::class, 'getEstadoFinanciero']);
+    Route::get('/coche2mano/newCoche2mano', [Coche2ManoController::class, 'storeCoche2Mano']);
+    Route::delete('/coches-segunda-mano/{id}/retirar', [Coche2ManoController::class, 'retirarDelTaller']);
+    Route::post('/coches-segunda-mano/{id}/vender', [Coche2ManoController::class, 'venderCoche']);
 
-//Metodo para logearse en la aplicacion
-Route::post('/usuario/login', [UsuarioController::class, 'login']);
+// =============================
+// 3. MENSAJES
+// =============================
+    Route::get('/admin/mensajes/recibidos/{id_recibo}', [MensajeController::class, 'obtenerMensajesRecibidos']);
+    Route::delete('/admin/mensaje/{id_mensaje}', [MensajeController::class, 'eliminarMensaje']);
 
-//Metodo para hacer logout
-Route::post('/usuario/logout', [UsuarioController::class, 'logout']);
+// =============================
+// 4. ADMINISTRACIÓN Y REPARACIONES
+// =============================
+    Route::get('/admin/coches/para-pagar', [CocheController::class, 'getCochesParaPagar']);
+    Route::get('/admin/reparaciones/en-proceso/count', [ReparacionController::class, 'getReparacionesEnProcesoCount']);
+    Route::get('/admin/coches/garaje', [CocheController::class, 'getCochesEnGaraje']);
+    Route::post('/admin/reparaciones', [ReparacionController::class, 'setNewReparacion']);
 
-//Metodo para crear un nuevo usuario
-Route::post('/usuario/newUser', [UsuarioController::class, 'setNewUser']);
+// =============================
+// 5. CONTABILIDAD Y DASHBOARD
+// =============================
+    Route::post('/contabilidad/transaccion', [ContabilidadController::class, 'store']);
+    Route::get('/contabilidad/estado', [ContabilidadController::class, 'getEstadoFinanciero']);
+    Route::get('/dashboard/metricas', [ContabilidadController::class, 'getDashboardData']);
 
-//Crear un nuevo coche para un usuario
-Route::post('/usuario/newCar', [CocheController::class, 'setNewCar']);
+// =============================
+// 6. INVENTARIO Y PROVEEDORES
+// =============================
+    Route::post('/piezas', [PiezaController::class, 'store']);
+    Route::get('/piezas', [PiezaController::class, 'index']);
+    Route::post('/piezas/{id_pieza}/comprar', [PiezaController::class, 'comprarPieza']);
+    Route::get('/piezas/bajo-minimo', [PiezaController::class, 'getBajoStockMinimo']);
+    Route::get('/piezas/sin-stock/total', [PiezaController::class, 'getCountSinStock']);
+    Route::post('/proveedores', [ProveedorController::class, 'store']);
+    Route::get('/proveedores', [ProveedorController::class, 'index']);
+    Route::get('/proveedores/{id_proveedor}', [ProveedorController::class, 'show']);
+    Route::put('/proveedores/{id_proveedor}', [ProveedorController::class, 'update']);
+    Route::delete('/proveedores/{id_proveedor}', [ProveedorController::class, 'destroy']);
+    Route::get('/proveedores/{id_proveedor}/piezas', [ProveedorController::class, 'getPiezasByProveedor']);
 
-//Metodo para enviar un mensaje de reparaicon al admin
-Route::post('/usuario/mensaje', [MensajeController::class, 'mensajesCliente']);
-
-//Retorna el id del usuario por su dni
-Route::get('/usuario/getId/{dni}', [UsuarioController::class, 'getIdByDni']);
-
-//Obtiene los coches de un usuario
-Route::get('/usuario/cars/{id}', [CocheController::class, 'getUsuarioCars']);
-
-//Retorna el usuario pedido por el id
-Route::get('/usuario/{id}', [UsuarioController::class, 'getUserByID']);
-
-
-//------ RUTAS PRIVADAS ------
-Route::middleware('auth:sanctum')->group(function () {
-
-    // Solo mecánicos
-    Route::middleware('role:mecanico')->group(function () {
-    });
-
-    // Solo administradores
-    Route::middleware('role:admin')->group(function () {
-
-        //Retorna el numero de coches que faltan por pagar
-        Route::get('/admin/coches/para-pagar', [CocheController::class, 'getCochesParaPagar']);
-
-        //Retorna el numero de coches que estan reparandose
-        Route::get('/admin/reparaciones/en-proceso/count', [ReparacionController::class, 'getReparacionesEnProcesoCount']);
-
-        //Retorna los coches que estan en el garaje
-        Route::get('/admin/coches/garaje', [CocheController::class, 'getCochesEnGaraje']);
-
-        //Crea una reparacion
-        Route::post('/admin/reparaciones', [ReparacionController::class, 'setNewReparacion']);
-
-        //Retorna los mensajes recibidos de un id de usuario
-        Route::get('/admin/mensajes/recibidos/{id_recibo}', [MensajeController::class, 'obtenerMensajesRecibidos']);
-
-        //Elimina un mensaje por su id
-        Route::delete('/admin/mensaje/{id_mensaje}', [MensajeController::class, 'eliminarMensaje']);
-
-    });
-});
+// =============================
+// 7. RUTAS PRIVADAS (AUTENTICADAS)
+// =============================
+// Todas las rutas son públicas para desarrollo y pruebas, sin middleware.
