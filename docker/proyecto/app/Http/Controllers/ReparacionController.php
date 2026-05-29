@@ -33,7 +33,7 @@ class ReparacionController extends Controller
             'coste_mano_obra'        => 0.00,
             'coste_total_piezas'     => 0.00,
             'coste_total_reparacion' => 0.00,
-            'fecha_entrada'          => null,
+            // fecha_entrada se establece automáticamente con useCurrent()
             'fecha_salida'           => null,
             'estado'                 => 'pendiente',
         ]);

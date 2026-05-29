@@ -17,6 +17,8 @@ class Coche2Mano extends Model
         'modelo',
         'imagen',
         'precio',
+        'anio_matriculacion',
+        'motorizacion',
         'especificaciones',
         'km'
     ];

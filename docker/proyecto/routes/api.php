@@ -40,7 +40,7 @@ use App\Http\Controllers\ReparacionController;
     Route::get('/coche2mano/matricula/{matricula}', [Coche2manoController::class, 'getIdPorMatricula']);
     Route::post('/contabilidad/transaccion', [ContabilidadController::class, 'store']);
     Route::get('/contabilidad/estado', [ContabilidadController::class, 'getEstadoFinanciero']);
-    Route::get('/coche2mano/newCoche2mano', [Coche2ManoController::class, 'storeCoche2Mano']);
+    Route::post('/coche2mano/newCoche2mano', [Coche2ManoController::class, 'storeCoche2Mano']);
     Route::delete('/coches-segunda-mano/{id}/retirar', [Coche2ManoController::class, 'retirarDelTaller']);
     Route::post('/coches-segunda-mano/{id}/vender', [Coche2ManoController::class, 'venderCoche']);
 

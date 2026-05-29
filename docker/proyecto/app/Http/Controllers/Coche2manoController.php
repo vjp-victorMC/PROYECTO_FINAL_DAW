@@ -62,30 +62,36 @@ class Coche2manoController extends Controller
     {
         // 1. Validamos los datos recibidos
         $request->validate([
-            'matricula'        => 'required|string|max:20|unique:vehiculo2mano,matricula',
-            'marca'            => 'required|string|max:50',
-            'modelo'           => 'required|string|max:50',
-            'imagen'           => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // Máximo 2MB
-            'precio'           => 'required|numeric|min:0',
-            'especificaciones' => 'nullable|string',
-            'km'               => 'required|integer|min:0',
+            'matricula'            => 'required|string|max:20|unique:vehiculo2mano,matricula',
+            'marca'                => 'required|string|max:50',
+            'modelo'               => 'required|string|max:50',
+            'imagen'               => 'nullable|string|url',
+            'precio'               => 'required|numeric|min:0',
+            'anio_matriculacion'   => 'required|digits:4|integer|min:1900|max:2099',
+            'motorizacion'         => 'required|string|max:50',
+            'especificaciones'     => 'nullable|string',
+            'km'                   => 'required|integer|min:0',
         ]);
 
-        // 2. Gestionamos la subida de la imagen si se ha enviado una
+        // 2. Gestionamos la imagen: puede ser URL o un archivo subido opcional
         $path = null;
         if ($request->hasFile('imagen')) {
             $path = $request->file('imagen')->store('coches2mano', 'public');
+        } elseif ($request->imagen) {
+            $path = $request->imagen;
         }
 
         // 3. Insertamos el nuevo registro en la base de datos
         $coche = Coche2Mano::create([
-            'matricula'        => $request->matricula,
-            'marca'            => $request->marca,
-            'modelo'           => $request->modelo,
-            'imagen'           => $path,
-            'precio'           => $request->precio,
-            'especificaciones' => $request->especificaciones,
-            'km'               => $request->km,
+            'matricula'            => $request->matricula,
+            'marca'                => $request->marca,
+            'modelo'               => $request->modelo,
+            'imagen'               => $path,
+            'precio'               => $request->precio,
+            'anio_matriculacion'   => $request->anio_matriculacion,
+            'motorizacion'         => $request->motorizacion,
+            'especificaciones'     => $request->especificaciones,
+            'km'                   => $request->km,
         ]);
 
         // 4. Retornamos la respuesta (para API JSON o vista)

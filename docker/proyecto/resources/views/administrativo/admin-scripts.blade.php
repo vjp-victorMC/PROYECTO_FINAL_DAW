@@ -6,12 +6,40 @@
 const API = '/api';
 
 async function apiFetch(url, opts = {}) {
+    const headers = {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+        'X-Requested-With': 'XMLHttpRequest'
+    };
+    if (!(opts.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
     const defaults = {
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '' },
+        credentials: 'same-origin',
+        headers: { ...headers, ...(opts.headers || {}) }
     };
     const res = await fetch(API + url, { ...defaults, ...opts });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return res.json();
+    const contentType = res.headers.get('content-type') || '';
+    const text = await res.text();
+    let data = null;
+    if (contentType.includes('application/json') || contentType.includes('text/json')) {
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            data = text;
+        }
+    } else {
+        data = text;
+    }
+    if (!res.ok) {
+        let msg = typeof data === 'object' && data !== null
+            ? (data.message || data.error || JSON.stringify(data))
+            : data || `HTTP ${res.status}`;
+        if (typeof msg === 'string' && /<!doctype|<html|<body|<_doc|<_Doc/i.test(msg)) {
+            msg = `Error interno del servidor (${res.status})`;
+        }
+        throw new Error(msg);
+    }
+    return data;
 }
 
 function fmtEur(n) {
@@ -293,9 +321,69 @@ function renderSolicitudes(mensajes) {
                 <div class="sol-desc">${m.mensaje ?? ''}</div>
             </div>
             <div class="sol-actions">
+                <button class="btn btn-sm btn-success" onclick="aprobarSolicitud(${m.id_mensaje ?? m.id})">✅ Aprobar</button>
                 <button class="btn btn-sm btn-danger" onclick="eliminarMensaje(${m.id_mensaje ?? m.id})">✕ Eliminar</button>
             </div>
         </div>`).join('');
+}
+
+async function aprobarSolicitud(id) {
+    try {
+        const adminId = {{ auth()->id() ?? 1 }};
+        const res = await apiFetch(`/admin/mensajes/recibidos/${adminId}`);
+        const mensajes = (res.data || []).filter(m => !m.leido);
+        const mensaje = mensajes.find(m => (m.id_mensaje ?? m.id) == id);
+        if (!mensaje) {
+            return alert('No se ha encontrado la solicitud para aprobar.');
+        }
+
+        const matricula = (mensaje.matricula || '').trim();
+        if (!matricula) {
+            return alert('La solicitud no tiene matrícula válida.');
+        }
+
+        let cocheRes;
+        try {
+            cocheRes = await apiFetch(`/coches/matricula/${encodeURIComponent(matricula)}`);
+        } catch (err) {
+            console.error('Error al buscar coche por matrícula:', err);
+            return alert('No se ha encontrado el coche con matrícula ' + matricula + '.');
+        }
+
+        const id_coche = cocheRes.id_coche;
+        if (!id_coche) {
+            return alert('No se ha encontrado el coche con matrícula ' + matricula + '.');
+        }
+
+        console.log('Creando reparación con:', { id_coche, motivo: mensaje.mensaje || 'Sin asunto' });
+
+        let crear;
+        try {
+            crear = await apiFetch('/admin/reparaciones', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id_coche: parseInt(id_coche),
+                    motivo: (mensaje.mensaje || 'Sin asunto').toString()
+                })
+            });
+        } catch (err) {
+            console.error('Error al crear reparación:', err);
+            const errorMsg = err.message || 'Error desconocido';
+            return alert('No se pudo crear la reparación: ' + errorMsg);
+        }
+
+        if (crear.status !== 'success') {
+            console.error('Respuesta de error del servidor:', crear);
+            return alert('No se pudo crear la reparación: ' + (crear.message || 'Error desconocido'));
+        }
+
+        await eliminarMensaje(id);
+        alert('Solicitud aprobada y reparación creada correctamente.');
+        loadReparaciones();
+    } catch (e) {
+        console.error('aprobarSolicitud:', e);
+        alert('Error al aprobar la solicitud: ' + (e.message || 'Error desconocido'));
+    }
 }
 
 async function eliminarMensaje(id) {
@@ -381,14 +469,15 @@ function renderVehiculos2() {
     const el = document.getElementById('vehiculos2Grid');
     if (!el) return;
 
-    const enVenta = coches2.filter(c => c.en_venta == 1 || c.en_venta === true);
-    const total   = enVenta.reduce((a, c) => a + parseFloat(c.precio || 0), 0);
-    const media   = enVenta.length ? Math.round(total / enVenta.length) : 0;
+    const total   = coches2.reduce((a, c) => a + parseFloat(c.precio || 0), 0);
+    const media   = coches2.length ? Math.round(total / coches2.length) : 0;
+    const kmTotal = coches2.reduce((a, c) => a + (parseInt(c.km || 0) || 0), 0);
+    const kmMedia = coches2.length ? Math.round(kmTotal / coches2.length) : 0;
 
-    document.getElementById('kpi-en-venta').textContent    = enVenta.length;
     document.getElementById('kpi-total-2mano').textContent = coches2.length;
     document.getElementById('kpi-valor-stock').textContent = '€' + total.toLocaleString('es-ES');
-    document.getElementById('kpi-precio-med').textContent  = enVenta.length ? '€' + media.toLocaleString('es-ES') : '—';
+    document.getElementById('kpi-precio-med').textContent  = coches2.length ? '€' + media.toLocaleString('es-ES') : '—';
+    document.getElementById('kpi-km-med').textContent      = coches2.length ? kmMedia.toLocaleString('es-ES') + ' km' : '—';
 
     if (!coches2.length) {
         el.innerHTML = '<p style="color:#4a6e9a;font-size:13px;padding:10px 0">Sin vehículos en catálogo.</p>';
@@ -398,6 +487,7 @@ function renderVehiculos2() {
     el.innerHTML = coches2.map(c => {
         const imgSrc  = c.imagen ? (c.imagen.startsWith('http') ? c.imagen : `/storage/${c.imagen}`) : null;
         const enVenta = c.en_venta == 1 || c.en_venta === true;
+        const extras  = [c.especificaciones, c.km ? c.km + ' km' : null].filter(Boolean).join(' · ');
         return `<div class="veh-card" onclick="openVeh2Modal(${c.id ?? c.id_coche2mano})">
             ${imgSrc ? `<img src="${imgSrc}" class="veh-img" alt="">` : ''}
             <div class="veh-img-ph" style="${imgSrc ? 'display:none' : ''}">🚘</div>
@@ -405,8 +495,7 @@ function renderVehiculos2() {
                 <div class="veh-matricula">${c.matricula}</div>
                 <div class="veh-modelo">${c.marca} ${c.modelo}</div>
                 <div class="veh-precio">€${parseFloat(c.precio).toLocaleString('es-ES')}</div>
-                <div style="font-size:10px;color:#4a6e9a;margin-top:2px">${c.especificaciones ?? c.km + ' km'}</div>
-                <span class="${enVenta ? 'veh-libre' : 'veh-garaje'} veh-status">${enVenta ? '● En venta' : '● Retirado'}</span>
+                <div style="font-size:10px;color:#4a6e9a;margin-top:2px">${extras || 'Sin detalles'}</div>
             </div>
             <div class="veh-actions" onclick="event.stopPropagation()">
                 <button class="btn btn-sm btn-danger" onclick="retirarVeh(${c.id ?? c.id_coche2mano})">📤 Retirar</button>
@@ -422,6 +511,7 @@ function openVeh2Modal(id) {
     const imgSrc  = c.imagen ? (c.imagen.startsWith('http') ? c.imagen : `/storage/${c.imagen}`) : null;
     const enVenta = c.en_venta == 1 || c.en_venta === true;
 
+    const extraInfo = [c.especificaciones, c.km ? c.km + ' km' : null].filter(Boolean).join(' · ');
     document.getElementById('veh-modal-title').textContent = `${c.matricula} · ${c.marca} ${c.modelo}`;
     document.getElementById('veh-modal-body').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
@@ -434,8 +524,8 @@ function openVeh2Modal(id) {
                 <div><span style="color:#4a6e9a">Matrícula:</span><strong style="color:#deeeff;margin-left:6px">${c.matricula}</strong></div>
                 <div><span style="color:#4a6e9a">Vehículo:</span><strong style="color:#deeeff;margin-left:6px">${c.marca} ${c.modelo}</strong></div>
                 <div><span style="color:#4a6e9a">Precio:</span><strong style="color:#2878f0;font-size:18px;margin-left:6px">€${parseFloat(c.precio).toLocaleString('es-ES')}</strong></div>
-                <div style="color:#4a6e9a;font-size:12px;margin-top:2px">${c.especificaciones ?? c.km + ' km'}</div>
-                <span class="${enVenta ? 'veh-libre' : 'veh-garaje'} veh-status">${enVenta ? '● En venta' : '● Retirado'}</span>
+                <div style="color:#4a6e9a;font-size:12px;margin-top:2px">${extraInfo || 'Sin detalles'}</div>
+                <span class="${enVenta ? 'veh-libre' : 'veh-garaje'} veh-status">${enVenta ? '● En venta' : '● No en venta'}</span>
             </div>
         </div>
         <div style="display:flex;gap:8px;justify-content:flex-end">
@@ -627,25 +717,34 @@ function showModal(type) {
                 <div><label class="mlabel">Precio (€)</label><input class="minput" type="number" id="av-p" placeholder="6500" min="0"></div>
                 <div><label class="mlabel">Marca</label><input class="minput" id="av-mk" placeholder="Volkswagen"></div>
                 <div><label class="mlabel">Modelo</label><input class="minput" id="av-mo" placeholder="Golf 1.6 TDI"></div>
+                <div><label class="mlabel">Año matriculación</label><input class="minput" id="av-a" type="number" placeholder="2018" min="1900" max="2099"></div>
+                <div><label class="mlabel">Motorización</label><input class="minput" id="av-t" placeholder="Gasolina 1.6 TDI"></div>
                 <div><label class="mlabel">Kilómetros</label><input class="minput" type="number" id="av-km" placeholder="65000" min="0"></div>
+                <div><label class="mlabel">URL imagen</label><input class="minput" id="av-i" placeholder="https://..." type="url"></div>
                 <div class="mfg-full"><label class="mlabel">Especificaciones</label><input class="minput" id="av-s" placeholder="2018 · Gasolina · Manual · 85 CV"></div>
             </div>`;
         const btn = document.getElementById('modal-confirm');
         btn.textContent = '+ Agregar';
         btn.onclick = async () => {
             const body = {
-                matricula       : document.getElementById('av-m').value.trim(),
-                precio          : parseFloat(document.getElementById('av-p').value) || 0,
-                marca           : document.getElementById('av-mk').value.trim(),
-                modelo          : document.getElementById('av-mo').value.trim(),
-                km              : parseInt(document.getElementById('av-km').value) || 0,
-                especificaciones: document.getElementById('av-s').value.trim(),
+                matricula        : document.getElementById('av-m').value.trim(),
+                precio           : parseFloat(document.getElementById('av-p').value) || 0,
+                marca            : document.getElementById('av-mk').value.trim(),
+                modelo           : document.getElementById('av-mo').value.trim(),
+                anio_matriculacion: parseInt(document.getElementById('av-a').value) || null,
+                motorizacion     : document.getElementById('av-t').value.trim(),
+                km               : parseInt(document.getElementById('av-km').value) || 0,
+                especificaciones : document.getElementById('av-s').value.trim(),
+                imagen           : document.getElementById('av-i').value.trim() || null,
             };
-            if (!body.matricula || !body.precio) return;
+            if (!body.matricula || !body.precio || !body.anio_matriculacion || !body.motorizacion) {
+                return alert('Rellena matrícula, precio, año de matriculación y motorización.');
+            }
             try {
-                await apiFetch('/coche2mano/newCoche2mano', { method: 'POST', body: JSON.stringify(body) });
+                const res = await apiFetch('/coche2mano/newCoche2mano', { method: 'POST', body: JSON.stringify(body) });
                 await loadVehiculos2();
                 hideModal();
+                alert(res.message || 'Vehículo agregado correctamente.');
             } catch(e) { alert('Error al agregar vehículo: ' + e.message); }
             btn.textContent = 'Confirmar';
         };
