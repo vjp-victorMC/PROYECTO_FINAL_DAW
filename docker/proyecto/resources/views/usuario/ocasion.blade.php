@@ -59,63 +59,56 @@
                     const delayClass = index % 3 === 0 ? '' : (index % 3 === 1 ? 'delay-1' : 'delay-2');
                     
                     // Comprobar la URL de la imagen
-                    let imgUrl = '';
+                    let imgSource = '';
                     if (veh.imagen) {
-                        imgUrl = (veh.imagen.startsWith('http://') || veh.imagen.startsWith('https://')) 
+                        imgSource = (veh.imagen.startsWith('http://') || veh.imagen.startsWith('https://')) 
                             ? veh.imagen 
                             : `/storage/${veh.imagen}`;
-                    } else {
-                        // Imagen por defecto (silueta SVG de auto)
-                        imgUrl = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50' fill='none' stroke='%23A9B8CE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 30 H25 C28 20, 36 12, 50 12 H65 C73 12, 80 18, 83 25 L86 30 H90 C92 30, 94 32, 94 34 V38 C94 40, 92 41, 90 41 H84' /><path d='M16 41 H10 C8 41, 6 40, 6 38 V34 C6 32, 8 30, 10 30 H15' /><circle cx='25' cy='41' r='5.5' stroke='%23A9B8CE' stroke-width='2' fill='%23F0F4FA' /><circle cx='75' cy='41' r='5.5' stroke='%23A9B8CE' stroke-width='2' fill='%23F0F4FA' /><path d='M31 41 H69' /><path d='M48 18 H63 C68 18, 73 22, 75 27 L76 30 H48 V18 Z' fill='%23A9B8CE' fill-opacity='0.1' stroke='%23A9B8CE' stroke-width='1.5' /><path d='M33 30 H44 V18 H38 C34 18, 30 22, 29 27 Z' fill='%23A9B8CE' fill-opacity='0.1' stroke='%23A9B8CE' stroke-width='1.5' /></svg>";
                     }
                     
-                    // Procesar especificaciones (separar por puntos/barras si es necesario)
-                    let specsHtml = '';
-                    if (veh.especificaciones) {
-                        const parts = veh.especificaciones.split('·').map(p => p.trim());
-                        const anio = parts[0] || 'N/A';
-                        const kms = parts[1] || `${veh.km ? veh.km.toLocaleString('es-ES') : 0} km`;
-                        const combustible = parts[2] || 'Gasolina';
-                        
-                        specsHtml = `
-                            <div class="spec-item">
-                                <span>Año</span>
-                                <strong>${anio}</strong>
-                            </div>
-                            <div class="spec-item">
-                                <span>Kms</span>
-                                <strong>${kms}</strong>
-                            </div>
-                            <div class="spec-item">
-                                <span>Motor</span>
-                                <strong>${combustible}</strong>
-                            </div>
-                        `;
+                    const priceFormatted = veh.precio ? new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(veh.precio) : 'Consultar';
+                    const kmFormatted = veh.km ? new Intl.NumberFormat('es-ES').format(veh.km) + ' km' : '0 km';
+                    
+                    const specsHtml = `
+                        <div class="spec-item">
+                            <span>Año</span>
+                            <strong>${veh.anio_matriculacion || 2021}</strong>
+                        </div>
+                        <div class="spec-item">
+                            <span>Kms</span>
+                            <strong>${kmFormatted}</strong>
+                        </div>
+                        <div class="spec-item">
+                            <span>Motor</span>
+                            <strong>${veh.motorizacion || 'Gasolina'}</strong>
+                        </div>
+                    `;
+                    
+                    let imageBlock = '';
+                    if (imgSource) {
+                        imageBlock = `<img src="${imgSource}" alt="${veh.marca} ${veh.modelo}">`;
                     } else {
-                        // Fallback con datos directos si no hay string de especificaciones
-                        specsHtml = `
-                            <div class="spec-item">
-                                <span>Matrícula</span>
-                                <strong>${veh.matricula ? veh.matricula.substring(0, 4) + '...' : 'N/A'}</strong>
-                            </div>
-                            <div class="spec-item">
-                                <span>Kms</span>
-                                <strong>${veh.km ? veh.km.toLocaleString('es-ES') : '0'}</strong>
-                            </div>
-                            <div class="spec-item">
-                                <span>Garantía</span>
-                                <strong>12 Meses</strong>
-                            </div>
+                        // Vector SVG fallback
+                        imageBlock = `
+                            <svg viewBox="0 0 100 50" width="120" height="60" fill="none" stroke="#A9B8CE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.85; margin: auto;">
+                                <path d="M15 30 H25 C28 20, 36 12, 50 12 H65 C73 12, 80 18, 83 25 L86 30 H90 C92 30, 94 32, 94 34 V38 C94 40, 92 41, 90 41 H84" />
+                                <path d="M16 41 H10 C8 41, 6 40, 6 38 V34 C6 32, 8 30, 10 30 H15" />
+                                <circle cx="25" cy="41" r="5.5" stroke="#A9B8CE" stroke-width="2.5" fill="#F0F4FA" />
+                                <circle cx="75" cy="41" r="5.5" stroke="#A9B8CE" stroke-width="2.5" fill="#F0F4FA" />
+                                <path d="M31 41 H69" />
+                                <path d="M48 18 H63 C68 18, 73 22, 75 27 L76 30 H48 V18 Z" fill="#A9B8CE" fill-opacity="0.15" stroke="#A9B8CE" stroke-width="1.8" />
+                                <path d="M33 30 H44 V18 H38 C34 18, 30 22, 29 27 Z" fill="#A9B8CE" fill-opacity="0.15" stroke="#A9B8CE" stroke-width="1.8" />
+                            </svg>
                         `;
                     }
                     
-                    const priceFormatted = veh.precio ? `${parseFloat(veh.precio).toLocaleString('es-ES')}€` : 'Consultar';
+                    const buyRoute = `/compra?car=${encodeURIComponent(veh.marca + ' ' + veh.modelo)}&price=${veh.precio}&brand=${encodeURIComponent(veh.marca)}&year=${veh.anio_matriculacion || 2021}&km=${veh.km || 0}`;
                     
                     html += `
                         <div class="vehicle-card animate-up ${delayClass}">
                             <div class="badge-ocasion">Ocasión</div>
-                            <div class="vehicle-image" style="background: #F4F7FB; display: flex; align-items: center; justify-content: center; height: 220px; overflow: hidden;">
-                                <img src="${imgUrl}" alt="${veh.marca} ${veh.modelo}" style="width:100%; height:100%; object-fit:cover;">
+                            <div class="vehicle-image">
+                                ${imageBlock}
                             </div>
                             <div class="vehicle-content">
                                 <h3 class="vehicle-title">${veh.marca} ${veh.modelo}</h3>
@@ -128,7 +121,7 @@
                                         <span class="price-promo">Entrega Inmediata</span>
                                         <span class="price-main">${priceFormatted}</span>
                                     </div>
-                                    <a href="/compra?car=${encodeURIComponent(veh.marca + ' ' + veh.modelo)}&price=${veh.precio}&brand=${encodeURIComponent(veh.marca)}&km=${veh.km || 0}" class="btn-view">Comprar / Financiar</a>
+                                    <a href="${buyRoute}" class="btn-view">Comprar / Financiar</a>
                                 </div>
                             </div>
                         </div>
