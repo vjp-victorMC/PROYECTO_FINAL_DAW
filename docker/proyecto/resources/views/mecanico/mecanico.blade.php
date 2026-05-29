@@ -452,6 +452,15 @@
         ]
     };
 
+    // Mock lista de vehículos dados de alta en el taller (para elegir al "meter coche")
+    const mockCars = [
+        { id: 101, matricula: '4821 MXS', marca: 'Seat', modelo: 'León FR' },
+        { id: 102, matricula: '7718 LPT', marca: 'VW', modelo: 'Golf' },
+        { id: 103, matricula: '1942 KBN', marca: 'Peugeot', modelo: '308' },
+        { id: 104, matricula: '5555 ABC', marca: 'Ford', modelo: 'Focus' },
+        { id: 105, matricula: '6666 XYZ', marca: 'Renault', modelo: 'Clio' }
+    ];
+
     // ============ HELPERS ============
     function getEstadoBadge(estado) {
         const map = {
@@ -606,20 +615,15 @@
             'meter-coche': () => createModal('meter-coche', 'Meter coche al taller', `
                 <form onsubmit="window.submitMeterCoche(event)">
                     <div class="mech-form-group">
-                        <label>Matrícula *</label>
-                        <input type="text" id="matricula" placeholder="Ej: 4821 MXS" required>
+                        <label>Selecciona vehículo *</label>
+                        <select id="select-vehiculo" required>
+                            <option value="">Selecciona un vehículo</option>
+                            ${mockCars.map(c => `<option value="${c.id}">${c.matricula} — ${c.marca} ${c.modelo}</option>`).join('')}
+                        </select>
                     </div>
                     <div class="mech-form-group">
-                        <label>Marca *</label>
-                        <input type="text" id="marca" placeholder="Ej: Seat" required>
-                    </div>
-                    <div class="mech-form-group">
-                        <label>Modelo *</label>
-                        <input type="text" id="modelo" placeholder="Ej: León FR" required>
-                    </div>
-                    <div class="mech-form-group">
-                        <label>Motivo de entrada *</label>
-                        <input type="text" id="motivo" placeholder="Ej: Revisión completa" required>
+                        <label>Motivo de entrada</label>
+                        <input type="text" id="motivo-entrada" placeholder="Ej: Revisió́n / Avería" />
                     </div>
                     <div class="mech-btn-group">
                         <button type="button" class="mech-btn-cancel" onclick="window.closeModal('meter-coche')">Cancelar</button>
@@ -779,15 +783,21 @@
     // ============ FORM SUBMISSIONS ============
     window.submitMeterCoche = function(e) {
         e.preventDefault();
-        const matricula = document.getElementById('matricula').value;
-        const marca = document.getElementById('marca').value;
-        const modelo = document.getElementById('modelo').value;
-        const motivo = document.getElementById('motivo').value;
+        const selectId = document.getElementById('select-vehiculo').value;
+        const motivo = document.getElementById('motivo-entrada').value || '';
+        const car = mockCars.find(c => String(c.id) === String(selectId));
+        if (!car) {
+            showNotification('Selecciona un vehículo válido', 'error');
+            return;
+        }
 
+        const nextId = mockData.reparaciones.length ? Math.max(...mockData.reparaciones.map(r => r.id)) + 1 : 1;
         mockData.reparaciones.push({
-            id: Math.max(...mockData.reparaciones.map(r => r.id)) + 1,
-            matricula, marca, modelo,
-            motivo,
+            id: nextId,
+            matricula: car.matricula,
+            marca: car.marca,
+            modelo: car.modelo,
+            motivo: motivo || 'Entrada al taller',
             estado: 'pending',
             horas: 0,
             piezas: [],
@@ -796,7 +806,7 @@
 
         window.closeModal('meter-coche');
         renderReparaciones();
-        showNotification('✓ Coche registrado correctamente');
+        showNotification('✓ Vehículo metido al taller');
     };
 
     window.submitCrearReparacion = function(e) {
