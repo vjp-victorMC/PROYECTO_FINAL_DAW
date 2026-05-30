@@ -6,12 +6,40 @@
 const API = '/api';
 
 async function apiFetch(url, opts = {}) {
+    const headers = {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+        'X-Requested-With': 'XMLHttpRequest'
+    };
+    if (!(opts.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
     const defaults = {
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '' },
+        credentials: 'same-origin',
+        headers: { ...headers, ...(opts.headers || {}) }
     };
     const res = await fetch(API + url, { ...defaults, ...opts });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return res.json();
+    const contentType = res.headers.get('content-type') || '';
+    const text = await res.text();
+    let data = null;
+    if (contentType.includes('application/json') || contentType.includes('text/json')) {
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            data = text;
+        }
+    } else {
+        data = text;
+    }
+    if (!res.ok) {
+        let msg = typeof data === 'object' && data !== null
+            ? (data.message || data.error || JSON.stringify(data))
+            : data || `HTTP ${res.status}`;
+        if (typeof msg === 'string' && /<!doctype|<html|<body|<_doc|<_Doc/i.test(msg)) {
+            msg = `Error interno del servidor (${res.status})`;
+        }
+        throw new Error(msg);
+    }
+    return data;
 }
 
 function fmtEur(n) {
@@ -25,6 +53,7 @@ let cochesRep = [];
 let coches2   = [];
 let piezas    = [];
 let usuarios  = [];
+let proveedores = [];
 
 // ============================================================
 // CONFIGURACIÓN DE PANELES
@@ -57,33 +86,51 @@ function showPanel(id) {
 // ============================================================
 // CHARTS
 // ============================================================
-function renderBarChart(svgId, data, labels, color) {
+function renderLineChart(svgId, data, labels, color) {
     const svg = document.getElementById(svgId);
-    if (!svg) return;
+    if (!svg || !data?.length || !labels?.length) return;
     const vb = svg.viewBox.baseVal;
     const W = vb.width, H = vb.height;
-    const P = { t: 10, r: 10, b: 26, l: 42 };
+    const P = { t: 16, r: 14, b: 30, l: 34 };
     const cW = W - P.l - P.r, cH = H - P.t - P.b;
-    const mx = Math.max(...data, 1) * 1.15;
-    const slot = cW / data.length;
-    const bw = slot * 0.56;
+    const count = Math.min(data.length, labels.length);
+    if (count === 0) { svg.innerHTML = ''; return; }
+
+    const maxV = Math.max(...data.slice(0, count), 1);
+    const axisMax = Math.ceil(maxV * 1.1);
+    const step = axisMax / 4;
+
     let h = '';
-    [0, 0.25, 0.5, 0.75, 1].forEach(f => {
+    [0, 1, 2, 3, 4].forEach(i => {
+        const f = i / 4;
         const y = P.t + cH * (1 - f);
-        const v = Math.round(mx * f);
-        const lbl = v >= 1000 ? (v >= 10000 ? '€' + (v / 1000).toFixed(0) + 'k' : v) : v;
+        const value = Math.round(step * i);
+        const label = axisMax >= 1000 ? `${Math.round(value / 1000)}k` : value;
         h += `<line x1="${P.l}" y1="${y.toFixed(1)}" x2="${W - P.r}" y2="${y.toFixed(1)}" stroke="#1a3050" stroke-width="1"/>`;
-        h += `<text x="${P.l - 4}" y="${(y + 3.5).toFixed(1)}" text-anchor="end" font-size="9" fill="#4a6e9a">${lbl}</text>`;
+        h += `<text x="${P.l - 6}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-size="9" fill="#4a6e9a">${label}</text>`;
     });
-    const maxV = Math.max(...data, 1);
-    data.forEach((v, i) => {
-        const barH = (v / mx) * cH;
-        const x = P.l + i * slot + (slot - bw) / 2;
-        const y = P.t + cH - barH;
-        const alpha = (0.45 + 0.55 * (v / maxV)).toFixed(2);
-        h += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${barH.toFixed(1)}" rx="3" fill="${color}" opacity="${alpha}"/>`;
-        h += `<text x="${(x + bw / 2).toFixed(1)}" y="${(H - P.b + 13).toFixed(1)}" text-anchor="middle" font-size="9" fill="#4a6e9a">${labels[i]}</text>`;
+
+    const points = [];
+    for (let i = 0; i < count; i++) {
+        const value = Number(data[i]) || 0;
+        const x = P.l + (count === 1 ? cW / 2 : (cW * i) / (count - 1));
+        const y = P.t + cH * (1 - (value / axisMax));
+        points.push({ x, y, value });
+    }
+
+    const path = points.map((pt, idx) => `${idx === 0 ? 'M' : 'L'}${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`).join(' ');
+    const area = `${path} L ${points[count - 1].x.toFixed(1)} ${P.t + cH} L ${points[0].x.toFixed(1)} ${P.t + cH} Z`;
+    h += `<path d="${area}" fill="${color}" opacity="0.12"/>`;
+    h += `<path d="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+    points.forEach(pt => {
+        h += `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3.5" fill="${color}" stroke="#0f172a" stroke-width="1.5"/>`;
     });
+
+    points.forEach((pt, i) => {
+        h += `<text x="${pt.x.toFixed(1)}" y="${H - P.b + 16}" text-anchor="middle" font-size="9" fill="#4a6e9a">${labels[i]}</text>`;
+    });
+
     svg.innerHTML = h;
 }
 
@@ -111,20 +158,13 @@ async function loadDashboard() {
         document.getElementById('kpi-coches-anio').textContent= t.coches_atendidos.total;
         document.getElementById('kpi-margen').textContent     = t.margen_bruto.valor_formateado;
 
+        const Y = g.etiquetas_anios || [];
         const M = g.etiquetas_meses;
-        const W = ['S1', 'S2', 'S3', 'S4'];
 
-        renderBarChart('chart-gastos-anual',  g.gastos_por_mes,  M, '#2878f0');
-        renderBarChart('chart-coches-anual',  g.coches_por_mes,  M, '#22c55e');
-
-        // Semanas: si la API no las devuelve, distribuimos el mes actual equitativamente
-        const mesActual = new Date().getMonth(); // 0-based
-        const gastosMes = g.gastos_por_mes[mesActual] || 0;
-        const cochesMes = g.coches_por_mes[mesActual] || 0;
-        const distG = [0.22, 0.27, 0.25, 0.26].map(f => Math.round(gastosMes * f));
-        const distC = [0.23, 0.28, 0.24, 0.25].map(f => Math.round(cochesMes * f));
-        renderBarChart('chart-gastos-mensual', distG, W, '#2878f0');
-        renderBarChart('chart-coches-mensual', distC, W, '#22c55e');
+        renderLineChart('chart-gastos-anual', g.gastos_por_anio || [], Y, '#2878f0');
+        renderLineChart('chart-coches-anual', g.coches_por_anio || [], Y, '#22c55e');
+        renderLineChart('chart-gastos-mensual', g.gastos_por_mes || [], M, '#2878f0');
+        renderLineChart('chart-coches-mensual', g.coches_por_mes || [], M, '#22c55e');
 
     } catch (e) {
         console.error('Dashboard error:', e);
@@ -134,7 +174,7 @@ async function loadDashboard() {
 // ============================================================
 // USUARIOS
 // ============================================================
-const roleClass = { 'administrador': 'role-admin', 'mecanico': 'role-mec', 'cliente': 'role-cli' };
+const roleClass = { 'admin': 'role-admin', 'administrador': 'role-admin', 'mecanico': 'role-mec', 'cliente': 'role-cli' };
 
 async function loadUsuarios() {
     try {
@@ -162,11 +202,11 @@ function renderUsuarios() {
     }
     tb.innerHTML = usuarios.map(u => `
         <tr>
-            <td style="color:#4a6e9a;font-size:11px">#${u.id_usuario ?? u.id}</td>
+            <td style="color:#4a6e9a;font-size:11px">${u.dni ?? '—'}</td>
             <td style="font-weight:600;color:#deeeff">${u.nombre}</td>
             <td>${u.email}</td>
             <td>${u.telefono ?? '—'}</td>
-            <td><span class="role-badge ${roleClass[u.rol] || 'role-cli'}">${u.rol}</span></td>
+            <td><span class="role-badge ${roleClass[u.rol] || 'role-cli'}">${u.rol === 'admin' || u.rol === 'administrador' ? 'Administrador' : u.rol}</span></td>
             <td><div style="display:flex;gap:6px">
                 <button class="btn btn-sm" onclick="editUsuario(${u.id_usuario ?? u.id})">✏️ Editar</button>
                 <button class="btn btn-sm btn-danger" onclick="confirmDeleteUsuario(${u.id_usuario ?? u.id})">✕</button>
@@ -185,7 +225,7 @@ function editUsuario(id) {
             <div class="mfg-full"><label class="mlabel">Email</label><input class="minput" id="eu-e" value="${u.email}"></div>
             <div><label class="mlabel">Rol</label>
                 <select class="minput" id="eu-r">
-                    <option ${u.rol === 'administrador' ? 'selected' : ''} value="administrador">Administrador</option>
+                    <option ${u.rol === 'admin' || u.rol === 'administrador' ? 'selected' : ''} value="admin">Administrador</option>
                     <option ${u.rol === 'mecanico'      ? 'selected' : ''} value="mecanico">Mecánico</option>
                     <option ${u.rol === 'cliente'       ? 'selected' : ''} value="cliente">Cliente</option>
                 </select>
@@ -293,9 +333,69 @@ function renderSolicitudes(mensajes) {
                 <div class="sol-desc">${m.mensaje ?? ''}</div>
             </div>
             <div class="sol-actions">
+                <button class="btn btn-sm btn-success" onclick="aprobarSolicitud(${m.id_mensaje ?? m.id})">✅ Aprobar</button>
                 <button class="btn btn-sm btn-danger" onclick="eliminarMensaje(${m.id_mensaje ?? m.id})">✕ Eliminar</button>
             </div>
         </div>`).join('');
+}
+
+async function aprobarSolicitud(id) {
+    try {
+        const adminId = {{ auth()->id() ?? 1 }};
+        const res = await apiFetch(`/admin/mensajes/recibidos/${adminId}`);
+        const mensajes = (res.data || []).filter(m => !m.leido);
+        const mensaje = mensajes.find(m => (m.id_mensaje ?? m.id) == id);
+        if (!mensaje) {
+            return alert('No se ha encontrado la solicitud para aprobar.');
+        }
+
+        const matricula = (mensaje.matricula || '').trim();
+        if (!matricula) {
+            return alert('La solicitud no tiene matrícula válida.');
+        }
+
+        let cocheRes;
+        try {
+            cocheRes = await apiFetch(`/coches/matricula/${encodeURIComponent(matricula)}`);
+        } catch (err) {
+            console.error('Error al buscar coche por matrícula:', err);
+            return alert('No se ha encontrado el coche con matrícula ' + matricula + '.');
+        }
+
+        const id_coche = cocheRes.id_coche;
+        if (!id_coche) {
+            return alert('No se ha encontrado el coche con matrícula ' + matricula + '.');
+        }
+
+        console.log('Creando reparación con:', { id_coche, motivo: mensaje.mensaje || 'Sin asunto' });
+
+        let crear;
+        try {
+            crear = await apiFetch('/admin/reparaciones', {
+                method: 'POST',
+                body: JSON.stringify({
+                    id_coche: parseInt(id_coche),
+                    motivo: (mensaje.mensaje || 'Sin asunto').toString()
+                })
+            });
+        } catch (err) {
+            console.error('Error al crear reparación:', err);
+            const errorMsg = err.message || 'Error desconocido';
+            return alert('No se pudo crear la reparación: ' + errorMsg);
+        }
+
+        if (crear.status !== 'success') {
+            console.error('Respuesta de error del servidor:', crear);
+            return alert('No se pudo crear la reparación: ' + (crear.message || 'Error desconocido'));
+        }
+
+        await eliminarMensaje(id);
+        alert('Solicitud aprobada y reparación creada correctamente.');
+        loadReparaciones();
+    } catch (e) {
+        console.error('aprobarSolicitud:', e);
+        alert('Error al aprobar la solicitud: ' + (e.message || 'Error desconocido'));
+    }
 }
 
 async function eliminarMensaje(id) {
@@ -381,14 +481,15 @@ function renderVehiculos2() {
     const el = document.getElementById('vehiculos2Grid');
     if (!el) return;
 
-    const enVenta = coches2.filter(c => c.en_venta == 1 || c.en_venta === true);
-    const total   = enVenta.reduce((a, c) => a + parseFloat(c.precio || 0), 0);
-    const media   = enVenta.length ? Math.round(total / enVenta.length) : 0;
+    const total   = coches2.reduce((a, c) => a + parseFloat(c.precio || 0), 0);
+    const media   = coches2.length ? Math.round(total / coches2.length) : 0;
+    const kmTotal = coches2.reduce((a, c) => a + (parseInt(c.km || 0) || 0), 0);
+    const kmMedia = coches2.length ? Math.round(kmTotal / coches2.length) : 0;
 
-    document.getElementById('kpi-en-venta').textContent    = enVenta.length;
     document.getElementById('kpi-total-2mano').textContent = coches2.length;
     document.getElementById('kpi-valor-stock').textContent = '€' + total.toLocaleString('es-ES');
-    document.getElementById('kpi-precio-med').textContent  = enVenta.length ? '€' + media.toLocaleString('es-ES') : '—';
+    document.getElementById('kpi-precio-med').textContent  = coches2.length ? '€' + media.toLocaleString('es-ES') : '—';
+    document.getElementById('kpi-km-med').textContent      = coches2.length ? kmMedia.toLocaleString('es-ES') + ' km' : '—';
 
     if (!coches2.length) {
         el.innerHTML = '<p style="color:#4a6e9a;font-size:13px;padding:10px 0">Sin vehículos en catálogo.</p>';
@@ -398,6 +499,7 @@ function renderVehiculos2() {
     el.innerHTML = coches2.map(c => {
         const imgSrc  = c.imagen ? (c.imagen.startsWith('http') ? c.imagen : `/storage/${c.imagen}`) : null;
         const enVenta = c.en_venta == 1 || c.en_venta === true;
+        const extras  = [c.especificaciones, c.km ? c.km + ' km' : null].filter(Boolean).join(' · ');
         return `<div class="veh-card" onclick="openVeh2Modal(${c.id ?? c.id_coche2mano})">
             ${imgSrc ? `<img src="${imgSrc}" class="veh-img" alt="">` : ''}
             <div class="veh-img-ph" style="${imgSrc ? 'display:none' : ''}">🚘</div>
@@ -405,8 +507,7 @@ function renderVehiculos2() {
                 <div class="veh-matricula">${c.matricula}</div>
                 <div class="veh-modelo">${c.marca} ${c.modelo}</div>
                 <div class="veh-precio">€${parseFloat(c.precio).toLocaleString('es-ES')}</div>
-                <div style="font-size:10px;color:#4a6e9a;margin-top:2px">${c.especificaciones ?? c.km + ' km'}</div>
-                <span class="${enVenta ? 'veh-libre' : 'veh-garaje'} veh-status">${enVenta ? '● En venta' : '● Retirado'}</span>
+                <div style="font-size:10px;color:#4a6e9a;margin-top:2px">${extras || 'Sin detalles'}</div>
             </div>
             <div class="veh-actions" onclick="event.stopPropagation()">
                 <button class="btn btn-sm btn-danger" onclick="retirarVeh(${c.id ?? c.id_coche2mano})">📤 Retirar</button>
@@ -422,6 +523,7 @@ function openVeh2Modal(id) {
     const imgSrc  = c.imagen ? (c.imagen.startsWith('http') ? c.imagen : `/storage/${c.imagen}`) : null;
     const enVenta = c.en_venta == 1 || c.en_venta === true;
 
+    const extraInfo = [c.especificaciones, c.km ? c.km + ' km' : null].filter(Boolean).join(' · ');
     document.getElementById('veh-modal-title').textContent = `${c.matricula} · ${c.marca} ${c.modelo}`;
     document.getElementById('veh-modal-body').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
@@ -434,8 +536,8 @@ function openVeh2Modal(id) {
                 <div><span style="color:#4a6e9a">Matrícula:</span><strong style="color:#deeeff;margin-left:6px">${c.matricula}</strong></div>
                 <div><span style="color:#4a6e9a">Vehículo:</span><strong style="color:#deeeff;margin-left:6px">${c.marca} ${c.modelo}</strong></div>
                 <div><span style="color:#4a6e9a">Precio:</span><strong style="color:#2878f0;font-size:18px;margin-left:6px">€${parseFloat(c.precio).toLocaleString('es-ES')}</strong></div>
-                <div style="color:#4a6e9a;font-size:12px;margin-top:2px">${c.especificaciones ?? c.km + ' km'}</div>
-                <span class="${enVenta ? 'veh-libre' : 'veh-garaje'} veh-status">${enVenta ? '● En venta' : '● Retirado'}</span>
+                <div style="color:#4a6e9a;font-size:12px;margin-top:2px">${extraInfo || 'Sin detalles'}</div>
+                <span class="${enVenta ? 'veh-libre' : 'veh-garaje'} veh-status">${enVenta ? '● En venta' : '● No en venta'}</span>
             </div>
         </div>
         <div style="display:flex;gap:8px;justify-content:flex-end">
@@ -484,12 +586,14 @@ function venderVeh(id) {
 // ============================================================
 async function loadPiezas() {
     try {
-        const [pRes, sinStockRes, bajoRes] = await Promise.all([
+        const [pRes, sinStockRes, bajoRes, provRes] = await Promise.all([
             apiFetch('/piezas'),
             apiFetch('/piezas/sin-stock/total'),
             apiFetch('/piezas/bajo-minimo'),
+            apiFetch('/proveedores'),
         ]);
         piezas = pRes.data || [];
+        proveedores = provRes.data || [];
 
         document.getElementById('kpi-piezas-total').textContent = piezas.length;
         document.getElementById('kpi-sin-stock').textContent    = sinStockRes.total_sin_stock ?? 0;
@@ -500,6 +604,12 @@ async function loadPiezas() {
 
         renderPiezas();
     } catch(e) { console.error('loadPiezas:', e); }
+}
+
+function getProveedorNombre(idProveedor) {
+    if (!idProveedor) return '—';
+    const proveedor = proveedores.find(p => (p.id_proveedor ?? p.id) == idProveedor);
+    return proveedor ? proveedor.nombre : `#${idProveedor}`;
 }
 
 function renderPiezas() {
@@ -520,13 +630,14 @@ function renderPiezas() {
             : stock <= smin
             ? `<span class="stock-low">⚠ Stock bajo (${stock} ud.)</span>`
             : `<span class="stock-ok">✓ En stock (${stock} ud.)</span>`;
+        const proveedorNombre = getProveedorNombre(p.id_proveedor);
         return `<div class="pieza-card">
             <div class="pieza-nombre">${p.nombre_pieza}</div>
             <div class="pieza-meta">
                 ${stockHtml}
                 <span>Mínimo: <strong>${smin} ud.</strong></span>
                 <span>P. Compra: <strong>€${pc.toFixed(2)}</strong></span>
-                <span>Proveedor: <strong>#${p.id_proveedor ?? '—'}</strong></span>
+                <span>Proveedor: <strong>${proveedorNombre}</strong></span>
             </div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid #1a3050">
                 <span class="pieza-pvp">€${pv.toFixed(2)}</span>
@@ -594,7 +705,7 @@ function showModal(type) {
                     <select class="minput" id="nu-r">
                         <option value="cliente">Cliente</option>
                         <option value="mecanico">Mecánico</option>
-                        <option value="administrador">Administrador</option>
+                        <option value="admin">Administrador</option>
                     </select>
                 </div>
                 <div><label class="mlabel">Contraseña</label><input class="minput" type="password" id="nu-p" placeholder="••••••••"></div>
@@ -627,25 +738,34 @@ function showModal(type) {
                 <div><label class="mlabel">Precio (€)</label><input class="minput" type="number" id="av-p" placeholder="6500" min="0"></div>
                 <div><label class="mlabel">Marca</label><input class="minput" id="av-mk" placeholder="Volkswagen"></div>
                 <div><label class="mlabel">Modelo</label><input class="minput" id="av-mo" placeholder="Golf 1.6 TDI"></div>
+                <div><label class="mlabel">Año matriculación</label><input class="minput" id="av-a" type="number" placeholder="2018" min="1900" max="2099"></div>
+                <div><label class="mlabel">Motorización</label><input class="minput" id="av-t" placeholder="Gasolina 1.6 TDI"></div>
                 <div><label class="mlabel">Kilómetros</label><input class="minput" type="number" id="av-km" placeholder="65000" min="0"></div>
+                <div><label class="mlabel">URL imagen</label><input class="minput" id="av-i" placeholder="https://..." type="url"></div>
                 <div class="mfg-full"><label class="mlabel">Especificaciones</label><input class="minput" id="av-s" placeholder="2018 · Gasolina · Manual · 85 CV"></div>
             </div>`;
         const btn = document.getElementById('modal-confirm');
         btn.textContent = '+ Agregar';
         btn.onclick = async () => {
             const body = {
-                matricula       : document.getElementById('av-m').value.trim(),
-                precio          : parseFloat(document.getElementById('av-p').value) || 0,
-                marca           : document.getElementById('av-mk').value.trim(),
-                modelo          : document.getElementById('av-mo').value.trim(),
-                km              : parseInt(document.getElementById('av-km').value) || 0,
-                especificaciones: document.getElementById('av-s').value.trim(),
+                matricula        : document.getElementById('av-m').value.trim(),
+                precio           : parseFloat(document.getElementById('av-p').value) || 0,
+                marca            : document.getElementById('av-mk').value.trim(),
+                modelo           : document.getElementById('av-mo').value.trim(),
+                anio_matriculacion: parseInt(document.getElementById('av-a').value) || null,
+                motorizacion     : document.getElementById('av-t').value.trim(),
+                km               : parseInt(document.getElementById('av-km').value) || 0,
+                especificaciones : document.getElementById('av-s').value.trim(),
+                imagen           : document.getElementById('av-i').value.trim() || null,
             };
-            if (!body.matricula || !body.precio) return;
+            if (!body.matricula || !body.precio || !body.anio_matriculacion || !body.motorizacion) {
+                return alert('Rellena matrícula, precio, año de matriculación y motorización.');
+            }
             try {
-                await apiFetch('/coche2mano/newCoche2mano', { method: 'POST', body: JSON.stringify(body) });
+                const res = await apiFetch('/coche2mano/newCoche2mano', { method: 'POST', body: JSON.stringify(body) });
                 await loadVehiculos2();
                 hideModal();
+                alert(res.message || 'Vehículo agregado correctamente.');
             } catch(e) { alert('Error al agregar vehículo: ' + e.message); }
             btn.textContent = 'Confirmar';
         };
@@ -659,6 +779,12 @@ function showModal(type) {
                 <div><label class="mlabel">Stock mínimo</label><input class="minput" type="number" id="np-sm" placeholder="5" min="1"></div>
                 <div><label class="mlabel">Precio compra (€)</label><input class="minput" type="number" id="np-pc" placeholder="15.00" step="0.01"></div>
                 <div><label class="mlabel">Precio venta (€)</label><input class="minput" type="number" id="np-pv" placeholder="30.00" step="0.01"></div>
+                <div><label class="mlabel">Proveedor</label>
+                    <select class="minput" id="np-pr">
+                        <option value="">Sin proveedor</option>
+                        ${proveedores.map(pr => `<option value="${pr.id_proveedor ?? pr.id}">${pr.nombre}</option>`).join('')}
+                    </select>
+                </div>
             </div>`;
         const btn = document.getElementById('modal-confirm');
         btn.textContent = '+ Crear pieza';
@@ -669,12 +795,14 @@ function showModal(type) {
                 stock_minimo       : parseInt(document.getElementById('np-sm').value) || 5,
                 precio_compra      : parseFloat(document.getElementById('np-pc').value) || 0,
                 precio_venta       : parseFloat(document.getElementById('np-pv').value) || 0,
+                id_proveedor       : document.getElementById('np-pr').value || null,
             };
             if (!body.nombre_pieza) return;
             try {
-                await apiFetch('/piezas', { method: 'POST', body: JSON.stringify(body) });
+                const res = await apiFetch('/piezas', { method: 'POST', body: JSON.stringify(body) });
                 await loadPiezas();
                 hideModal();
+                alert(res.message || 'Pieza creada con éxito.');
             } catch(e) { alert('Error al crear pieza: ' + e.message); }
             btn.textContent = 'Confirmar';
         };

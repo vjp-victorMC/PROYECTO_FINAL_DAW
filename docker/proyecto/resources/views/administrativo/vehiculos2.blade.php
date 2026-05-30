@@ -2,10 +2,10 @@
 <div class="panel" id="panel-vehiculos2">
 
     <div class="kpi-row">
-        <div class="kpi"><span class="kpi-label">En venta</span><span class="kpi-value" id="kpi-en-venta">—</span></div>
         <div class="kpi"><span class="kpi-label">Valor total stock</span><span class="kpi-value" id="kpi-valor-stock">—</span></div>
         <div class="kpi"><span class="kpi-label">Total en catálogo</span><span class="kpi-value" id="kpi-total-2mano">—</span></div>
         <div class="kpi"><span class="kpi-label">Precio medio</span><span class="kpi-value" id="kpi-precio-med">—</span></div>
+        <div class="kpi"><span class="kpi-label">Km medio</span><span class="kpi-value" id="kpi-km-med">—</span></div>
     </div>
 
     <div class="card card-last">

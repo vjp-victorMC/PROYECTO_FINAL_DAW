@@ -13,7 +13,7 @@ class UsuarioController extends Controller
     // Obtener todos los usuarios
     public function getAllUser() {
         // Recupera solo los campos necesarios por seguridad
-        $usuarios = Usuario::select('id', 'nombre', 'email', 'dni', 'rol')->get();
+        $usuarios = Usuario::select('id_usuario', 'nombre', 'email', 'dni', 'telefono', 'rol')->get();
 
         return response()->json([
             'success' => true,
@@ -35,10 +35,11 @@ class UsuarioController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'id' => $usuario->id,
+                'id_usuario' => $usuario->id,
                 'nombre' => $usuario->nombre,
                 'email' => $usuario->email,
                 'dni' => $usuario->dni,
+                'telefono' => $usuario->telefono,
                 'rol' => $usuario->rol
             ]
         ], 200);
@@ -147,8 +148,10 @@ class UsuarioController extends Controller
             'dni'        => 'required|string|max:20|unique:usuarios,dni',
             'telefono'   => 'nullable|string|max:15',
             'contraseña' => 'required|string|min:6',
-            'rol'        => 'required|string|in:mecanico,cliente,administrador', // Adapta los roles si usas otros nombres
+            'rol'        => 'required|string|in:mecanico,cliente,admin,administrador',
         ]);
+
+        $rol = $request->rol === 'administrador' ? 'admin' : $request->rol;
 
         $usuario = Usuario::create([
             'nombre'     => $request->nombre,
@@ -156,7 +159,7 @@ class UsuarioController extends Controller
             'dni'        => $request->dni,
             'telefono'   => $request->telefono,
             'contraseña' => Hash::make($request->contraseña), // Encriptación segura para Auth
-            'rol'        => $request->rol,
+            'rol'        => $rol,
         ]);
 
         return response()->json([
@@ -184,11 +187,16 @@ class UsuarioController extends Controller
             'dni'        => 'sometimes|required|string|max:20|unique:usuarios,dni,' . $id_usuario . ',id_usuario',
             'telefono'   => 'nullable|string|max:15',
             'contraseña' => 'sometimes|required|string|min:6',
-            'rol'        => 'sometimes|required|string|in:mecanico,cliente,administrador',
+            'rol'        => 'sometimes|required|string|in:mecanico,cliente,admin,administrador',
         ]);
 
         // Recogemos todos los datos excepto la contraseña inicialmente
         $data = $request->except(['contraseña']);
+
+        // Normalizar rol admin/administrador a la columna actual
+        if ($request->filled('rol')) {
+            $data['rol'] = $request->rol === 'administrador' ? 'admin' : $request->rol;
+        }
 
         // Si se envía una nueva contraseña, la encriptamos antes de guardar
         if ($request->filled('contraseña')) {
@@ -230,7 +238,7 @@ class UsuarioController extends Controller
         // Contamos cada rol de forma independiente en la base de datos
         $mecanicos       = Usuario::where('rol', 'mecanico')->count();
         $clientes        = Usuario::where('rol', 'cliente')->count();
-        $administradores = Usuario::where('rol', 'administrador')->count();
+        $administradores = Usuario::whereIn('rol', ['admin', 'administrador'])->count();
 
         return response()->json([
             'status' => 'success',

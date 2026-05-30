@@ -23,13 +23,13 @@
             <div class="chart-section active" id="gastos-anual">
                 <svg id="chart-gastos-anual" viewBox="0 0 520 150" class="chart-svg"></svg>
                 <div class="chart-legend">
-                    <div class="chart-leg-item"><span class="chart-leg-dot" style="background:#2878f0"></span>Gastos mensuales (€)</div>
+                    <div class="chart-leg-item"><span class="chart-leg-dot" style="background:#2878f0"></span>Gastos por año (€)</div>
                 </div>
             </div>
             <div class="chart-section" id="gastos-mensual">
                 <svg id="chart-gastos-mensual" viewBox="0 0 280 150" class="chart-svg"></svg>
                 <div class="chart-legend">
-                    <div class="chart-leg-item"><span class="chart-leg-dot" style="background:#2878f0"></span>Gastos por semana · mes actual</div>
+                    <div class="chart-leg-item"><span class="chart-leg-dot" style="background:#2878f0"></span>Gastos por mes · año actual</div>
                 </div>
             </div>
         </div>
@@ -48,13 +48,13 @@
             <div class="chart-section active" id="coches-anual">
                 <svg id="chart-coches-anual" viewBox="0 0 520 150" class="chart-svg"></svg>
                 <div class="chart-legend">
-                    <div class="chart-leg-item"><span class="chart-leg-dot" style="background:#22c55e"></span>Vehículos atendidos</div>
+                    <div class="chart-leg-item"><span class="chart-leg-dot" style="background:#22c55e"></span>Vehículos atendidos por año</div>
                 </div>
             </div>
             <div class="chart-section" id="coches-mensual">
                 <svg id="chart-coches-mensual" viewBox="0 0 280 150" class="chart-svg"></svg>
                 <div class="chart-legend">
-                    <div class="chart-leg-item"><span class="chart-leg-dot" style="background:#22c55e"></span>Vehículos por semana · mes actual</div>
+                    <div class="chart-leg-item"><span class="chart-leg-dot" style="background:#22c55e"></span>Vehículos por mes · año actual</div>
                 </div>
             </div>
         </div>

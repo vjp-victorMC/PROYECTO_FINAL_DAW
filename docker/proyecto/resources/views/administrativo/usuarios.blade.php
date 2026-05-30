@@ -19,7 +19,7 @@
         <table class="user-table">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>DNI</th>
                     <th>Nombre</th>
                     <th>Email</th>
                     <th>Teléfono</th>
