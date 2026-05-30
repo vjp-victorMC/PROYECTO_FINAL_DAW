@@ -80,7 +80,11 @@
             </button>
         </div>
 
-        <a href="{{ url('/') }}" class="am-cita">← Web pública</a>
+        @if(request()->query('from_admin'))
+            <a href="{{ url('/admin') }}" class="am-cita">← Panel admin</a>
+        @else
+            <a href="{{ url('/').'?from_admin=1' }}" class="am-cita">← Web pública</a>
+        @endif
     </div>
 
     <nav class="am-mobile-menu" id="mobileMenu">
