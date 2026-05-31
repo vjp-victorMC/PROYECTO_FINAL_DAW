@@ -808,3 +808,224 @@
         color: #fff;
     }
 }
+
+.mech-action-btn:hover i { color: #fff; }
+.mech-action-btn:active { transform: translateY(0); }
+
+/* ── Acciones rápidas — uniforme ─────────────────────────── */
+.mech-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .75rem;
+}
+.mech-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: 1.1rem .5rem;
+    height: 96px;
+    background: var(--mech-surface-2);
+    border: 1px solid var(--mech-border);
+    border-radius: 20px;
+    color: var(--mech-text);
+    cursor: pointer;
+    font-size: var(--mech-text-xs);
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -.01em;
+    text-align: center;
+    line-height: 1.3;
+    transition: all var(--mech-transition);
+    width: 100%;
+}
+.mech-action-btn i {
+    font-size: 1.45rem;
+    color: var(--mech-primary);
+    transition: color var(--mech-transition);
+}
+.mech-action-btn:hover {
+    background: var(--mech-primary);
+    border-color: transparent;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0,102,255,.28);
+}
+.mech-action-btn:hover i { color: #fff; }
+.mech-action-btn:active  { transform: translateY(0); box-shadow: none; }
+
+/* ── Header limpio (sin buscador) ─────────────────────────── */
+.mech-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.75rem;
+    background: var(--mech-surface);
+    border: 1px solid var(--mech-border);
+    border-radius: 24px;
+    box-shadow: var(--mech-shadow-sm);
+}
+.mech-header-copy h1 {
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    line-height: 1.1;
+    letter-spacing: -.04em;
+}
+.mech-header-copy p {
+    font-size: var(--mech-text-xs);
+    color: var(--mech-text-muted);
+    margin-top: .2rem;
+}
+
+/* ── Botón editar en tabla ────────────────────────────────── */
+.mech-btn-edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: .4rem .85rem;
+    border-radius: 10px;
+    border: 1px solid var(--mech-border);
+    background: var(--mech-surface-2);
+    color: var(--mech-text-muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    cursor: pointer;
+    transition: all var(--mech-transition);
+    white-space: nowrap;
+}
+.mech-btn-edit i { font-size: .9rem; }
+.mech-btn-edit:hover {
+    background: var(--mech-primary);
+    border-color: transparent;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,102,255,.22);
+}
+
+/* ── Tabla de reparaciones ─────────────────────────────────── */
+.mech-table th {
+    color: var(--mech-text-faint);
+    font-weight: 700;
+    font-size: .68rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    padding: .75rem 1.1rem;
+    border-bottom: 2px solid var(--mech-divider);
+    white-space: nowrap;
+}
+.mech-table td {
+    padding: 1rem 1.1rem;
+    font-size: var(--mech-text-xs);
+    vertical-align: middle;
+}
+.mech-table tbody tr {
+    border-top: 1px solid var(--mech-divider);
+    transition: background var(--mech-transition);
+}
+.mech-table tbody tr:hover { background: var(--mech-surface-offset); }
+.mech-vehicle-mark {
+    width: 40px; height: 40px;
+    border-radius: 13px;
+    background: var(--mech-surface-offset);
+    display: grid; place-items: center;
+    color: var(--mech-primary);
+    font-weight: 800; font-size: .78rem;
+    letter-spacing: -.01em;
+    flex-shrink: 0;
+    border: 1px solid var(--mech-border);
+}
+.mech-vehicle strong {
+    font-size: var(--mech-text-xs);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    display: block;
+}
+.mech-vehicle .mech-muted {
+    font-size: .68rem;
+    color: var(--mech-text-faint);
+    font-variant-numeric: tabular-nums;
+    margin-top: 1px;
+}
+
+/* ── Hero panel imagen ─────────────────────────────────────── */
+.mech-hero-img {
+    position: absolute;
+    right: 0; bottom: 0;
+    width: 55%;
+    max-width: 340px;
+    height: 100%;
+    object-fit: cover;
+    object-position: center right;
+    opacity: .18;
+    pointer-events: none;
+    border-radius: 0 32px 32px 0;
+}
+.mech-hero-panel { isolation: isolate; }
+
+/* ── Queue card sin scroll feo ─────────────────────────────── */
+.mech-queue-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* ── KPIs mejorados ─────────────────────────────────────────── */
+.mech-kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.mech-panel {
+    border-radius: 24px;
+    padding: 1.25rem 1.5rem;
+}
+.mech-kpi-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -.06em;
+    font-variant-numeric: tabular-nums lining-nums;
+    line-height: 1;
+    margin: .35rem 0 .25rem;
+}
+.mech-kpi-icon {
+    width: 42px; height: 42px;
+    border-radius: 13px;
+    background: var(--mech-surface-offset);
+    display: grid; place-items: center;
+    color: var(--mech-primary);
+    font-size: 1.1rem;
+    border: 1px solid var(--mech-border);
+}
+
+/* ── Timeline/detalle derecho ──────────────────────────────── */
+.mech-timeline-card {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: 480px;
+}
+
+/* ── Responsive sin sidebar ────────────────────────────────── */
+@media (max-width: 960px) {
+    .mech-hero-grid,
+    .mech-content-grid,
+    .mech-bottom-grid,
+    .mech-kpi-grid,
+    .mech-planner-grid { grid-template-columns: 1fr; }
+    .mech-main { padding: 1.25rem; }
+    .mech-kpi-grid { grid-template-columns: repeat(2,1fr); }
+    .mech-actions-grid { grid-template-columns: repeat(3,1fr); }
+}
+@media (max-width: 600px) {
+    .mech-main { padding: 1rem; }
+    .mech-actions-grid { grid-template-columns: repeat(2,1fr); }
+    .mech-kpi-grid { grid-template-columns: 1fr 1fr; }
+    .mech-header { border-radius: 18px; padding: 1rem 1.25rem; }
+}
