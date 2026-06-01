@@ -160,16 +160,18 @@
                 <div class="team-card animate-up">
                     <div class="team-img-box">
                         <div class="team-avatar-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <circle cx="9" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"></circle>
-                                <path d="M18.5 10l1.5 1.5 3.5-3.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a1.5 1.5 0 0 1 1.5 1.5v1.07a8.04 8.04 0 0 1 3.43 1.42l.76-.76a1.5 1.5 0 0 1 2.12 0l1.41 1.41a1.5 1.5 0 0 1 0 2.12l-.76.76c.64 1 .94 2.13 1.42 3.43h1.07a1.5 1.5 0 0 1 1.5 1.5v2a1.5 1.5 0 0 1-1.5 1.5h-1.07a8.04 8.04 0 0 1-1.42 3.43l.76.76a1.5 1.5 0 0 1 0 2.12l-1.41 1.41a1.5 1.5 0 0 1-2.12 0l-.76-.76a8.04 8.04 0 0 1-3.43 1.42v1.07a1.5 1.5 0 0 1-1.5 1.5h-2a1.5 1.5 0 0 1-1.5-1.5v-1.07a8.04 8.04 0 0 1-3.43-1.42l-.76.76a1.5 1.5 0 0 1-2.12 0L2.83 20.3a1.5 1.5 0 0 1 0-2.12l.76-.76A8.04 8.04 0 0 1 2.17 14H1.1a1.5 1.5 0 0 1-1.5-1.5v-2A1.5 1.5 0 0 1 1.1 9h1.07a8.04 8.04 0 0 1 1.42-3.43l-.76-.76a1.5 1.5 0 0 1 0-2.12L4.24 2.8a1.5 1.5 0 0 1 2.12 0l.76.76A8.04 8.04 0 0 1 10.5 4.17V2.5A1.5 1.5 0 0 1 12 2z" />
+                                <circle cx="12" cy="12" r="3.5" />
+                                <path d="M7 17l10-10" />
+                                <path d="M15 5l4 4" />
+                                <path d="M5 15l4 4" />
                             </svg>
                         </div>
                         <span class="team-badge">Fundador</span>
                     </div>
                     <div class="team-info">
-                        <h3>Carlos Mendoza</h3>
+                        <h3>Ismael Pablos</h3>
                         <span class="team-role">Director Técnico</span>
                         <p>Más de 25 años de experiencia. Apasionado de la mecánica pura de combustión y experto restaurador de motores clásicos.</p>
                         <div class="team-superpower">
@@ -182,18 +184,20 @@
                 <div class="team-card animate-up delay-1">
                     <div class="team-img-box">
                         <div class="team-avatar-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <circle cx="9" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"></circle>
-                                <path d="M19 16V8h-2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <rect x="9" y="9" width="6" height="6" rx="1" />
+                                <path d="M9 1v2M15 1v2M9 21v2M15 21v2M1 9h2M1 15h2M21 9h2M21 15h2" />
+                                <path d="M12 9v3M12 15h.01" />
+                                <path d="M6 6h3v3M18 18h-3v-3" />
                             </svg>
                         </div>
                         <span class="team-badge">Híbridos & Diagnosis</span>
                     </div>
                     <div class="team-info">
-                        <h3>Elena Rostova</h3>
-                        <span class="team-role">Ingeniera de Diagnosis</span>
-                        <p>Ex-ingeniera telemétrica de competición. Experta en diagnosis de centralitas y software de gestión en coches híbridos y eléctricos.</p>
+                        <h3>Aitor Trujillo</h3>
+                        <span class="team-role">Ingeniero de Diagnosis</span>
+                        <p>Ex-ingeniero telemétrico de competición. Experto en diagnosis de centralitas y software de gestión en coches híbridos y eléctricos.</p>
                         <div class="team-superpower">
                             <span>💻 Superpoder: <strong>Hablar con los microchips</strong></span>
                         </div>
@@ -204,16 +208,19 @@
                 <div class="team-card animate-up delay-2">
                     <div class="team-img-box">
                         <div class="team-avatar-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <circle cx="9" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"></circle>
-                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="9" />
+                                <circle cx="12" cy="12" r="5" />
+                                <circle cx="12" cy="12" r="1.5" />
+                                <path d="M16 3.5A8.5 8.5 0 0 1 20.5 8" stroke-width="3" stroke="currentColor" />
+                                <path d="M12 3v2M12 19v2M3 12h2M19 12h2" />
+                                <path d="M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4l1.4-1.4M17 7l1.4-1.4" />
                             </svg>
                         </div>
                         <span class="team-badge">Especialista Box</span>
                     </div>
                     <div class="team-info">
-                        <h3>Manuel Silva</h3>
+                        <h3>Víctor Mariscal</h3>
                         <span class="team-role">Especialista en Chasis</span>
                         <p>Técnico experto en suspensiones, cajas de cambios automáticas y sistemas de alineación inteligente y frenado de alta seguridad.</p>
                         <div class="team-superpower">
@@ -226,18 +233,20 @@
                 <div class="team-card animate-up delay-3">
                     <div class="team-img-box">
                         <div class="team-avatar-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <circle cx="9" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"></circle>
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                <path d="M4 11v-1a8 8 0 0 1 16 0v1" />
+                                <rect x="2" y="11" width="3" height="4" rx="1" />
+                                <rect x="19" y="11" width="3" height="4" rx="1" />
+                                <path d="M20 15c0 1.5-1.5 3-3.5 3H15" />
                             </svg>
                         </div>
                         <span class="team-badge">Atención Premium</span>
                     </div>
                     <div class="team-info">
-                        <h3>Sofía Vega</h3>
+                        <h3>Javier Baiyong</h3>
                         <span class="team-role">Experiencia de Cliente</span>
-                        <p>Tu enlace directo con los mecánicos. Asesora experta en planes de mantenimiento y gestiones de vehículos de cortesía.</p>
+                        <p>Tu enlace directo con los mecánicos. Asesor experto en planes de mantenimiento y gestiones de vehículos de cortesía.</p>
                         <div class="team-superpower">
                             <span>✨ Superpoder: <strong>Simplificar lo complejo</strong></span>
                         </div>
@@ -311,7 +320,7 @@
                 <div class="cta-content">
                     <h2>Experimenta el verdadero cuidado automotriz</h2>
                     <p>Déjanos demostrarte por qué más de 8.000 extremeños ya no confían su vehículo a nadie más. Reserva una cita online en menos de 60 segundos.</p>
-                    <a href="{{ route('welcome') }}#cita" class="btn-primary">
+                    <a href="{{ route('cita') }}" class="btn-primary">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                             <line x1="16" y1="2" x2="16" y2="6"></line>

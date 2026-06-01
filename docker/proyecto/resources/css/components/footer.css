@@ -43,6 +43,19 @@
     font-size: 13px;
 }
 
+.ft-logo-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.ft-logo:hover .ft-logo-img {
+    transform: scale(1.08) rotate(-3deg);
+    filter: drop-shadow(0 4px 10px rgba(255, 255, 255, 0.2));
+}
+
 .ft-name {
     font-size: 17px;
     font-weight: 900;
@@ -65,20 +78,42 @@
 
 .ft-social {
     display: flex;
-    gap: 8px;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 .ft-social a {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #8a9ab5;
-    font-size: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
+}
+
+.ft-social-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    filter: brightness(0) invert(1) opacity(0.7);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effects */
+.ft-social a:hover {
+    border-color: #4a9eff;
+    background: rgba(74, 158, 255, 0.1);
+    box-shadow: 0 0 12px rgba(74, 158, 255, 0.35);
+    transform: translateY(-3px);
+}
+
+.ft-social a:hover .ft-social-img {
+    filter: none; /* Transition to original brand colors on hover! */
+    transform: scale(1.1);
 }
 
 .ft-col h5 {
@@ -93,19 +128,31 @@
 .ft-col a {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-size: 11.5px;
     color: #8a9ab5;
     text-decoration: none;
-    margin-bottom: 9px;
+    margin-bottom: 12px;
     text-transform: uppercase;
     font-weight: 700;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ft-col a:hover {
+    color: #fff;
+    transform: translateX(4px);
 }
 
 .ft-col a i {
     font-size: 13px;
     color: #4a9eff;
     flex-shrink: 0;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ft-col a:hover i {
+    transform: scale(1.15) translateX(2px);
+    color: #fff;
 }
 
 .ft-ci {

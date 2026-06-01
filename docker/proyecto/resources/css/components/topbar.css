@@ -159,6 +159,19 @@
   font-size: 18px;
 }
 
+.am-logo-img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.am-logo-block:hover .am-logo-img {
+  transform: scale(1.08) rotate(3deg);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+}
+
 .am-brandname {
   font-size: 22px;
   font-weight: 800;

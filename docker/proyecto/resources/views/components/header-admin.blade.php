@@ -35,7 +35,7 @@
     <div class="am-navbar">
         <a href="{{ url('/admin') }}" class="am-logo-block">
             <div class="am-logo">
-                <div class="am-diamond"><span>T</span></div>
+                <img src="{{ asset('images/Logos svg/logo/logoRYC.png') }}" alt="Talleres R&C" class="am-logo-img">
                 <div class="am-brandname">Talleres <em>R&amp;C</em></div>
             </div>
         </a>

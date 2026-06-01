@@ -1235,7 +1235,7 @@ body {
 .process-icon-box {
   width: 60px;
   height: 60px;
-  background: rgba(0, 102, 255, 0.1);
+  background: rgba(0, 102, 255, 0.08);
   color: var(--primary);
   border-radius: 18px;
   display: flex;
@@ -1246,10 +1246,20 @@ body {
   transition: var(--transition);
 }
 
+.process-icon-box img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  transition: var(--transition);
+}
+
 .process-card:hover .process-icon-box {
-  background: var(--primary);
-  color: #fff;
+  background: rgba(0, 102, 255, 0.15);
   transform: scale(1.1) rotate(5deg);
+}
+
+.process-card:hover .process-icon-box img {
+  transform: scale(1.15);
 }
 
 .process-step {

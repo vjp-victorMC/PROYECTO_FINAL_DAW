@@ -14,7 +14,7 @@
                 <h1>Tu vehículo en manos <span>expertas</span></h1>
                 <p>Más de 20 años cuidando vehículos en Extremadura. Revisiones, reparaciones y puesta a punto con tecnología de vanguardia y garantía total.</p>
                 <div class="hero-btns">
-                    <a href="#cita" class="btn-primary"><i class="ti ti-calendar" aria-hidden="true"></i> Pedir cita online</a>
+                    <a href="{{ route ('cita')}}" class="btn-primary"><i class="ti ti-calendar" aria-hidden="true"></i> Pedir cita online</a>
                     <a href="#" class="btn-outline">Nuestros servicios</a>
                 </div>
             </div>
@@ -140,7 +140,7 @@
                             <h2 class="xray-info-title" id="xray-info-title">Neumáticos</h2>
                             <p class="xray-info-desc" id="xray-info-desc">Trabajamos con todas las marcas del mercado y realizamos cambios de neumáticos de todo tipo de vehículos: turismos, 4x4 y furgonetas. Reparación y alineación.</p>
                         </div>
-                        <a href="#cita" class="btn-primary" style="margin-top:auto; width:100%; justify-content:center;">Consultar precio</a>
+                        <a href="{{ route ('login')}}" class="btn-primary" style="margin-top:auto; width:100%; justify-content:center;">Consultar precio</a>
                     </div>
                 </div>
 
@@ -313,7 +313,7 @@
                 <div class="process-card animate-up">
                     <span class="process-step">Paso 1</span>
                     <div class="process-icon-box">
-                        <i class="ti ti-calendar-event"></i>
+                        <img src="{{ asset('images/como trabajamos/calendario.png') }}" alt="Cita Online">
                     </div>
                     <h3>1. Cita Online</h3>
                     <p>Elige el día y la hora que mejor te vengan desde nuestro simulador o llámanos directamente en pocos segundos.</p>
@@ -321,7 +321,7 @@
                 <div class="process-card animate-up delay-1">
                     <span class="process-step">Paso 2</span>
                     <div class="process-icon-box">
-                        <i class="ti ti-report-analytics"></i>
+                        <img src="{{ asset('images/como trabajamos/diagnostico-del-automovil.png') }}" alt="Diagnóstico">
                     </div>
                     <h3>2. Recepción y Diagnóstico</h3>
                     <p>Revisamos tu coche con software de vanguardia y te preparamos un presupuesto cerrado al momento.</p>
@@ -329,7 +329,7 @@
                 <div class="process-card animate-up delay-2">
                     <span class="process-step">Paso 3</span>
                     <div class="process-icon-box">
-                        <i class="ti ti-settings-automation"></i>
+                        <img src="{{ asset('images/como trabajamos/reparacion-de-autos.png') }}" alt="Reparación">
                     </div>
                     <h3>3. Reparación Premium</h3>
                     <p>Nuestros mecánicos expertos efectúan el servicio utilizando recambios oficiales certificados y con total limpieza.</p>
@@ -337,7 +337,7 @@
                 <div class="process-card animate-up delay-3">
                     <span class="process-step">Paso 4</span>
                     <div class="process-icon-box">
-                        <i class="ti ti-discount-check"></i>
+                        <img src="{{ asset('images/como trabajamos/entrega.png') }}" alt="Entrega">
                     </div>
                     <h3>4. Control y Entrega</h3>
                     <p>Probamos el coche a fondo, te explicamos el trabajo realizado y te entregamos las llaves con tu garantía de 12 meses.</p>
