@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap");
 
 :root {
     --mech-text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
@@ -6,9 +6,9 @@
     --mech-text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
     --mech-text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
     --mech-text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
-    --mech-space-1: .25rem;
-    --mech-space-2: .5rem;
-    --mech-space-3: .75rem;
+    --mech-space-1: 0.25rem;
+    --mech-space-2: 0.5rem;
+    --mech-space-3: 0.75rem;
     --mech-space-4: 1rem;
     --mech-space-5: 1.25rem;
     --mech-space-6: 1.5rem;
@@ -16,8 +16,8 @@
     --mech-space-10: 2.5rem;
     --mech-space-12: 3rem;
     --mech-space-16: 4rem;
-    --mech-radius-sm: .375rem;
-    --mech-radius-md: .75rem;
+    --mech-radius-sm: 0.375rem;
+    --mech-radius-md: 0.75rem;
     --mech-radius-lg: 1rem;
     --mech-radius-xl: 1.5rem;
     --mech-radius-full: 999px;
@@ -75,7 +75,7 @@
 }
 
 .mech-page {
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
     background: var(--mech-bg);
     color: var(--mech-text);
     display: grid;
@@ -325,14 +325,20 @@
     overflow: hidden;
     border-radius: 32px;
     padding: 32px;
-    background: radial-gradient(circle at top right, rgba(77, 148, 255, 0.28), rgba(13, 18, 30, 0) 32%), linear-gradient(135deg, #0a0f1a, #152132 60%, #0f1724);
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(77, 148, 255, 0.28),
+            rgba(13, 18, 30, 0) 32%
+        ),
+        linear-gradient(135deg, #0a0f1a, #152132 60%, #0f1724);
     color: #fff;
     min-height: 280px;
     box-shadow: var(--mech-shadow-md);
 }
 
 .mech-hero-panel::after {
-    content: '';
+    content: "";
     position: absolute;
     right: -70px;
     bottom: -90px;
@@ -809,22 +815,26 @@
     }
 }
 
-.mech-action-btn:hover i { color: #fff; }
-.mech-action-btn:active { transform: translateY(0); }
+.mech-action-btn:hover i {
+    color: #fff;
+}
+.mech-action-btn:active {
+    transform: translateY(0);
+}
 
 /* ── Acciones rápidas — uniforme ─────────────────────────── */
 .mech-actions-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: .75rem;
+    gap: 0.75rem;
 }
 .mech-action-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: .5rem;
-    padding: 1.1rem .5rem;
+    gap: 0.5rem;
+    padding: 1.1rem 0.5rem;
     height: 96px;
     background: var(--mech-surface-2);
     border: 1px solid var(--mech-border);
@@ -833,8 +843,8 @@
     cursor: pointer;
     font-size: var(--mech-text-xs);
     font-weight: 700;
-    font-family: 'Outfit', sans-serif;
-    letter-spacing: -.01em;
+    font-family: "Outfit", sans-serif;
+    letter-spacing: -0.01em;
     text-align: center;
     line-height: 1.3;
     transition: all var(--mech-transition);
@@ -850,10 +860,15 @@
     border-color: transparent;
     color: #fff;
     transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0,102,255,.28);
+    box-shadow: 0 12px 28px rgba(0, 102, 255, 0.28);
 }
-.mech-action-btn:hover i { color: #fff; }
-.mech-action-btn:active  { transform: translateY(0); box-shadow: none; }
+.mech-action-btn:hover i {
+    color: #fff;
+}
+.mech-action-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
 
 /* ── Header limpio (sin buscador) ─────────────────────────── */
 .mech-header {
@@ -871,12 +886,12 @@
 .mech-header-copy h1 {
     font-size: clamp(1.2rem, 2vw, 1.6rem);
     line-height: 1.1;
-    letter-spacing: -.04em;
+    letter-spacing: -0.04em;
 }
 .mech-header-copy p {
     font-size: var(--mech-text-xs);
     color: var(--mech-text-muted);
-    margin-top: .2rem;
+    margin-top: 0.2rem;
 }
 
 /* ── Botón editar en tabla ────────────────────────────────── */
@@ -885,36 +900,38 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: .4rem .85rem;
+    padding: 0.4rem 0.85rem;
     border-radius: 10px;
     border: 1px solid var(--mech-border);
     background: var(--mech-surface-2);
     color: var(--mech-text-muted);
-    font-family: 'Outfit', sans-serif;
-    font-size: .72rem;
+    font-family: "Outfit", sans-serif;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: .02em;
+    letter-spacing: 0.02em;
     cursor: pointer;
     transition: all var(--mech-transition);
     white-space: nowrap;
 }
-.mech-btn-edit i { font-size: .9rem; }
+.mech-btn-edit i {
+    font-size: 0.9rem;
+}
 .mech-btn-edit:hover {
     background: var(--mech-primary);
     border-color: transparent;
     color: #fff;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(0,102,255,.22);
+    box-shadow: 0 6px 16px rgba(0, 102, 255, 0.22);
 }
 
 /* ── Tabla de reparaciones ─────────────────────────────────── */
 .mech-table th {
     color: var(--mech-text-faint);
     font-weight: 700;
-    font-size: .68rem;
+    font-size: 0.68rem;
     text-transform: uppercase;
-    letter-spacing: .1em;
-    padding: .75rem 1.1rem;
+    letter-spacing: 0.1em;
+    padding: 0.75rem 1.1rem;
     border-bottom: 2px solid var(--mech-divider);
     white-space: nowrap;
 }
@@ -927,26 +944,31 @@
     border-top: 1px solid var(--mech-divider);
     transition: background var(--mech-transition);
 }
-.mech-table tbody tr:hover { background: var(--mech-surface-offset); }
+.mech-table tbody tr:hover {
+    background: var(--mech-surface-offset);
+}
 .mech-vehicle-mark {
-    width: 40px; height: 40px;
+    width: 40px;
+    height: 40px;
     border-radius: 13px;
     background: var(--mech-surface-offset);
-    display: grid; place-items: center;
+    display: grid;
+    place-items: center;
     color: var(--mech-primary);
-    font-weight: 800; font-size: .78rem;
-    letter-spacing: -.01em;
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: -0.01em;
     flex-shrink: 0;
     border: 1px solid var(--mech-border);
 }
 .mech-vehicle strong {
     font-size: var(--mech-text-xs);
     font-weight: 700;
-    letter-spacing: -.02em;
+    letter-spacing: -0.02em;
     display: block;
 }
 .mech-vehicle .mech-muted {
-    font-size: .68rem;
+    font-size: 0.68rem;
     color: var(--mech-text-faint);
     font-variant-numeric: tabular-nums;
     margin-top: 1px;
@@ -955,17 +977,20 @@
 /* ── Hero panel imagen ─────────────────────────────────────── */
 .mech-hero-img {
     position: absolute;
-    right: 0; bottom: 0;
+    right: 0;
+    bottom: 0;
     width: 55%;
     max-width: 340px;
     height: 100%;
     object-fit: cover;
     object-position: center right;
-    opacity: .18;
+    opacity: 0.18;
     pointer-events: none;
     border-radius: 0 32px 32px 0;
 }
-.mech-hero-panel { isolation: isolate; }
+.mech-hero-panel {
+    isolation: isolate;
+}
 
 /* ── Queue card sin scroll feo ─────────────────────────────── */
 .mech-queue-card {
@@ -987,29 +1012,1207 @@
 .mech-kpi-value {
     font-size: 2.2rem;
     font-weight: 800;
-    letter-spacing: -.06em;
+    letter-spacing: -0.06em;
     font-variant-numeric: tabular-nums lining-nums;
     line-height: 1;
-    margin: .35rem 0 .25rem;
+    margin: 0.35rem 0 0.25rem;
 }
 .mech-kpi-icon {
-    width: 42px; height: 42px;
+    width: 42px;
+    height: 42px;
     border-radius: 13px;
     background: var(--mech-surface-offset);
-    display: grid; place-items: center;
+    display: grid;
+    place-items: center;
     color: var(--mech-primary);
     font-size: 1.1rem;
     border: 1px solid var(--mech-border);
+}
+/* ── keyframes ────────────────────────────────────────────── */
+@keyframes mech-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+@keyframes mechFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes mechSlideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+@keyframes mechSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+@keyframes mechSlideOut {
+    to {
+        opacity: 0;
+        transform: translateX(20px) scale(0.95);
+    }
+}
+
+/* ── Grid acciones rápidas ────────────────────────────────── */
+.mech-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.mech-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--mech-surface-2);
+    border: 1px solid var(--mech-border);
+    border-radius: 20px;
+    color: var(--mech-text);
+    cursor: pointer;
+    font-size: var(--mech-text-sm);
+    font-weight: 600;
+    font-family: "Outfit", sans-serif;
+    transition: all var(--mech-transition);
+}
+.mech-action-btn i {
+    font-size: 1.5rem;
+    color: var(--mech-primary);
+}
+.mech-action-btn:hover {
+    background: var(--mech-primary);
+    border-color: transparent;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 102, 255, 0.25);
+}
+.mech-action-btn:hover i {
+    color: #fff;
+}
+.mech-action-btn:active {
+    transform: translateY(0);
+}
+
+/* Acciones rápidas section */
+.mech-actions-section {
+    margin: 1.5rem 0;
+    padding: 0;
+}
+.mech-actions-container {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 1rem;
+}
+.mech-actions-container .mech-action-btn {
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+}
+
+/* Tabla responsive */
+.mech-table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    margin: 1rem 0;
+}
+.mech-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.mech-table th,
+.mech-table td {
+    padding: 0.85rem;
+    text-align: left;
+    border-bottom: 1px solid var(--mech-border);
+}
+.mech-table th {
+    background: var(--mech-surface-offset);
+    font-weight: 600;
+    font-size: var(--mech-text-sm);
+}
+.mech-table tbody tr:hover {
+    background: var(--mech-surface-2);
+}
+
+@media (max-width: 1024px) {
+    .mech-actions-container {
+        gap: 0.5rem;
+    }
+    .mech-actions-container .mech-action-btn {
+        min-width: 130px;
+        max-width: 160px;
+        font-size: var(--mech-text-sm);
+    }
+}
+
+@media (max-width: 768px) {
+    .mech-actions-section {
+        padding: 0;
+    }
+    .mech-actions-container {
+        gap: 0.5rem;
+        padding: 0 0.75rem;
+    }
+    .mech-actions-container .mech-action-btn {
+        min-width: 100px;
+        max-width: 130px;
+        padding: 0.7rem 0.6rem;
+        font-size: 0.85rem;
+    }
+    .mech-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .mech-table th,
+    .mech-table td {
+        padding: 0.6rem 0.5rem;
+        font-size: var(--mech-text-xs);
+    }
+}
+
+@media (max-width: 480px) {
+    .mech-action-btn span {
+        display: none;
+    }
+    .mech-action-btn {
+        padding: 0.75rem;
+        border-radius: 50%;
+        min-width: auto;
+        flex: 0 0 auto;
+    }
+    .mech-actions-container {
+        gap: 0.4rem;
+        justify-content: space-around;
+    }
+    .mech-table th {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+    .mech-table td {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* ── Modal base ───────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   SISTEMA DE MODALES — diseño unificado
+   Glassmorphism suave · border-radius 28px · Outfit
+   Paleta idéntica a .mech-header y .mech-hero-panel
+   ══════════════════════════════════════════════════════════════ */
+
+.mech-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(8, 13, 22, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+.mech-modal.show {
+    display: flex;
+    animation: modalOverlayIn 0.2s ease;
+}
+
+@keyframes modalOverlayIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes modalContentIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Contenedor */
+.mech-modal-content {
+    background: var(--mech-surface);
+    border: 1px solid var(--mech-border);
+    border-radius: 28px;
+    padding: 0;
+    width: 100%;
+    max-width: 560px;
+    max-height: 98vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+        0 28px 64px rgba(8, 13, 22, 0.22),
+        0 8px 24px rgba(8, 13, 22, 0.1);
+    animation: modalContentIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mech-modal-content.modal-wide {
+    max-width: 700px;
+}
+.mech-modal-content.modal-narrow {
+    max-width: 440px;
+}
+
+/* Header */
+.mech-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.75rem 2rem 1.5rem;
+    border-bottom: 1px solid var(--mech-divider);
+    flex-shrink: 0;
+    background: var(--mech-surface);
+}
+.mech-modal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+}
+.mech-modal-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    background: var(--mech-primary-highlight);
+    display: grid;
+    place-items: center;
+    color: var(--mech-primary);
+    flex-shrink: 0;
+}
+.mech-modal-icon i {
+    font-size: 1.15rem;
+}
+.mech-modal-header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin: 0;
+    color: var(--mech-text);
+}
+.mech-modal-subtitle {
+    font-size: var(--mech-text-xs);
+    color: var(--mech-text-muted);
+    margin: 0.18rem 0 0;
+}
+
+/* Botón cerrar */
+.mech-close-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: var(--mech-surface-2);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: all var(--mech-transition);
+    padding: 0;
+}
+.mech-close-btn i {
+    font-size: 1.1rem;
+}
+.mech-close-btn:hover {
+    background: #a82f2f;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* Body scrollable */
+.mech-modal-body {
+    padding: 1.75rem 2rem;
+    overflow-y: auto;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mech-border) transparent;
+}
+.mech-modal-body::-webkit-scrollbar {
+    width: 4px;
+}
+.mech-modal-body::-webkit-scrollbar-thumb {
+    background: var(--mech-border);
+    border-radius: 99px;
+}
+
+/* Buscador interno */
+.mech-modal-search {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--mech-border);
+    border-radius: 14px;
+    background: var(--mech-surface-2);
+    margin-bottom: 1rem;
+    transition:
+        border-color var(--mech-transition),
+        box-shadow var(--mech-transition);
+}
+.mech-modal-search:focus-within {
+    border-color: var(--mech-primary);
+    box-shadow: 0 0 0 3px var(--mech-primary-highlight);
+    background: var(--mech-surface);
+}
+.mech-modal-search i {
+    color: var(--mech-text-faint);
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+.mech-modal-search input {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: var(--mech-text);
+    font-family: "Outfit", sans-serif;
+    font-size: var(--mech-text-sm);
+    width: 100%;
+}
+.mech-modal-search input::placeholder {
+    color: var(--mech-text-faint);
+}
+
+/* Filtros */
+.mech-modal-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+/* Avisos inline */
+.mech-form-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    padding: 0.65rem 1rem;
+    border-radius: 12px;
+    font-size: var(--mech-text-xs);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+.mech-form-notice i {
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+}
+.mech-form-notice.warning {
+    background: rgba(210, 122, 0, 0.09);
+    border: 1px solid rgba(210, 122, 0, 0.2);
+    color: var(--mech-warning);
+}
+.mech-form-notice.info {
+    background: var(--mech-primary-highlight);
+    border: 1px solid rgba(0, 102, 255, 0.2);
+    color: var(--mech-primary);
+}
+.mech-form-notice.danger {
+    background: rgba(197, 61, 61, 0.09);
+    border: 1px solid rgba(197, 61, 61, 0.2);
+    color: var(--mech-danger);
+}
+
+/* Formularios */
+.mech-form-group {
+    margin-bottom: 1.1rem;
+}
+.mech-form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--mech-text-muted);
+}
+.mech-form-group input,
+.mech-form-group select,
+.mech-form-group textarea {
+    width: 100%;
+    padding: 0.72rem 1rem;
+    border: 1px solid var(--mech-border);
+    border-radius: 14px;
+    background: var(--mech-surface-2);
+    color: var(--mech-text);
+    font-family: "Outfit", sans-serif;
+    font-size: var(--mech-text-sm);
+    transition:
+        border-color var(--mech-transition),
+        box-shadow var(--mech-transition);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.mech-form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236f7785' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    padding-right: 2.5rem;
+}
+.mech-form-group textarea {
+    resize: vertical;
+    min-height: 88px;
+    line-height: 1.55;
+}
+.mech-form-group input::placeholder,
+.mech-form-group textarea::placeholder {
+    color: var(--mech-text-faint);
+}
+.mech-form-group input:focus,
+.mech-form-group select:focus,
+.mech-form-group textarea:focus {
+    border-color: var(--mech-primary);
+    box-shadow: 0 0 0 3px var(--mech-primary-highlight);
+    background: var(--mech-surface);
+}
+.mech-form-group input:disabled,
+.mech-form-group select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.mech-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+
+/* Botones del modal */
+.mech-btn-group {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.6rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--mech-divider);
+}
+.mech-btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0.68rem 1.25rem;
+    border-radius: 14px;
+    border: 1px solid var(--mech-border);
+    background: var(--mech-surface-2);
+    color: var(--mech-text-muted);
+    font-family: "Outfit", sans-serif;
+    font-size: var(--mech-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--mech-transition);
+}
+.mech-btn-cancel:hover {
+    background: var(--mech-surface-offset);
+    color: var(--mech-text);
+    transform: translateY(-1px);
+}
+
+/* Lista de ítems */
+.mech-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.mc-car-item,
+.ra-rep-item {
+    display: grid;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--mech-border);
+    border-radius: 18px;
+    cursor: pointer;
+    background: var(--mech-surface-2);
+    transition: all var(--mech-transition);
+}
+.mc-car-item {
+    grid-template-columns: 42px 1fr auto;
+}
+.ra-rep-item {
+    grid-template-columns: 44px 1fr auto;
+}
+.mc-car-item:hover,
+.ra-rep-item:hover {
+    border-color: var(--mech-primary);
+    background: var(--mech-primary-highlight);
+    transform: translateX(3px);
+    box-shadow: 0 4px 16px rgba(0, 102, 255, 0.08);
+}
+.mc-car-item.selected,
+.ra-rep-item.selected {
+    border-color: var(--mech-primary);
+    background: var(--mech-primary-highlight);
+    box-shadow:
+        0 0 0 2px var(--mech-primary),
+        0 4px 16px rgba(0, 102, 255, 0.12);
+    transform: none;
+}
+.mc-car-mark,
+.ra-rep-mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: var(--mech-surface-offset);
+    display: grid;
+    place-items: center;
+    color: var(--mech-primary);
+    font-weight: 800;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+    transition: background var(--mech-transition);
+}
+.mc-car-item.selected .mc-car-mark,
+.ra-rep-item.selected .ra-rep-mark {
+    background: rgba(0, 102, 255, 0.18);
+}
+.mc-check {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--mech-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--mech-transition);
+    flex-shrink: 0;
+    color: transparent;
+}
+.mc-car-item.selected .mc-check {
+    border-color: var(--mech-primary);
+    background: var(--mech-primary);
+    color: #fff;
+}
+
+/* Filtros */
+.ra-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.38rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--mech-border);
+    background: var(--mech-surface-2);
+    color: var(--mech-text-muted);
+    font-size: var(--mech-text-xs);
+    font-weight: 600;
+    font-family: "Outfit", sans-serif;
+    cursor: pointer;
+    transition: all var(--mech-transition);
+}
+.ra-filter-btn:hover {
+    border-color: var(--mech-primary);
+    color: var(--mech-primary);
+}
+.ra-filter-btn.active {
+    background: var(--mech-primary);
+    border-color: var(--mech-primary);
+    color: #fff;
+}
+
+/* Badges */
+.ra-badge-pendiente,
+.ra-badge-enproceso,
+.ra-badge-finalizada {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.22rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+.ra-badge-pendiente {
+    background: rgba(210, 122, 0, 0.14);
+    color: var(--mech-warning);
+}
+.ra-badge-enproceso {
+    background: var(--mech-primary-highlight);
+    color: var(--mech-primary);
+}
+.ra-badge-finalizada {
+    background: rgba(31, 143, 85, 0.12);
+    color: var(--mech-success);
+}
+
+/* Panel detalle reparación */
+.mech-detalle-reparacion {
+    padding: 0.25rem 0;
+}
+.mech-detail-section {
+    margin-bottom: 1.1rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--mech-divider);
+}
+.mech-detail-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.mech-detail-section h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--mech-text-muted);
+}
+.mech-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.45rem;
+    font-size: var(--mech-text-xs);
+    gap: 0.5rem;
+}
+.mech-detail-label {
+    color: var(--mech-text-muted);
+    flex-shrink: 0;
+}
+.mech-detail-value {
+    font-weight: 600;
+    text-align: right;
+}
+.mech-action-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.875rem;
+}
+.mech-action-row button {
+    flex: 1;
+    min-width: 88px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: var(--mech-text-xs);
+    font-family: "Outfit", sans-serif;
+    transition: all var(--mech-transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+}
+
+/* Panel info pieza seleccionada */
+.ap-pieza-info {
+    display: none;
+    padding: 0.95rem 1.1rem;
+    border-radius: 16px;
+    background: var(--mech-surface-offset);
+    border: 1px solid var(--mech-border);
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+.ap-pieza-info.visible {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.ap-pieza-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+.ap-pieza-info-item .ap-info-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mech-text-faint);
+}
+.ap-pieza-info-item .ap-info-value {
+    font-size: var(--mech-text-sm);
+    font-weight: 700;
+    color: var(--mech-text);
+    font-variant-numeric: tabular-nums;
+}
+.ap-pieza-info-item .ap-info-value.highlight {
+    color: var(--mech-primary);
+}
+.ap-error {
+    display: none;
+    padding: 0.55rem 0.9rem;
+    border-radius: 12px;
+    background: rgba(197, 61, 61, 0.09);
+    border: 1px solid rgba(197, 61, 61, 0.2);
+    color: var(--mech-danger);
+    font-size: var(--mech-text-xs);
+    font-weight: 600;
+    margin-top: 0.6rem;
+}
+
+/* Skeleton */
+@keyframes mechShimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+.mech-skeleton-item {
+    height: 64px;
+    border-radius: 18px;
+    margin-bottom: 0.45rem;
+    background: linear-gradient(
+        90deg,
+        var(--mech-surface-offset) 25%,
+        var(--mech-border) 50%,
+        var(--mech-surface-offset) 75%
+    );
+    background-size: 200% 100%;
+    animation: mechShimmer 1.4s ease-in-out infinite;
+}
+
+/* Toast */
+.mech-toast {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: 16px;
+    font-family: "Outfit", sans-serif;
+    font-size: var(--mech-text-sm);
+    font-weight: 600;
+    color: #fff;
+    box-shadow: var(--mech-shadow-lg);
+    animation: mechSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 380px;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.mech-toast.success {
+    background: linear-gradient(135deg, #156336, #1f8f55);
+}
+.mech-toast.error {
+    background: linear-gradient(135deg, #922626, #c53d3d);
+}
+.mech-toast.exit {
+    animation: mechSlideOut 0.25s ease forwards;
+}
+
+@keyframes mechSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(24px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+@keyframes mechSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(16px) scale(0.96);
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .mech-modal {
+        padding: 0;
+        align-items: flex-end;
+    }
+    .mech-modal-content {
+        max-width: 100%;
+        width: 100%;
+        border-radius: 28px 28px 0 0;
+        max-height: 92vh;
+    }
+    .ap-pieza-info.visible {
+        grid-template-columns: 1fr 1fr;
+    }
+    .mech-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Overrides layout sin sidebar ─────────────────────── */
+.mech-page {
+    display: block !important;
+}
+.mech-main {
+    width: 100%;
+    min-height: auto;
+    padding: 1.5rem 1rem;
+    max-width: none;
+}
+
+/* Header badge rol */
+.mech-header-badge .mech-badge {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.72rem;
+    border-radius: 999px;
+}
+
+/* Tabla card full width en grid */
+.mech-content-grid {
+    grid-template-columns: 1.4fr 0.7fr;
+}
+.mech-table-card {
+    border-radius: 24px;
+    padding: 0;
+}
+
+/* Timeline card (panel detalle) */
+.mech-timeline-card {
+    border-radius: 24px;
+    padding: 1.5rem;
+    position: sticky;
+    top: 1rem;
+    max-height: 520px;
+    overflow-y: auto;
+}
+.mech-timeline-card h3 {
+    font-size: var(--mech-text-base);
+    letter-spacing: -0.03em;
+    margin: 0 0 0.25rem;
+}
+.mech-timeline-card > p {
+    font-size: var(--mech-text-xs);
+    color: var(--mech-text-muted);
+    margin: 0 0 1rem;
+}
+
+/* Empty state tabla */
+.mech-empty-row td {
+    padding: 3rem 1rem !important;
+    text-align: center;
+}
+.mech-empty-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    background: var(--mech-surface-offset);
+    display: grid;
+    place-items: center;
+    color: var(--mech-text-faint);
+    font-size: 1.6rem;
+    margin: 0 auto 1rem;
+    border: 1px solid var(--mech-border);
+}
+
+@media (max-width: 1100px) {
+    .mech-content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 768px) {
+    .mech-main {
+        padding: 1rem 0.75rem;
+    }
 }
 
 /* ── Timeline/detalle derecho ──────────────────────────────── */
 .mech-timeline-card {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
     padding: 1.5rem;
     overflow-y: auto;
     max-height: 480px;
+}
+
+/* Fondo y texto base del modal */
+.mech-modal-content {
+    background: var(--mech-surface) !important;
+    color: var(--mech-text) !important;
+}
+
+/* Header del modal */
+.mech-modal-header h2,
+.mech-modal-header h3 {
+    color: var(--mech-text) !important;
+}
+.mech-modal-subtitle {
+    color: var(--mech-text-muted) !important;
+}
+
+/* Body del modal: todos los textos claros */
+.mech-modal-body,
+.mech-modal-body p,
+.mech-modal-body span,
+.mech-modal-body li,
+.mech-modal-body label,
+.mech-modal-body td,
+.mech-modal-body th {
+    color: var(--mech-text) !important;
+}
+.mech-modal-body .mech-small-muted,
+.mech-modal-body [style*="muted"] {
+    color: var(--mech-text-muted) !important;
+}
+
+/* Inputs / selects dentro de modales */
+.mech-modal-body .mech-form-group input,
+.mech-modal-body .mech-form-group select,
+.mech-modal-body .mech-form-group textarea {
+    background: var(--mech-surface-2) !important;
+    color: var(--mech-text) !important;
+    border-color: var(--mech-border) !important;
+}
+.mech-modal-body .mech-form-group input::placeholder,
+.mech-modal-body .mech-form-group textarea::placeholder {
+    color: var(--mech-text-faint) !important;
+}
+.mech-modal-body .mech-form-group label {
+    color: var(--mech-text-muted) !important;
+}
+
+/* Select — opciones de lista */
+.mech-modal-body .mech-form-group select option {
+    background: var(--mech-surface-2);
+    color: var(--mech-text);
+}
+
+/* Listas de ítems dentro del modal (coches/reparaciones) */
+.mc-car-item,
+.ra-rep-item,
+.ra-list-item {
+    background: var(--mech-surface-2) !important;
+    color: var(--mech-text) !important;
+    border-color: var(--mech-border) !important;
+}
+.mc-car-item p,
+.ra-rep-item p,
+.ra-list-item p {
+    color: var(--mech-text) !important;
+}
+.mc-car-item:hover,
+.ra-rep-item:hover,
+.ra-list-item:hover {
+    background: var(--mech-surface-offset) !important;
+    border-color: var(--mech-primary) !important;
+}
+.mc-car-item.selected,
+.ra-rep-item.selected,
+.ra-list-item.selected {
+    background: color-mix(in oklab, var(--mech-primary) 12%, var(--mech-surface-2)) !important;
+    border-color: var(--mech-primary) !important;
+}
+
+/* ─── Botones del modal ─── */
+
+/* Botón primario: azul sólido, siempre visible */
+.mech-btn-group .mech-btn-primary,
+.mech-modal-body .mech-btn-primary,
+.mech-btn.mech-btn-primary {
+    background: var(--mech-primary) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(0, 102, 255, 0.28) !important;
+    font-weight: 700 !important;
+}
+.mech-btn-group .mech-btn-primary:hover,
+.mech-modal-body .mech-btn-primary:hover {
+    background: var(--mech-primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 102, 255, 0.36) !important;
+}
+.mech-btn-group .mech-btn-primary:disabled {
+    opacity: 0.55 !important;
+    transform: none !important;
+    cursor: not-allowed !important;
+}
+
+/* Botón cancelar: siempre legible */
+.mech-btn-cancel {
+    background: var(--mech-surface-2) !important;
+    color: var(--mech-text-muted) !important;
+    border: 1px solid var(--mech-border) !important;
+}
+.mech-btn-cancel:hover {
+    background: var(--mech-surface-offset) !important;
+    color: var(--mech-text) !important;
+}
+
+/* Botón cerrar (×) */
+.mech-close-btn {
+    color: var(--mech-text-muted) !important;
+    background: var(--mech-surface-2) !important;
+    border: 1px solid var(--mech-border) !important;
+    border-radius: 12px !important;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--mech-transition);
+}
+.mech-close-btn:hover {
+    background: var(--mech-surface-offset) !important;
+    color: var(--mech-text) !important;
+}
+
+/* Botones de estado (iniciar/pausar/finalizar) */
+#ra-btn-iniciar {
+    background: var(--mech-primary) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+#ra-btn-pausar {
+    background: var(--mech-surface-2) !important;
+    color: var(--mech-text) !important;
+    border-color: var(--mech-border) !important;
+}
+#ra-btn-finalizar {
+    background: var(--mech-success) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+#ra-btn-iniciar:disabled,
+#ra-btn-pausar:disabled,
+#ra-btn-finalizar:disabled {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+/* Tabla dentro del modal */
+.mech-modal-body table thead tr {
+    background: var(--mech-surface-offset) !important;
+}
+.mech-modal-body table thead th {
+    color: var(--mech-text-muted) !important;
+    font-size: .68rem;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+}
+.mech-modal-body table tbody tr:hover {
+    background: var(--mech-surface-2) !important;
+}
+.mech-modal-body table tbody td {
+    color: var(--mech-text) !important;
+}
+
+/* Caja de error dentro del modal */
+.mech-modal-error {
+    padding: .55rem .85rem;
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--mech-error) 14%, var(--mech-surface-2));
+    border: 1px solid color-mix(in oklab, var(--mech-error) 40%, transparent);
+    color: var(--mech-error) !important;
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+/* Filtros del modal */
+.ra-filter-btn {
+    background: var(--mech-surface-2) !important;
+    color: var(--mech-text-muted) !important;
+    border: 1px solid var(--mech-border) !important;
+    border-radius: 10px;
+    padding: .35rem .85rem;
+    font-size: .72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--mech-transition);
+}
+.ra-filter-btn.active,
+.ra-filter-btn:hover {
+    background: var(--mech-primary) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+/* Search dentro del modal */
+.mech-modal-search {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .85rem;
+    background: var(--mech-surface-2) !important;
+    border: 1px solid var(--mech-border) !important;
+    border-radius: 12px;
+    color: var(--mech-text-muted) !important;
+}
+.mech-modal-search input {
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+    color: var(--mech-text) !important;
+    font-size: .8rem;
+    flex: 1;
+}
+.mech-modal-search input::placeholder {
+    color: var(--mech-text-faint) !important;
+}
+
+/* Panel de acciones reparación asignada */
+#ra-actions-panel {
+    background: var(--mech-surface-2) !important;
+    border: 1px solid var(--mech-border) !important;
+    border-radius: 16px;
+    padding: 1rem;
+    margin-top: .75rem;
+}
+#ra-actions-panel label {
+    color: var(--mech-text-muted) !important;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+}
+
+/* Detalle car info */
+#mc-car-detail {
+    background: var(--mech-surface-2) !important;
+    border: 1px solid var(--mech-border) !important;
+    color: var(--mech-text) !important;
+}
+
+/* Pieza info */
+#ap-pieza-info {
+    background: var(--mech-surface-2) !important;
+    border: 1px solid var(--mech-border) !important;
+    color: var(--mech-text) !important;
 }
 
 /* ── Responsive sin sidebar ────────────────────────────────── */
@@ -1018,14 +2221,31 @@
     .mech-content-grid,
     .mech-bottom-grid,
     .mech-kpi-grid,
-    .mech-planner-grid { grid-template-columns: 1fr; }
-    .mech-main { padding: 1.25rem; }
-    .mech-kpi-grid { grid-template-columns: repeat(2,1fr); }
-    .mech-actions-grid { grid-template-columns: repeat(3,1fr); }
+    .mech-planner-grid {
+        grid-template-columns: 1fr;
+    }
+    .mech-main {
+        padding: 1.25rem;
+    }
+    .mech-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .mech-actions-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 @media (max-width: 600px) {
-    .mech-main { padding: 1rem; }
-    .mech-actions-grid { grid-template-columns: repeat(2,1fr); }
-    .mech-kpi-grid { grid-template-columns: 1fr 1fr; }
-    .mech-header { border-radius: 18px; padding: 1rem 1.25rem; }
+    .mech-main {
+        padding: 1rem;
+    }
+    .mech-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .mech-kpi-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .mech-header {
+        border-radius: 18px;
+        padding: 1rem 1.25rem;
+    }
 }

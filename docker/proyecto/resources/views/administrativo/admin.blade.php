@@ -31,7 +31,12 @@
     <div class="modal-box" style="width:520px;max-width:95vw">
         <div class="modal-header">
             <span id="modal-title">Modal</span>
-            <button onclick="hideModal()" style="background:none;border:none;color:#7a9ec5;cursor:pointer;font-size:18px">✕</button>
+            <button onclick="hideModal()" style="background:none;border:none;color:#7a9ec5;cursor:pointer;font-size:18px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 6L6 18"></path>
+                    <path d="M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
         <div id="modal-body" style="margin:10px 0 4px"></div>
         <div style="text-align:right;margin-top:14px;display:flex;gap:8px;justify-content:flex-end">
@@ -46,7 +51,12 @@
     <div class="modal-box" style="width:600px;max-width:95vw">
         <div class="modal-header">
             <span id="veh-modal-title">Vehículo</span>
-            <button onclick="closeVehModal()" style="background:none;border:none;color:#7a9ec5;cursor:pointer;font-size:18px">✕</button>
+            <button onclick="closeVehModal()" style="background:none;border:none;color:#7a9ec5;cursor:pointer;font-size:18px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 6L6 18"></path>
+                    <path d="M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
         <div id="veh-modal-body"></div>
     </div>

@@ -55,9 +55,9 @@ Route::post('logout', [UsuarioController::class, 'logout'])->name('logout');
 //     return view('administrativo.admin');
 // });
 
-Route::get('/mecanico', function () {
-    return view('mecanico.mecanico');
-})->name("mecanico");
+// Route::get('/mecanico', function () {
+//     return view('mecanico.mecanico');
+// })->name("mecanico");
 
 
 //------ RUTAS PRIVADAS ------
@@ -66,9 +66,9 @@ Route::middleware('auth:sanctum')->group(function () {
     //MECANICO
     Route::middleware('role:mecanico')->group(function () {
 
-        // Route::get('/mecanico', function () {
-        //     return view('mecanico.mecanico');
-        // });
+        Route::get('/mecanico', function () {
+            return view('mecanico.mecanico');
+        });
 
     });
 

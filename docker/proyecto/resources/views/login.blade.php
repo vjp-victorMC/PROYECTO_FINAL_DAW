@@ -320,6 +320,8 @@
                     setTimeout(() => {
                         if (data.rol === 'admin') {
                             window.location.href = "/admin";
+                        } else if (data.rol === 'mecanico') {
+                            window.location.href = "/mecanico";
                         } else {
                             window.location.href = "{{ route('welcome') }}";
                         }

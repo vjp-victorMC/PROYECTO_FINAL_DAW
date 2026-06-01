@@ -294,10 +294,10 @@ class ReparacionController extends Controller
         }
     }
 
-    public function getReparacionesPorMecanico(Request $request)
+    public function getReparacionesPorMecanico(Request $request, $id_mecanico)
     {
         // 1. Validar que el id_mecanico exista en la tabla usuarios (clave primaria id_usuario)
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(['id_mecanico' => $id_mecanico], [
             'id_mecanico' => 'required|exists:usuarios,id_usuario',
         ]);
 
@@ -310,7 +310,7 @@ class ReparacionController extends Controller
 
         try {
             // 2. Buscar las reparaciones asociadas al mecánico (ordenadas de la más reciente a la más antigua)
-            $reparaciones = Reparacion::where('id_mecanico', $request->id_mecanico)
+            $reparaciones = Reparacion::where('id_mecanico', $id_mecanico)
                 ->with('coche') // Carga opcional de la relación si necesitas datos del vehículo
                 ->latest('id_reparacion')
                 ->get();
