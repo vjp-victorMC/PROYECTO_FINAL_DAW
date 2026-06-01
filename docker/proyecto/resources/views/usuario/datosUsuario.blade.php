@@ -15,7 +15,7 @@
             </div>
             
             <h2 class="profile-name">{{ $usuario->nombre }}</h2>
-            <span class="profile-role">Rol: {{ ucfirst($usuario->rol ?? 'Cliente') }}</span>
+            <span class="profile-role">{{ ucfirst($usuario->rol ?? 'Cliente') }}</span>
 
             <ul class="profile-details-list">
                 <li class="profile-detail-item">
@@ -51,7 +51,7 @@
                 <a href="{{ route('vehiculo') }}" class="btn-action-garaje">
                     <i class="ti ti-circle-plus" aria-hidden="true"></i> Registrar nuevo vehículo
                 </a>
-                <a href="#cita" class="btn-outline" style="border-radius: 12px; color: var(--secondary); border: 1px solid #E5E5E7; padding: 14px 20px; font-size: 14px; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 700; transition: var(--transition);">
+                <a href="{{ route('cita') }}" class="btn-outline" style="border-radius: 12px; color: var(--secondary); border: 1px solid #E5E5E7; padding: 14px 20px; font-size: 14px; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 700; transition: var(--transition);">
                     <i class="ti ti-calendar" aria-hidden="true"></i> Pedir cita en taller
                 </a>
             </div>
@@ -103,8 +103,6 @@
 
                                 @if($coche->en_garaje)
                                     <span class="status-badge in-garage">En Taller</span>
-                                @else
-                                    <span class="status-badge active-road">Listo para circular</span>
                                 @endif
                             </div>
 
