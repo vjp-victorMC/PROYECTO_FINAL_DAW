@@ -5,7 +5,7 @@
 @section('content')
 <div class="mech-page">
 
-    
+
 
     {{-- ── ÁREA PRINCIPAL ───────────────────────────────────── --}}
     <section class="mech-main">
@@ -35,79 +35,48 @@
                 <h2>Gestión de vehículos<br>y reparaciones</h2>
                 <p>Panel operativo para registrar entrada de vehículos, diagnosticar y registrar avance en tiempo real.</p>
                 <div class="mech-hero-stats">
-                    <div class="mech-hero-stat"><strong id="hero-active">0</strong><span>Activas</span></div>
-                    <div class="mech-hero-stat"><strong id="hero-pending">0</strong><span>Pendientes</span></div>
-                    <div class="mech-hero-stat"><strong id="hero-ready">0</strong><span>Para entrega</span></div>
+                    <div class="mech-hero-stat">
+                        <div style="font-size:.7rem;color:var(--mech-text-muted);margin-bottom:.2rem;">Pendientes</div>
+                        <strong id="count-pending" style="font-size:1.1rem;">0</strong>
+                    </div>
+                    <div class="mech-hero-stat">
+                        <div style="font-size:.7rem;color:var(--mech-text-muted);margin-bottom:.2rem;">En proceso</div>
+                        <strong id="count-inprogress" style="font-size:1.1rem;">0</strong>
+                    </div>
+                    <div class="mech-hero-stat">
+                        <div style="font-size:.7rem;color:var(--mech-text-muted);margin-bottom:.2rem;">Finalizadas</div>
+                        <strong id="count-finished" style="font-size:1.1rem;">0</strong>
+                    </div>
+                    <div class="mech-hero-stat">
+                        <div style="font-size:.7rem;color:var(--mech-text-muted);margin-bottom:.2rem;">Piezas pendientes</div>
+                        <strong id="count-pending-parts" style="font-size:1.1rem;">0</strong>
+                    </div>
                 </div>
             </article>
 
-            <aside class="mech-queue-card">
-                <div class="mech-card-head">
-                    <div><h3>Acciones rápidas</h3><p>Operaciones inmediatas del taller.</p></div>
-                </div>
-                <div class="mech-actions-grid">
-                    <button class="mech-action-btn" data-action="meter-coche">
-                        <i class="ti ti-car-plus"></i>
-                        <span>Meter coche</span>
-                    </button>
-                    <button class="mech-action-btn" data-action="reparaciones-asignadas">
-                        <i class="ti ti-file-check"></i>
-                        <span>Reparaciones</span>
-                    </button>
-                    <button class="mech-action-btn" data-action="diagnosticar">
-                        <i class="ti ti-clipboard-list"></i>
-                        <span>Diagnosticar</span>
-                    </button>
-                    <button class="mech-action-btn" data-action="agregar-horas">
-                        <i class="ti ti-clock-plus"></i>
-                        <span>Añadir horas</span>
-                    </button>
-                    <button class="mech-action-btn" data-action="agregar-piezas">
-                        <i class="ti ti-tool"></i>
-                        <span>Añadir piezas</span>
-                    </button>
-                    <button class="mech-action-btn" data-action="solicitar-piezas">
-                        <i class="ti ti-package"></i>
-                        <span>Solicitar piezas</span>
-                    </button>
-                </div>
-            </aside>
+            <!-- Acciones rápidas movidas entre hero y tabla -->
         </section>
 
-        {{-- KPIs --}}
-        <section class="mech-kpi-grid">
-            <article class="mech-panel">
-                <div class="mech-kpi-top">
-                    <div><h3>Estado: Pendiente</h3><p>Reparaciones sin iniciar</p></div>
-                    <div class="mech-kpi-icon"><i class="ti ti-alert-circle"></i></div>
-                </div>
-                <div class="mech-kpi-value" id="count-pending">0</div>
-                <div class="mech-small-muted">Esperando inicio</div>
-            </article>
-            <article class="mech-panel">
-                <div class="mech-kpi-top">
-                    <div><h3>Estado: En proceso</h3><p>Reparaciones iniciadas</p></div>
-                    <div class="mech-kpi-icon"><i class="ti ti-player-play"></i></div>
-                </div>
-                <div class="mech-kpi-value" id="count-inprogress">0</div>
-                <div class="mech-small-muted">Trabajo activo</div>
-            </article>
-            <article class="mech-panel">
-                <div class="mech-kpi-top">
-                    <div><h3>Estado: Finalizada</h3><p>Listas para entrega</p></div>
-                    <div class="mech-kpi-icon"><i class="ti ti-check"></i></div>
-                </div>
-                <div class="mech-kpi-value" id="count-finished">0</div>
-                <div class="mech-small-muted">Esperando recogida</div>
-            </article>
-            <article class="mech-panel">
-                <div class="mech-kpi-top">
-                    <div><h3>Piezas pendientes</h3><p>Solicitadas, no llegadas</p></div>
-                    <div class="mech-kpi-icon"><i class="ti ti-package-x"></i></div>
-                </div>
-                <div class="mech-kpi-value" id="count-pending-parts">0</div>
-                <div class="mech-small-muted">Bloquean trabajos</div>
-            </article>
+        {{-- Acciones rápidas (entre hero y tabla) --}}
+        <section class="mech-actions-section">
+            <div class="mech-actions-container">
+                <button class="mech-action-btn" data-action="reparaciones-asignadas">
+                    <i class="ti ti-file-check"></i>
+                    <span>Reparaciones</span>
+                </button>
+                <button class="mech-action-btn" data-action="agregar-horas">
+                    <i class="ti ti-clock-plus"></i>
+                    <span>Añadir horas</span>
+                </button>
+                <button class="mech-action-btn" data-action="agregar-piezas">
+                    <i class="ti ti-tool"></i>
+                    <span>Añadir piezas</span>
+                </button>
+                <button class="mech-action-btn" data-action="solicitar-piezas">
+                    <i class="ti ti-package"></i>
+                    <span>Solicitar piezas</span>
+                </button>
+            </div>
         </section>
 
         {{-- Tabla + detalle --}}
@@ -135,7 +104,7 @@
                         <tbody id="tabla-reparaciones">
                             <tr class="mech-empty-row">
                                 <td colspan="6" style="text-align:center;padding:2rem;">
-                                    <p class="mech-small-muted">No hay reparaciones. Comienza por <strong>meter un coche</strong>.</p>
+                                    <p class="mech-small-muted">No hay reparaciones asignadas. Contacta con administración si hace falta asignación.</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -464,6 +433,39 @@
 .mech-action-btn:hover i { color: #fff; }
 .mech-action-btn:active { transform: translateY(0); }
 
+/* Acciones rápidas section */
+.mech-actions-section { margin: 1.5rem 0; padding: 0; }
+.mech-actions-container { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; align-items: center; padding: 0 1rem; }
+.mech-actions-container .mech-action-btn { flex: 1; min-width: 140px; max-width: 200px; }
+
+/* Tabla responsive */
+.mech-table-wrap { overflow-x: auto; border-radius: 12px; margin: 1rem 0; }
+.mech-table { width: 100%; border-collapse: collapse; }
+.mech-table th, .mech-table td { padding: 0.85rem; text-align: left; border-bottom: 1px solid var(--mech-border); }
+.mech-table th { background: var(--mech-surface-offset); font-weight: 600; font-size: var(--mech-text-sm); }
+.mech-table tbody tr:hover { background: var(--mech-surface-2); }
+
+@media (max-width: 1024px) {
+    .mech-actions-container { gap: 0.5rem; }
+    .mech-actions-container .mech-action-btn { min-width: 130px; max-width: 160px; font-size: var(--mech-text-sm); }
+}
+
+@media (max-width: 768px) {
+    .mech-actions-section { padding: 0; }
+    .mech-actions-container { gap: 0.5rem; padding: 0 0.75rem; }
+    .mech-actions-container .mech-action-btn { min-width: 100px; max-width: 130px; padding: 0.7rem 0.6rem; font-size: 0.85rem; }
+    .mech-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .mech-table th, .mech-table td { padding: 0.6rem 0.5rem; font-size: var(--mech-text-xs); }
+}
+
+@media (max-width: 480px) {
+    .mech-action-btn span { display: none; }
+    .mech-action-btn { padding: 0.75rem; border-radius: 50%; min-width: auto; flex: 0 0 auto; }
+    .mech-actions-container { gap: 0.4rem; justify-content: space-around; }
+    .mech-table th { font-size: 0.75rem; padding: 0.5rem; }
+    .mech-table td { padding: 0.5rem; font-size: 0.75rem; }
+}
+
 /* ── Modal base ───────────────────────────────────────────── */
 /* ══════════════════════════════════════════════════════════════
    SISTEMA DE MODALES — diseño unificado
@@ -776,7 +778,7 @@
 
 /* ── Overrides layout sin sidebar ─────────────────────── */
 .mech-page { display: block !important; }
-.mech-main { width: 100%; min-height: auto; padding: 1.5rem 2rem; }
+.mech-main { width: 100%; min-height: auto; padding: 1.5rem 1rem; max-width: none; }
 
 /* Header badge rol */
 .mech-header-badge .mech-badge {
@@ -814,7 +816,7 @@
 }
 
 @media (max-width: 1100px) { .mech-content-grid { grid-template-columns: 1fr; } }
-@media (max-width: 768px)  { .mech-main { padding: 1rem; } }
+@media (max-width: 768px)  { .mech-main { padding: 1rem 0.75rem; } }
 </style>
 
 
@@ -1006,13 +1008,11 @@
             return a;
         }, { pending:0, inprogress:0, finished:0, parts:0 });
 
+        // Actualizar hero stats
         document.getElementById('count-pending').textContent    = c.pending;
         document.getElementById('count-inprogress').textContent = c.inprogress;
         document.getElementById('count-finished').textContent   = c.finished;
         document.getElementById('count-pending-parts').textContent = c.parts;
-        document.getElementById('hero-active').textContent  = state.reparaciones.length;
-        document.getElementById('hero-pending').textContent = c.pending;
-        document.getElementById('hero-ready').textContent   = c.finished;
         const badgeTotal = document.getElementById('badge-total-reps');
         if (badgeTotal) badgeTotal.textContent = state.reparaciones.length + ' órdenes';
     }
@@ -1091,6 +1091,7 @@
     // ==========================================================
     window.openMeterCocheModal = function() {
         const modal = document.getElementById('modal-meter-coche');
+        if (!modal) { window.showNotification('Funcionalidad gestionada por administración', 'error'); return; }
         modal.classList.add('show');
         document.getElementById('mc-motivo').value = '';
         document.getElementById('modal-mc-search').value = '';
@@ -1521,6 +1522,8 @@
         `<option value="${r.id}">${r.marca} ${r.modelo} (${r.matricula})</option>`).join('');
 
     function openDiagnosticarModal() {
+        window.showNotification('Diagnóstico gestionado por administración', 'error');
+        return;
         const m = createModal('modal-diagnosticar', 'Diagnosticar vehículo', `
             <form onsubmit="window.submitDiagnosticar(event)">
                 <div class="mech-form-group">
@@ -2192,9 +2195,9 @@
     //  DISPATCHER: botones data-action
     // ==========================================================
     const actionMap = {
-        'meter-coche':            () => window.openMeterCocheModal(),
+        'meter-coche':            () => window.showNotification('Funcionalidad gestionada por administración', 'error'),
         'reparaciones-asignadas': () => window.openRepAsignadasModal(),
-        'diagnosticar':           () => openDiagnosticarModal(),
+        'diagnosticar':           () => window.showNotification('Diagnóstico gestionado por administración', 'error'),
         'agregar-horas':          () => openAgregarHorasModal(),
         'agregar-piezas':         () => openAgregarPiezasModal(),
         'solicitar-piezas':       () => openSolicitarPiezasModal(),

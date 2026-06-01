@@ -270,4 +270,299 @@ class ReparacionController extends Controller
         ], 200);
     }
 
+    public function getReparacionesCountPorEstado()
+    {
+        try {
+            // 1. Contar y agrupar las reparaciones por su columna 'estado'
+            $conteos = Reparacion::select('estado', DB::raw('count(*) as total'))
+                ->groupBy('estado')
+                ->pluck('total', 'estado')
+                ->toArray();
+
+            // 2. Retornar la respuesta con el formato de éxito del sistema
+            return response()->json([
+                'status' => 'success',
+                'data'   => $conteos
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Error al obtener el conteo de reparaciones.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getReparacionesPorMecanico(Request $request)
+    {
+        // 1. Validar que el id_mecanico exista en la tabla usuarios (clave primaria id_usuario)
+        $validator = Validator::make($request->all(), [
+            'id_mecanico' => 'required|exists:usuarios,id_usuario',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            // 2. Buscar las reparaciones asociadas al mecánico (ordenadas de la más reciente a la más antigua)
+            $reparaciones = Reparacion::where('id_mecanico', $request->id_mecanico)
+                ->with('coche') // Carga opcional de la relación si necesitas datos del vehículo
+                ->latest('id_reparacion')
+                ->get();
+
+            // 3. Controlar si el mecánico aún no tiene reparaciones asignadas
+            if ($reparaciones->isEmpty()) {
+                return response()->json([
+                    'status'  => 'success',
+                    'message' => 'El mecánico no tiene reparaciones asignadas actualmente.',
+                    'data'    => []
+                ], 200);
+            }
+
+            // 4. Retornar el listado de reparaciones
+            return response()->json([
+                'status' => 'success',
+                'count'  => $reparaciones->count(),
+                'data'   => $reparaciones
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Error al obtener las reparaciones del mecánico.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Añadir horas de trabajo y calcular el coste de mano de obra (12€/hora)
+    public function addHorasTrabajo(Request $request)
+    {
+        // 1. Validar los datos de entrada
+        $validator = Validator::make($request->all(), [
+            'id_reparacion' => 'required|exists:reparaciones,id_reparacion',
+            'horas'         => 'required|numeric|min:0.01',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            // 2. Buscar la reparación
+            $reparacion = Reparacion::find($request->id_reparacion);
+
+            // Control de errores: Evitar modificar una reparación ya finalizada
+            if ($reparacion->estado === 'finalizado') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No se pueden añadir horas a una reparación ya finalizada y cobrada.'
+                ], 400);
+            }
+
+            // 3. Calcular los nuevos valores
+            $precioPorHora = 12.00; // Precio fijo por hora solicitado [1]
+
+            // Sumamos las nuevas horas a las que ya tuviera acumuladas
+            $nuevasHorasTotales = $reparacion->horas_trabajo + $request->horas;
+
+            // Calculamos el coste total de la mano de obra acumulada
+            $nuevoCosteManoObra = $nuevasHorasTotales * $precioPorHora;
+
+            // El coste total de la reparación es: nueva mano de obra + piezas actuales
+            $nuevoCosteTotal = $nuevoCosteManoObra + $reparacion->coste_total_piezas;
+
+            // 4. Actualizar el registro en la base de datos
+            $reparacion->update([
+                'horas_trabajo'          => $nuevasHorasTotales,
+                'coste_mano_obra'        => $nuevoCosteManoObra,
+                'coste_total_reparacion' => $nuevoCosteTotal,
+                // Opcional: si estaba 'pendiente', puedes pasar el estado a 'en proceso' de forma automática
+                'estado'                 => $reparacion->estado === 'pendiente' ? 'en proceso' : $reparacion->estado
+            ]);
+
+            // 5. Respuesta de éxito
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Horas añadidas y costes recalculados correctamente.',
+                'data'    => [
+                    'id_reparacion'          => $reparacion->id_reparacion,
+                    'horas_añadidas'         => $request->horas,
+                    'horas_totales'          => $reparacion->horas_trabajo,
+                    'coste_mano_obra'        => $reparacion->coste_mano_obra,
+                    'coste_total_piezas'     => $reparacion->coste_total_piezas,
+                    'coste_total_reparacion' => $reparacion->coste_total_reparacion,
+                    'estado'                 => $reparacion->estado
+                ]
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Error al añadir las horas de trabajo.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+     public function getPiezasPorReparacion(Request $request)
+    {
+        // 1. Validar que se reciba el id de la reparación y exista en la base de datos
+        $validator = Validator::make($request->all(), [
+            'id_reparacion' => 'required|exists:reparaciones,id_reparacion',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            // 2. Buscar los registros de la tabla intermedia asociados a la reparación
+            // Cargamos la relación 'pieza' para obtener los detalles de cada artículo
+            $piezasAsignadas = \App\Models\ReparacionPieza::where('id_reparacion', $request->id_reparacion)
+                ->with(['pieza' => function($query) {
+                    $query->select('id_pieza', 'nombre_pieza', 'precio_venta');
+                }])
+                ->get();
+
+            // 3. Controlar si la reparación aún no tiene ninguna pieza asignada
+            if ($piezasAsignadas->isEmpty()) {
+                return response()->json([
+                    'status'  => 'success',
+                    'message' => 'Esta reparación aún no tiene piezas asignadas.',
+                    'data'    => []
+                ], 200);
+            }
+
+            // 4. Mapear y formatear la respuesta para que quede limpia y fácil de leer
+            $resultado = $piezasAsignadas->map(function ($item) {
+                return [
+                    'id_registro'      => $item->id,
+                    'id_pieza'         => $item->id_pieza,
+                    'nombre_pieza'     => $item->pieza->nombre_pieza ?? 'Desconocida',
+                    'precio_unitario'  => $item->pieza->precio_venta ?? 0.00,
+                    'cantidad_usada'   => $item->cantidad_usada,
+                    'subtotal_pieza'   => ($item->pieza->precio_venta ?? 0.00) * $item->cantidad_usada,
+                    'id_mecanico_asig' => $item->id_usuario
+                ];
+            });
+
+            // 5. Retornar la lista con el total de registros encontrados
+            return response()->json([
+                'status' => 'success',
+                'count'  => $resultado->count(),
+                'data'   => $resultado
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Error al obtener las piezas de la reparación.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    // Cambiar el estado de una reparación de forma dinámica
+    public function cambiarEstado(Request $request)
+    {
+        // 1. Validar los datos de entrada (estados permitidos en tu taller)
+        $validator = Validator::make($request->all(), [
+            'id_reparacion' => 'required|exists:reparaciones,id_reparacion',
+            'estado'        => 'required|string|in:pendiente,en proceso,finalizado',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            // 2. Buscar la reparación
+            $reparacion = Reparacion::find($request->id_reparacion);
+            $nuevoEstado = $request->input('estado');
+
+            // Control de seguridad: si ya está finalizada, no se debería alterar su flujo normal
+            if ($reparacion->estado === 'finalizado') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Esta reparación ya está finalizada y no se puede modificar su estado.'
+                ], 400);
+            }
+
+            // 3. Caso Especial: Si el nuevo estado es 'finalizado', ejecutamos lógica de cobro y salida
+            if ($nuevoEstado === 'finalizado') {
+                if ($reparacion->coste_total_reparacion <= 0) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'No se puede finalizar una reparación con coste total de 0.00. Añade horas o piezas primero.'
+                    ], 400);
+                }
+
+                $resultado = DB::transaction(function () use ($reparacion) {
+                    // A. Actualizar reparación
+                    $reparacion->update([
+                        'estado'       => 'finalizado',
+                        'fecha_salida' => now(),
+                    ]);
+
+                    // B. Sacar coche del taller
+                    $coche = Coche::find($reparacion->id_coche);
+                    if ($coche) {
+                        $coche->update(['en_garaje' => 0]);
+                    }
+
+                    // C. Registrar ingreso en contabilidad
+                    $ingreso = \App\Models\Contabilidad::create([
+                        'tipo'       => 'ingreso',
+                        'cantidad'   => $reparacion->coste_total_reparacion,
+                        'concepto'   => "Cobro automático por finalización de reparación #" . $reparacion->id_reparacion,
+                        'id_usuario' => $reparacion->id_mecanico,
+                        'fecha'      => now(),
+                    ]);
+
+                    return $reparacion;
+                });
+
+                return response()->json([
+                    'status'  => 'success',
+                    'message' => 'Reparación finalizada, coche retirado del taller e ingreso contabilizado.',
+                    'data'    => $resultado
+                ], 200);
+            }
+
+            // 4. Caso Común: Cambiar a 'pendiente' o 'en proceso'
+            $reparacion->update(['estado' => $nuevoEstado]);
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => "El estado de la reparación ha cambiado a '{$nuevoEstado}' correctamente.",
+                'data'    => [
+                    'id_reparacion' => $reparacion->id_reparacion,
+                    'nuevo_estado'  => $reparacion->estado
+                ]
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Error al cambiar el estado de la reparación.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
 }

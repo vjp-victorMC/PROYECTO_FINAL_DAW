@@ -107,4 +107,36 @@ class PiezaController extends Controller
             'total_sin_stock' => $totalSinStock
         ], 200);
     }
+
+    // Obtener el listado completo de todas las piezas
+    public function getTodasLasPiezas()
+    {
+        try {
+            // 1. Obtener todos los registros de la tabla piezas
+            $piezas = Pieza::all();
+
+            // 2. Controlar si la tabla está vacía
+            if ($piezas->isEmpty()) {
+                return response()->json([
+                    'status'  => 'success',
+                    'message' => 'No hay ninguna pieza registrada en el sistema.',
+                    'data'    => []
+                ], 200);
+            }
+
+            // 3. Retornar el listado completo
+            return response()->json([
+                'status' => 'success',
+                'count'  => $piezas->count(),
+                'data'   => $piezas
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Error al obtener el listado de piezas.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
 }

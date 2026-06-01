@@ -13,6 +13,7 @@ use App\Http\Controllers\MensajeController;
 use App\Http\Controllers\PiezaController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ReparacionController;
+use App\Http\Controllers\ReparacionPiezaController;
 
 // =============================
 // 1. USUARIOS Y AUTENTICACIÓN
@@ -59,9 +60,14 @@ use App\Http\Controllers\ReparacionController;
     Route::post('/reparacion/cobrar', [ReparacionController::class, 'cobrarReparacion']);
     Route::get('/reparacion/estado', [ReparacionController::class, 'getEstadoReparacion']);
     Route::get('/admin/coches/para-pagar', [CocheController::class, 'getCochesParaPagar']);
+    Route::get('/reparaciones/conteo-estados', [ReparacionController::class, 'getReparacionesCountPorEstado']); //Victor
     Route::get('/admin/reparaciones/en-proceso/count', [ReparacionController::class, 'getReparacionesEnProcesoCount']);
     Route::get('/admin/coches/garaje', [CocheController::class, 'getCochesEnGaraje']);
     Route::post('/admin/reparaciones', [ReparacionController::class, 'setNewReparacion']);
+    Route::post('/reparaciones/add-pieza', [ReparacionPiezaController::class, 'addPiezaAReparacion']); //Victor
+    Route::put('/reparaciones/cambiar-estado', [ReparacionController::class, 'cambiarEstado']);  //Victor
+    Route::get('/reparaciones/mecanico/{id_mecanico}', [ReparacionController::class, 'getReparacionesPorMecanico']); //Victor
+    Route::get('/reparaciones/{id_reparacion}/piezas', [ReparacionController::class, 'getPiezasPorReparacion']);  //Victor
 
 // =============================
 // 5. CONTABILIDAD Y DASHBOARD
@@ -83,6 +89,7 @@ use App\Http\Controllers\ReparacionController;
     Route::get('/proveedores/{id_proveedor}', [ProveedorController::class, 'show']);
     Route::put('/proveedores/{id_proveedor}', [ProveedorController::class, 'update']);
     Route::delete('/proveedores/{id_proveedor}', [ProveedorController::class, 'destroy']);
+    Route::get('/piezas', [PiezaController::class, 'getTodasLasPiezas']);  //Victor
     Route::get('/proveedores/{id_proveedor}/piezas', [ProveedorController::class, 'getPiezasByProveedor']);
 
 // =============================
