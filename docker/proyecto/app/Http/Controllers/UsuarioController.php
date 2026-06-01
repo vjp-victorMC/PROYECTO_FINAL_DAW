@@ -250,4 +250,31 @@ class UsuarioController extends Controller
             ]
         ], 200);
     }
+
+    // Obtener la lista de todos los usuarios que son mecánicos
+    public function getMecanicos()
+    {
+        // 1. Buscar los usuarios cuyo rol sea 'mecanico'
+        // Nota: Ajusta la cadena 'mecanico' si en tu base de datos usas mayúsculas o acentos (ej. 'mecánico')
+        $mecanicos = Usuario::where('rol', 'mecanico')
+                            ->select('id_usuario', 'nombre', 'email', 'dni', 'telefono', 'rol')
+                            ->get();
+
+        // 2. Controlar si no hay mecánicos registrados
+        if ($mecanicos->isEmpty()) {
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'No se encontraron usuarios con el rol de mecánico.',
+                'data'    => []
+            ], 200);
+        }
+
+        // 3. Retornar la lista en formato JSON
+        return response()->json([
+            'status' => 'success',
+            'count'  => $mecanicos->count(),
+            'data'   => $mecanicos
+        ], 200);
+    }
+
 }
