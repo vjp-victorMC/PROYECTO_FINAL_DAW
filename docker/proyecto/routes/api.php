@@ -28,6 +28,8 @@ use App\Http\Controllers\ReparacionController;
     Route::put('/usuarios/{id_usuario}', [UsuarioController::class, 'update']);
     Route::delete('/usuarios/{id_usuario}', [UsuarioController::class, 'destroy']);
     Route::get('/usuarios/metricas/roles', [UsuarioController::class, 'getMetricasRoles']);
+    Route::get('/mecanicos', [UsuarioController::class, 'getMecanicos']);
+
 
 // =============================
 // 2. COCHES Y COCHES DE 2ª MANO
@@ -53,6 +55,9 @@ use App\Http\Controllers\ReparacionController;
 // =============================
 // 4. ADMINISTRACIÓN Y REPARACIONES
 // =============================
+    Route::post('/reparacion/asignar-mecanico', [ReparacionController::class, 'asignarMecanico']);
+    Route::post('/reparacion/cobrar', [ReparacionController::class, 'cobrarReparacion']);
+    Route::get('/reparacion/estado', [ReparacionController::class, 'getEstadoReparacion']);
     Route::get('/admin/coches/para-pagar', [CocheController::class, 'getCochesParaPagar']);
     Route::get('/admin/reparaciones/en-proceso/count', [ReparacionController::class, 'getReparacionesEnProcesoCount']);
     Route::get('/admin/coches/garaje', [CocheController::class, 'getCochesEnGaraje']);
@@ -84,3 +89,4 @@ use App\Http\Controllers\ReparacionController;
 // 7. RUTAS PRIVADAS (AUTENTICADAS)
 // =============================
 // Todas las rutas son públicas para desarrollo y pruebas, sin middleware.
+    Route::get('/image/proxy', [\App\Http\Controllers\ImageProxyController::class, 'proxy']);

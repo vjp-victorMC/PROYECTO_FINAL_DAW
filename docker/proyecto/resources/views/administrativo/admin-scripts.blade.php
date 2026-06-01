@@ -4,6 +4,7 @@
 // HELPERS
 // ============================================================
 const API = '/api';
+const PLACEHOLDER_SVG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='72'><rect width='100%25' height='100%25' fill='%23e6eefb' rx='6' ry='6'/><text x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%234a6e9a' font-family='Arial,Helvetica,sans-serif' font-size='12'>Sin imagen</text></svg>";
 
 async function apiFetch(url, opts = {}) {
     const headers = {
@@ -54,6 +55,7 @@ let coches2   = [];
 let piezas    = [];
 let usuarios  = [];
 let proveedores = [];
+let mecanicos = []; // lista de mecánicos en memoria
 
 // ============================================================
 // CONFIGURACIÓN DE PANELES
@@ -286,6 +288,26 @@ const estadoLabels = {
     pendiente      : { label: '⏳ Pendiente',          cls: 's-nueva'     },
 };
 
+function normalizeEstado(raw) {
+    if (!raw) return 'pendiente';
+    raw = String(raw).toLowerCase().trim();
+    if (raw === 'en proceso' || raw === 'en_proceso' || raw === 'enproceso') return 'en_reparacion';
+    if (raw === 'finalizado' || raw === 'finalizada') return 'finalizada';
+    if (raw === 'pendiente') return 'pendiente';
+    if (raw.includes('pago')) return 'pendiente_pago';
+    return raw.replace(/\s+/g,'_');
+}
+
+async function loadMecanicos() {
+    try {
+        const res = await apiFetch('/mecanicos');
+        mecanicos = res.data || [];
+    } catch(e) {
+        console.warn('No se pudieron cargar mecánicos:', e);
+        mecanicos = [];
+    }
+}
+
 async function loadReparaciones() {
     try {
         const gRes = await apiFetch('/admin/coches/garaje');
@@ -405,45 +427,128 @@ async function eliminarMensaje(id) {
     } catch(e) { alert('Error al eliminar mensaje: ' + e.message); }
 }
 
-function renderVehiculosRep() {
+async function renderVehiculosRep() {
     const el = document.getElementById('vehiculosReparGrid');
     if (!el) return;
     if (!cochesRep.length) {
         el.innerHTML = '<p style="color:#4a6e9a;font-size:13px;padding:10px 0">No hay vehículos en el taller.</p>';
         return;
     }
-    el.innerHTML = cochesRep.map(c => {
-        const estadoKey = c.estado ?? c.ultima_reparacion?.estado ?? 'pendiente';
+
+    const cards = [];
+    for (const c of cochesRep) {
+        const idCoche = c.id_coche ?? c.id;
+        // Pedimos estado real al endpoint de la API (param 'buscar')
+        let estadoKey = c.estado ?? c.ultima_reparacion?.estado ?? 'pendiente';
+        try {
+            const parametro = c.matricula ?? idCoche;
+            const estRes = await apiFetch(`/reparacion/estado?buscar=${encodeURIComponent(parametro)}`);
+            if (estRes && estRes.reparacion?.estado) {
+                estadoKey = normalizeEstado(estRes.reparacion.estado);
+            } else if (estRes && estRes.estado) {
+                estadoKey = normalizeEstado(estRes.estado);
+            }
+        } catch (err) {
+            console.warn('No se pudo obtener estado remoto para', c.matricula || idCoche, err);
+        }
+
         const est = estadoLabels[estadoKey] ?? { label: estadoKey, cls: 's-nueva' };
-        const imgSrc = c.imagen ? `/storage/${c.imagen}` : null;
-        return `<div class="veh-card" onclick="openVehRepModal(${c.id_coche ?? c.id})">
-            ${imgSrc ? `<img src="${imgSrc}" class="veh-img" alt="" onerror="this.style.display='none';this.nextSibling.style.display='flex'">` : ''}
-            <div class="veh-img-ph" style="${imgSrc ? 'display:none' : ''}">🚗</div>
-            <div class="veh-info">
+        let imgSrc = null;
+        if (c.imagen) {
+            const raw = String(c.imagen).trim();
+            if (/^https?:\/\//i.test(raw)) {
+                // usar proxy interno para evitar problemas CORS/headers
+                imgSrc = `/api/image/proxy?url=${encodeURIComponent(raw)}`;
+            } else {
+                imgSrc = `/storage/${raw}`;
+            }
+        }
+
+        // tarjeta simple; la interacción (selector/cobrar) se maneja en el modal
+        const card = `<div class="veh-card" data-id="${idCoche}" onclick="openVehRepModal(${idCoche})">
+            ${imgSrc ? `<img src="${imgSrc}" class="veh-img" alt="${c.marca} ${c.modelo}" style="width:120px;height:72px;object-fit:cover;border-radius:6px;display:block" loading="lazy" onerror="this.onerror=null;this.src='${PLACEHOLDER_SVG}'">` : ''}
+             <div class="veh-img-ph" style="${imgSrc ? 'display:none;width:120px;height:72px;align-items:center;justify-content:center;background:#e6eefb;border-radius:6px' : 'display:flex;width:120px;height:72px;align-items:center;justify-content:center;background:#e6eefb;border-radius:6px'}">🚗</div>
+             <div class="veh-info">
                 <div class="veh-matricula">${c.matricula}</div>
                 <div class="veh-modelo">${c.marca} ${c.modelo}</div>
                 <div style="font-size:11px;color:#4a6e9a;margin-top:2px">${c.ultima_reparacion?.motivo ?? '—'}</div>
-                <span class="status-pill ${est.cls}" style="margin-top:6px">${est.label}</span>
+                <span class="status-pill ${est.cls}">${est.label}</span>
             </div>
         </div>`;
-    }).join('');
+        cards.push(card);
+    }
+
+    el.innerHTML = cards.join('');
+}
+
+// Asegurar que exista función para cerrar el modal
+function closeVehModal() {
+    document.getElementById('vehModal').classList.remove('open');
 }
 
 async function openVehRepModal(id) {
     try {
         const res = await apiFetch(`/coches/${id}/detalle`);
         const c = res.data;
-        const estadoKey = c.ultima_reparacion?.estado ?? 'pendiente';
+
+        // obtener estado desde la API de estado (buscar por matrícula o id)
+        let estadoKey = c.ultima_reparacion?.estado ?? 'pendiente';
+        try {
+            const parametro = c.matricula ?? id;
+            const estRes = await apiFetch(`/reparacion/estado?buscar=${encodeURIComponent(parametro)}`);
+            if (estRes && estRes.reparacion?.estado) {
+                estadoKey = normalizeEstado(estRes.reparacion.estado);
+            } else if (estRes && estRes.estado) {
+                estadoKey = normalizeEstado(estRes.estado);
+            }
+        } catch (err) {
+            console.warn('No se pudo obtener estado remoto para modal', err);
+        }
+
         const est = estadoLabels[estadoKey] ?? { label: estadoKey, cls: 's-nueva' };
         const cliente = c.usuario?.nombre ?? `Cliente #${c.id_usuario}`;
-        const imgSrc  = c.imagen ? `/storage/${c.imagen}` : null;
+        let imgSrc  = null;
+        if (c.imagen) {
+            const raw = String(c.imagen).trim();
+            imgSrc = /^https?:\/\//i.test(raw) ? `/api/image/proxy?url=${encodeURIComponent(raw)}` : `/storage/${raw}`;
+        }
+
+        // almacenar id del coche en el modal para futuras acciones
+        document.getElementById('vehModal').dataset.cocheId = c.id_coche ?? c.id;
+
+        // determinar nombre del mecánico asignado si existe
+        let mecanicoNombre = 'Sin mecánico';
+        if (c.ultima_reparacion?.mecanico?.nombre) {
+            mecanicoNombre = c.ultima_reparacion.mecanico.nombre;
+        } else if (c.ultima_reparacion?.id_mecanico) {
+            // intentar buscar en la lista de mecanicos cargada
+            const found = mecanicos.find(m => (m.id_usuario ?? m.id) == c.ultima_reparacion.id_mecanico);
+            if (found) mecanicoNombre = found.nombre;
+        }
 
         document.getElementById('veh-modal-title').textContent = `${c.matricula} · ${c.marca} ${c.modelo}`;
+
+        // construir select de mecánicos (incluye carga si está vacío)
+        if (!mecanicos.length) await loadMecanicos();
+        const options = mecanicos.length ? mecanicos.map(m => `<option value="${m.id_usuario ?? m.id}">${m.nombre}</option>`).join('') : '<option value="">Sin mecánicos</option>';
+        const selId = `modal-mec-${id}`;
+
+        // botones según estado
+        let accionesHtml = '';
+        if (estadoKey === 'pendiente' || estadoKey === 'en_reparacion') {
+            accionesHtml = `<div style="display:flex;gap:8px;align-items:center">
+                <select id="${selId}" class="minput" style="min-width:200px">${options}</select>
+                <button class="btn btn-primary" onclick="asignarMecanicoApi(${c.ultima_reparacion?.id_reparacion ?? c.ultima_reparacion?.id ?? id}, document.getElementById('${selId}').value)">Asignar mecánico</button>
+            </div>`;
+        } else if (estadoKey === 'finalizada') {
+            accionesHtml = `<button class="btn btn-success" onclick="cobrarReparacionApi(${c.ultima_reparacion?.id_reparacion ?? c.ultima_reparacion?.id ?? id})">Cobrar y sacar del garaje</button>`;
+        }
+
         document.getElementById('veh-modal-body').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
             <div>
                 ${imgSrc
-                    ? `<img src="${imgSrc}" style="width:100%;border-radius:8px;height:180px;object-fit:cover" alt="">`
+                    ? `<img src="${imgSrc}" style="width:100%;border-radius:8px;height:180px;object-fit:cover" alt="" loading="lazy" onerror="this.onerror=null;this.src='${PLACEHOLDER_SVG}'">`
                     : '<div style="height:180px;background:#0a1826;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:48px">🚗</div>'}
             </div>
             <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
@@ -451,19 +556,53 @@ async function openVehRepModal(id) {
                 <div><span style="color:#4a6e9a">Vehículo:</span><strong style="color:#deeeff;margin-left:6px">${c.marca} ${c.modelo}</strong></div>
                 <div><span style="color:#4a6e9a">Cliente:</span><strong style="color:#deeeff;margin-left:6px">${cliente}</strong></div>
                 <div><span style="color:#4a6e9a">Motivo:</span><strong style="color:#deeeff;margin-left:6px">${c.ultima_reparacion?.motivo ?? '—'}</strong></div>
-                <div><span style="color:#4a6e9a">Estado:</span><span class="status-pill ${est.cls}" style="margin-left:6px">${est.label}</span></div>
-                <div><span style="color:#4a6e9a">En garaje:</span><strong style="color:#deeeff;margin-left:6px">${c.en_garaje ? 'Sí' : 'No'}</strong></div>
+                <div><span style="color:#4a6e9a">Estado:</span><span class="status-pill ${est.cls}" style="margin-left:6px" id="modal-status-pill">${est.label}</span></div>
+                <div><span style="color:#4a6e9a">Mecánico:</span><strong style="color:#deeeff;margin-left:6px" id="modal-mecanico">${mecanicoNombre}</strong></div>
+                <div><span style="color:#4a6e9a">En garaje:</span><strong style="color:#deeeff;margin-left:6px" id="modal-en-garaje">${c.en_garaje ? 'Sí' : 'No'}</strong></div>
+                <div style="margin-top:8px">${accionesHtml}</div>
             </div>
         </div>
         <div style="display:flex;gap:8px;justify-content:flex-end">
             <button class="btn btn-sm" onclick="closeVehModal()">Cerrar</button>
         </div>`;
+
+        // actualizar badge en la tarjeta correspondiente para mantener consistencia visual
+        const card = document.querySelector(`.veh-card[data-id="${c.id_coche ?? c.id}"]`);
+        if (card) {
+            const pill = card.querySelector('.status-pill');
+            if (pill) {
+                pill.textContent = est.label;
+                pill.className = 'status-pill ' + est.cls;
+            }
+            // también mostrar nombre mecánico en tarjeta si existe
+            const existingMech = card.querySelector('.veh-mecanico');
+            if (existingMech) existingMech.textContent = mecanicoNombre;
+            else if (mecanicoNombre && mecanicoNombre !== 'Sin mecánico') {
+                const mechHtml = `<div class="veh-mecanico" style="font-size:11px;color:#b5cfe8;margin-top:6px">Mecánico: <strong style="color:#deeeff">${mecanicoNombre}</strong></div>`;
+                const info = card.querySelector('.veh-info');
+                if (info) info.insertAdjacentHTML('beforeend', mechHtml);
+            }
+        }
+
         document.getElementById('vehModal').classList.add('open');
     } catch(e) { alert('No se pudo cargar el detalle: ' + e.message); }
 }
 
-function closeVehModal() {
-    document.getElementById('vehModal').classList.remove('open');
+async function asignarMecanicoApi(id_reparacion, id_mecanico) {
+    if (!id_mecanico) return alert('Selecciona un mecánico.');
+    try {
+        const body = { id_reparacion: parseInt(id_reparacion), id_mecanico: parseInt(id_mecanico) };
+        const res = await apiFetch('/reparacion/asignar-mecanico', { method: 'POST', body: JSON.stringify(body) });
+        if (res.status === 'success') {
+            alert('Mecánico asignado correctamente.');
+            await loadReparaciones();
+            // refrescar modal para mostrar nuevo estado: obtener id_coche del modal dataset
+            const cocheId = document.getElementById('vehModal').dataset.cocheId;
+            if (cocheId) await openVehRepModal(cocheId);
+        } else {
+            alert('Error: ' + (res.message || 'Respuesta inesperada'));
+        }
+    } catch (e) { alert('Error al asignar mecánico: ' + e.message); }
 }
 
 // ============================================================
@@ -501,9 +640,9 @@ function renderVehiculos2() {
         const enVenta = c.en_venta == 1 || c.en_venta === true;
         const extras  = [c.especificaciones, c.km ? c.km + ' km' : null].filter(Boolean).join(' · ');
         return `<div class="veh-card" onclick="openVeh2Modal(${c.id ?? c.id_coche2mano})">
-            ${imgSrc ? `<img src="${imgSrc}" class="veh-img" alt="">` : ''}
-            <div class="veh-img-ph" style="${imgSrc ? 'display:none' : ''}">🚘</div>
-            <div class="veh-info">
+            ${imgSrc ? `<img src="${imgSrc}" class="veh-img" alt="${c.marca} ${c.modelo}" style="width:120px;height:72px;object-fit:cover;border-radius:6px;display:block" loading="lazy" onerror="this.onerror=null;this.src='${PLACEHOLDER_SVG}'">` : ''}
+            <div class="veh-img-ph" style="${imgSrc ? 'display:none;width:120px;height:72px;align-items:center;justify-content:center;background:#f7f7fb;border-radius:6px' : 'display:flex;width:120px;height:72px;align-items:center;justify-content:center;background:#f7f7fb;border-radius:6px'}">🚘</div>
+             <div class="veh-info">
                 <div class="veh-matricula">${c.matricula}</div>
                 <div class="veh-modelo">${c.marca} ${c.modelo}</div>
                 <div class="veh-precio">€${parseFloat(c.precio).toLocaleString('es-ES')}</div>
@@ -529,7 +668,7 @@ function openVeh2Modal(id) {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
             <div>
                 ${imgSrc
-                    ? `<img src="${imgSrc}" style="width:100%;border-radius:8px;height:180px;object-fit:cover" alt="">`
+                    ? `<img src="${imgSrc}" style="width:100%;border-radius:8px;height:180px;object-fit:cover" alt="" loading="lazy" onerror="this.onerror=null;this.src='${PLACEHOLDER_SVG}'">`
                     : '<div style="height:180px;background:#0a1826;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:48px">🚘</div>'}
             </div>
             <div style="display:flex;flex-direction:column;gap:9px;font-size:13px">
@@ -543,7 +682,7 @@ function openVeh2Modal(id) {
         <div style="display:flex;gap:8px;justify-content:flex-end">
             <button class="btn btn-sm" onclick="closeVehModal()">Cerrar</button>
             <button class="btn btn-sm btn-danger" onclick="retirarVeh(${c.id ?? c.id_coche2mano});closeVehModal()">📤 Retirar</button>
-            <button class="btn btn-success btn-sm" onclick="venderVeh(${c.id ?? c.id_coche2mano});closeVehModal()">💰 Vender</button>
+            <button class="btn success btn-sm" onclick="venderVeh(${c.id ?? c.id_coche2mano});closeVehModal()">💰 Vender</button>
         </div>`;
     document.getElementById('vehModal').classList.add('open');
 }
