@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class CocheController extends Controller
 {
     // Guardar un nuevo coche
-    public function setNewCar(Request $request)
+   public function setNewCar(Request $request)
     {
         $request->validate([
             'matricula'          => 'required|unique:coches,matricula|max:20',
@@ -19,13 +19,8 @@ class CocheController extends Controller
             'transmision'        => 'required|string|max:30',
             'anio_matriculacion' => 'required|digits:4',
             'id_usuario'         => 'required|exists:usuarios,id_usuario',
-            'imagen'             => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'imagen'             => 'nullable|url|max:500', // ← validar como URL
         ]);
-
-        $path = null;
-        if ($request->hasFile('imagen')) {
-            $path = $request->file('imagen')->store('coches', 'public');
-        }
 
         Coche::create([
             'matricula'          => $request->matricula,
@@ -36,13 +31,13 @@ class CocheController extends Controller
             'transmision'        => $request->transmision,
             'anio_matriculacion' => $request->anio_matriculacion,
             'id_usuario'         => $request->id_usuario,
-            'imagen'             => $path,
+            'imagen'             => $request->imagen ?: null, // ← guardar URL directamente
             'en_garaje'          => 0,
         ]);
 
-        return back()->with('success', 'Coche registrado con éxito.');
+        return response()->json(['message' => 'Coche registrado con éxito.']);
+        // ↑ También cambia esto: usas fetch() en el JS, no back()
     }
-
     // Ver todos los vehículos de un usuario específico
     public function carByUserId($id_usuario)
     {

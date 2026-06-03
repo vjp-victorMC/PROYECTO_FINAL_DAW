@@ -1,10 +1,8 @@
-
 // ============================================================
-// mecanico.js  v3
-// - MECANICO_ID obtenido desde meta tag inyectada por blade
-// - Modal meter coche: select de coches disponibles
-// - Modales horas/piezas: selects en lugar de campos sueltos
-// - Estilos de modal corregidos (textos blancos, botones)
+// mecanico.js  v3 — CORREGIDO
+// - fin declarado correctamente en selectReparacion
+// - finalizada consistente en todo el archivo
+// - Tabla muestra coste piezas y botón Ver con texto
 // ============================================================
 (() => {
 'use strict';
@@ -12,12 +10,9 @@
 // ── Config ────────────────────────────────────────────────
 const BASE = '/api';
 
-// ID del mecánico: leído desde <meta name="mecanico-id"> inyectada por blade
-// (más fiable que window.__MECANICO_ID__ que depende del orden de carga)
 function getMecanicoId() {
     const meta = document.querySelector('meta[name="mecanico-id"]');
     if (meta && meta.content && parseInt(meta.content) > 0) return parseInt(meta.content);
-    // Fallback: window global si el blade lo inyecta como script
     if (window.__MECANICO_ID__ && window.__MECANICO_ID__ > 0) return window.__MECANICO_ID__;
     console.error('[Mecánico] No se pudo obtener el id del mecánico. Comprueba la meta tag.');
     return null;
@@ -31,7 +26,7 @@ function csrfToken() {
 const state = {
     reparaciones: [],
     selectedRepId: null,
-    cochesDisponibles: [],  // en_garaje = 0
+    cochesDisponibles: [],
 };
 
 document.documentElement.setAttribute('data-theme', 'dark');
@@ -46,7 +41,7 @@ function badge(estado) {
     const map = {
         'pendiente':  {cls:'mech-badge-orange', text:'Pendiente',  icon:'ti-clock'},
         'en proceso': {cls:'mech-badge-blue',   text:'En proceso', icon:'ti-player-play'},
-        'finalizado': {cls:'mech-badge-green',  text:'Finalizada', icon:'ti-circle-check'},
+        'finalizada': {cls:'mech-badge-green',  text:'Finalizada', icon:'ti-circle-check'},
     };
     return map[estado] || map['pendiente'];
 }
@@ -95,6 +90,7 @@ function renderReparaciones() {
         const mat = c.matricula || r.matricula || '—';
         const veh = `${c.marca||''} ${c.modelo||''}`.trim();
         const h   = parseFloat(r.horas_trabajo) || 0;
+
         return `<tr class="mech-tr${state.selectedRepId===r.id_reparacion?' selected':''}"
                     onclick="window.selectReparacion(${r.id_reparacion})" style="cursor:pointer;">
             <td>
@@ -102,13 +98,18 @@ function renderReparaciones() {
                 <span class="mech-small-muted">${veh}</span>
             </td>
             <td>${r.motivo||'—'}</td>
-            <td><span class="mech-badge ${b.cls}"><i class="ti ${b.icon}"></i>${b.text}</span></td>
-            <td style="text-align:center;">${h>0?h+'h':'—'}</td>
-            <td style="text-align:center;">—</td>
+            <td><span class="mech-badge ${b.cls}"><i class="ti ${b.icon}"></i> ${b.text}</span></td>
+            <td style="text-align:center;">${h > 0 ? h + 'h' : '—'}</td>
+            <td style="text-align:center;">
+                ${parseFloat(r.coste_total_piezas||0) > 0
+                    ? parseFloat(r.coste_total_piezas).toFixed(2) + ' €'
+                    : '—'}
+            </td>
             <td style="text-align:right;">
-                <button class="mech-btn mech-btn-xs"
+                <button class="mech-btn mech-btn-xs mech-btn-primary"
+                    style="gap:.35rem;"
                     onclick="event.stopPropagation();window.openRepAsignadasModal(${r.id_reparacion})">
-                    <i class="ti ti-eye"></i>
+                    <i class="ti ti-eye"></i> Ver
                 </button>
             </td>
         </tr>`;
@@ -120,12 +121,12 @@ function updateKPIs() {
     const reps = state.reparaciones;
     const pen  = reps.filter(r=>r.estado==='pendiente').length;
     const enP  = reps.filter(r=>r.estado==='en proceso').length;
-    const fin  = reps.filter(r=>r.estado==='finalizado').length;
+    const fin  = reps.filter(r=>r.estado==='finalizada').length;
     const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
     set('count-pending',    pen);
     set('count-inprogress', enP);
     set('count-finished',   fin);
-    set('count-pending-parts', reps.filter(r=>r.estado!=='finalizado'&&!r.horas_trabajo).length);
+    set('count-pending-parts', reps.filter(r=>r.estado!=='finalizada'&&!r.horas_trabajo).length);
     set('hero-active',  reps.length);
     set('hero-pending', pen);
     set('hero-ready',   fin);
@@ -137,21 +138,29 @@ window.selectReparacion = function(id) {
     state.selectedRepId = id;
     document.querySelectorAll('#tabla-reparaciones .mech-tr').forEach(tr =>
         tr.classList.toggle('selected', tr.onclick?.toString().includes(`(${id})`)));
+
     const rep = state.reparaciones.find(r=>r.id_reparacion===id);
     if (!rep) return;
-    const c = rep.coche||{};
-    const b = badge(rep.estado);
+
+    const c   = rep.coche || {};
+    const b   = badge(rep.estado);
+    const fin = rep.estado === 'finalizada'; // ✅ declarado aquí, en el scope correcto
+
     document.getElementById('reparacion-detalle').innerHTML = `
         <div style="display:flex;flex-direction:column;gap:.75rem;">
             <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
-                <span class="mech-badge ${b.cls}"><i class="ti ${b.icon}"></i>${b.text}</span>
+                <span class="mech-badge ${b.cls}"><i class="ti ${b.icon}"></i> ${b.text}</span>
                 <span class="mech-small-muted">ID #${rep.id_reparacion}</span>
             </div>
-            <div><span class="mech-small-muted">Vehículo</span>
+            <div>
+                <span class="mech-small-muted">Vehículo</span>
                 <p style="font-weight:700;font-size:.9rem;color:var(--mech-text);">
-                    ${c.matricula||'—'} · ${c.marca||''} ${c.modelo||''}</p></div>
-            <div><span class="mech-small-muted">Motivo</span>
-                <p style="font-weight:600;color:var(--mech-text);">${rep.motivo||'—'}</p></div>
+                    ${c.matricula||'—'} · ${c.marca||''} ${c.modelo||''}</p>
+            </div>
+            <div>
+                <span class="mech-small-muted">Motivo</span>
+                <p style="font-weight:600;color:var(--mech-text);">${rep.motivo||'—'}</p>
+            </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
                 <div><span class="mech-small-muted">Entrada</span><p style="color:var(--mech-text);">${fmt(rep.fecha_entrada)}</p></div>
                 <div><span class="mech-small-muted">Salida</span><p style="color:var(--mech-text);">${fmt(rep.fecha_salida)}</p></div>
@@ -162,6 +171,7 @@ window.selectReparacion = function(id) {
                     <p style="font-weight:700;color:var(--mech-primary);">${parseFloat(rep.coste_total_reparacion||0).toFixed(2)} €</p></div>
             </div>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.25rem;">
+                ${!fin ? `
                 <button class="mech-btn mech-btn-xs mech-btn-primary"
                     onclick="window.openAgregarHorasModal(${id})">
                     <i class="ti ti-clock-plus"></i> Horas
@@ -171,18 +181,20 @@ window.selectReparacion = function(id) {
                     style="background:var(--mech-surface-offset);">
                     <i class="ti ti-tool"></i> Piezas
                 </button>
-                ${rep.estado!=='finalizado'?`
                 <button class="mech-btn mech-btn-xs"
                     onclick="window.openCambiarEstadoModal(${id})"
                     style="background:var(--mech-surface-offset);">
                     <i class="ti ti-refresh"></i> Estado
-                </button>`:''}
+                </button>` : `
+                <div style="padding:.5rem .75rem;border-radius:10px;background:var(--mech-surface-offset);
+                    font-size:.72rem;color:var(--mech-text-muted);display:flex;align-items:center;gap:.4rem;">
+                    <i class="ti ti-lock"></i> Reparación finalizada · solo lectura
+                </div>`}
             </div>
         </div>`;
 };
 
 // ── Cargar reparaciones ───────────────────────────────────
-// GET /api/reparaciones/mecanico/{id_mecanico}
 async function cargarReparaciones() {
     const MECANICO_ID = getMecanicoId();
     if (!MECANICO_ID) {
@@ -198,26 +210,11 @@ async function cargarReparaciones() {
     }
 }
 
-// ── Cargar coches disponibles (en_garaje=0) ───────────────
-// Usamos GET /admin/coches/garaje (devuelve en_garaje=1) y lo invertimos,
-// OR: GET /reparacion/estado no sirve para listar todos.
-// Como no hay ruta directa para en_garaje=0, usamos el endpoint
-// de coches en garaje para filtrar y mostramos los NO en garaje
-// solicitando todos por usuario — pero tampoco hay ruta.
-// SOLUCIÓN: usamos /admin/coches/garaje para saber cuáles ESTÁN dentro
-// y pedimos al admin que añada GET /coches/disponibles.
-// Por ahora hacemos la carga desde /admin/coches/garaje y complementamos
-// indicando que son los disponibles (los que NO aparecen en esa lista).
-// TODO: Añadir en api.php:
-//   Route::get('/coches/disponibles', fn() => Coche::where('en_garaje',0)->with('usuario')->get());
 async function cargarCochesDisponibles() {
     try {
-        // Intentamos la ruta hipotética primero
         const data = await api('/coches/disponibles');
         state.cochesDisponibles = data.data || data || [];
     } catch {
-        // Si no existe la ruta, cargamos todos los del garaje para excluirlos
-        // y usamos un array vacío — el modal lo indicará
         state.cochesDisponibles = [];
     }
 }
@@ -280,9 +277,6 @@ function openModal(id) {
 
 // ══════════════════════════════════════════════════════════
 // MODAL: METER COCHE
-// GET /coches/disponibles → select de coches (en_garaje=0)
-// POST /admin/reparaciones  { id_coche, motivo }
-// POST /reparacion/asignar-mecanico { id_reparacion, id_mecanico }
 // ══════════════════════════════════════════════════════════
 window.openMeterCocheModal = async function() {
     const MECANICO_ID = getMecanicoId();
@@ -311,9 +305,7 @@ window.openMeterCocheModal = async function() {
             </button>
         </div>`);
     openModal('modal-meter-coche');
-    // Aplicar estilos a inputs del modal
     applyFormStyles('modal-meter-coche');
-    // Cargar coches disponibles
     const sel = document.getElementById('mc-coche');
     try {
         const data = await api('/coches/disponibles');
@@ -337,8 +329,8 @@ window.openMeterCocheModal = async function() {
 };
 
 function mcMostrarDetalle(sel) {
-    const det  = document.getElementById('mc-car-detail');
-    const opt  = sel.options[sel.selectedIndex];
+    const det = document.getElementById('mc-car-detail');
+    const opt = sel.options[sel.selectedIndex];
     if (!opt||!opt.value) { det.style.display='none'; return; }
     det.style.display = 'block';
     det.innerHTML = `
@@ -365,9 +357,7 @@ window.mcConfirmar = async function() {
     if (!motivo)  { errBox.textContent='El motivo es obligatorio.'; errBox.style.display='block'; return; }
     btn.disabled=true; btn.innerHTML='<i class="ti ti-loader ti-spin"></i> Registrando…';
     try {
-        // POST /api/admin/reparaciones { id_coche, motivo }
         const rep = await api('/admin/reparaciones', {method:'POST', body:{id_coche:idCoche, motivo}});
-        // Intentar asignar el mecánico a la reparación recién creada
         const idRep = rep.data?.id_reparacion || rep.id_reparacion;
         if (idRep && MECANICO_ID) {
             await api('/reparacion/asignar-mecanico', {
@@ -386,8 +376,6 @@ window.mcConfirmar = async function() {
 
 // ══════════════════════════════════════════════════════════
 // MODAL: REPARACIONES ASIGNADAS
-// GET /api/reparaciones/mecanico/{id}
-// PUT /api/reparaciones/cambiar-estado { id_reparacion, estado }
 // ══════════════════════════════════════════════════════════
 const raState = {reparaciones:[], filtroActivo:'todos', busqueda:'', selectedId:null};
 
@@ -445,7 +433,7 @@ window.raSeleccionar = function(id) {
     if (panel) panel.style.display='block';
     const rep=raState.reparaciones.find(r=>r.id_reparacion===id);
     if (!rep) return;
-    const fin = rep.estado==='finalizado';
+    const fin = rep.estado==='finalizada';
     const enP = rep.estado==='en proceso';
     const bi  = document.getElementById('ra-btn-iniciar');
     const bp  = document.getElementById('ra-btn-pausar');
@@ -467,8 +455,8 @@ window.raCambiarEstado = async function(nuevoEstado) {
 
 window.raConfirmarFinalizar = async function() {
     if (!raState.selectedId){window.showNotification('Selecciona una reparación','error');return;}
-    if (!confirm('¿Finalizar esta reparación? Se generará el ingreso en contabilidad.')) return;
-    await window.raCambiarEstado('finalizado');
+    if (!confirm('¿Estás seguro de finalizar esta reparación? No se podrá editar.')) return;
+    await window.raCambiarEstado('finalizada');
 };
 
 async function raCargar() {
@@ -508,10 +496,9 @@ window.openRepAsignadasModal = function(preselId) {
 
 // ══════════════════════════════════════════════════════════
 // MODAL: AÑADIR HORAS
-// TODO: Route::post('/reparaciones/add-horas', [ReparacionController::class, 'addHorasTrabajo']);
 // ══════════════════════════════════════════════════════════
 window.openAgregarHorasModal = function(preselId) {
-    const activas = state.reparaciones.filter(r=>r.estado!=='finalizado');
+    const activas = state.reparaciones.filter(r=>r.estado!=='finalizada');
     const opts = activas.map(r=>{
         const c=r.coche||{};
         return `<option value="${r.id_reparacion}" ${r.id_reparacion===preselId?'selected':''}>
@@ -548,12 +535,10 @@ window.ahConfirmar = async function() {
     const horas =parseFloat(document.getElementById('ah-horas')?.value);
     const btn   =document.getElementById('ah-submit');
     errBox.style.display='none';
-    if (!idRep)     {errBox.textContent='Selecciona una reparación.';errBox.style.display='block';return;}
+    if (!idRep)          {errBox.textContent='Selecciona una reparación.';errBox.style.display='block';return;}
     if (!horas||horas<=0){errBox.textContent='Introduce horas válidas.';errBox.style.display='block';return;}
     btn.disabled=true; btn.innerHTML='<i class="ti ti-loader ti-spin"></i> Guardando…';
     try {
-        // TODO: Añadir en api.php:
-        // Route::post('/reparaciones/add-horas', [ReparacionController::class, 'addHorasTrabajo']);
         await api('/reparaciones/add-horas',{method:'POST',body:{id_reparacion:idRep,horas}});
         window.showNotification(`${horas}h añadidas correctamente.`,'success');
         window.closeModal('modal-agregar-horas');
@@ -566,12 +551,10 @@ window.ahConfirmar = async function() {
 
 // ══════════════════════════════════════════════════════════
 // MODAL: AÑADIR PIEZAS
-// GET  /api/piezas
-// POST /api/reparaciones/add-pieza { id_reparacion, id_pieza, cantidad_usada, id_usuario }
 // ══════════════════════════════════════════════════════════
 window.openAgregarPiezasModal = function(preselId) {
     const MECANICO_ID = getMecanicoId();
-    const activas = state.reparaciones.filter(r=>r.estado!=='finalizado');
+    const activas = state.reparaciones.filter(r=>r.estado!=='finalizada');
     const optsRep = activas.map(r=>{
         const c=r.coche||{};
         return `<option value="${r.id_reparacion}" ${r.id_reparacion===preselId?'selected':''}>
@@ -608,7 +591,6 @@ window.openAgregarPiezasModal = function(preselId) {
         </div>`);
     applyFormStyles('modal-agregar-piezas');
     openModal('modal-agregar-piezas');
-    // Cargar catálogo real: GET /api/piezas
     api('/piezas').then(data=>{
         window._apCatalogo = Array.isArray(data)?data:(data.data||[]);
         const sel=document.getElementById('ap-pieza');
@@ -642,7 +624,8 @@ window.apMostrarInfo = function() {
         <span style="color:var(--mech-text);">Stock disponible: <strong>${stock}</strong></span>
         &nbsp;·&nbsp;
         <span style="color:var(--mech-text);">Precio: <strong>${precio.toFixed(2)} €/ud</strong></span>
-        ${stock===0?`<span style="color:var(--mech-error);margin-left:.5rem;"><i class="ti ti-alert-triangle"></i> Sin stock</span>`:''}`;
+        ${stock===0?`<span style="color:var(--mech-error);margin-left:.5rem;">
+            <i class="ti ti-alert-triangle"></i> Sin stock</span>`:''}`;
 };
 
 window.apConfirmar = async function() {
@@ -653,12 +636,11 @@ window.apConfirmar = async function() {
     const cantidad =parseInt(document.getElementById('ap-cantidad')?.value);
     const btn      =document.getElementById('ap-submit');
     errBox.style.display='none';
-    if (!idRep)    {errBox.textContent='Selecciona una reparación.';errBox.style.display='block';return;}
-    if (!idPieza)  {errBox.textContent='Selecciona una pieza.';errBox.style.display='block';return;}
+    if (!idRep)             {errBox.textContent='Selecciona una reparación.';errBox.style.display='block';return;}
+    if (!idPieza)           {errBox.textContent='Selecciona una pieza.';errBox.style.display='block';return;}
     if (!cantidad||cantidad<1){errBox.textContent='La cantidad debe ser al menos 1.';errBox.style.display='block';return;}
     btn.disabled=true; btn.innerHTML='<i class="ti ti-loader ti-spin"></i> Añadiendo…';
     try {
-        // POST /api/reparaciones/add-pieza
         await api('/reparaciones/add-pieza',{method:'POST',body:{
             id_reparacion:idRep, id_pieza:idPieza, cantidad_usada:cantidad, id_usuario:MECANICO_ID
         }});
@@ -672,7 +654,7 @@ window.apConfirmar = async function() {
 };
 
 // ══════════════════════════════════════════════════════════
-// MODAL: SOLICITAR PIEZAS — GET /api/piezas/bajo-minimo
+// MODAL: SOLICITAR PIEZAS
 // ══════════════════════════════════════════════════════════
 window.openSolicitarPiezasModal = function() {
     createModal('modal-solicitar-piezas','Solicitar piezas',`
@@ -706,7 +688,7 @@ window.openSolicitarPiezasModal = function() {
                     <p style="margin:.1rem 0 0;font-size:.7rem;color:var(--mech-text-muted);">
                         Stock actual: ${p.cantidad_disponible} · Mínimo: ${p.stock_minimo}</p>
                 </div>
-                <span class="mech-badge ${p.cantidad_disponible===0?'mech-badge-orange':'mech-badge-orange'}"
+                <span class="mech-badge ${p.cantidad_disponible===0?'mech-badge-red':'mech-badge-orange'}"
                     style="font-size:.65rem;flex-shrink:0;">
                     ${p.cantidad_disponible===0?'Sin stock':'Bajo mínimo'}</span>
             </div>`).join('');
@@ -718,13 +700,12 @@ window.openSolicitarPiezasModal = function() {
 
 // ══════════════════════════════════════════════════════════
 // MODAL: CAMBIAR ESTADO
-// PUT /api/reparaciones/cambiar-estado { id_reparacion, estado }
 // ══════════════════════════════════════════════════════════
 window.openCambiarEstadoModal = function(idRep) {
     const rep=state.reparaciones.find(r=>r.id_reparacion===idRep);
     if (!rep) return;
     const b=badge(rep.estado);
-    const estados=['pendiente','en proceso','finalizado'].filter(e=>e!==rep.estado);
+    const estados=['pendiente','en proceso','finalizada'].filter(e=>e!==rep.estado);
     createModal('modal-cambiar-estado','Cambiar estado',`
         <p style="font-size:.82rem;color:var(--mech-text-muted);margin-bottom:1rem;">
             Reparación <strong style="color:var(--mech-text);">#${idRep}</strong>
@@ -741,7 +722,8 @@ window.openCambiarEstadoModal = function(idRep) {
                     <span class="mech-badge ${eb.cls}" style="font-size:.7rem;">
                         <i class="ti ${eb.icon}"></i>${eb.text}</span>
                     Cambiar a <strong>${eb.text}</strong>
-                    ${e==='finalizado'?'<span style="margin-left:auto;font-size:.65rem;color:var(--mech-text-muted);">Genera ingreso</span>':''}
+                    ${e==='finalizada'?`<span style="margin-left:auto;font-size:.65rem;
+                        color:var(--mech-text-muted);">Acción irreversible</span>`:''}
                 </button>`;
             }).join('')}
         </div>
@@ -755,7 +737,7 @@ window.openCambiarEstadoModal = function(idRep) {
 };
 
 window.ceCambiar = async function(idRep,estado) {
-    if (estado==='finalizado'&&!confirm('¿Finalizar esta reparación? Se generará ingreso en contabilidad.')) return;
+    if (estado==='finalizada'&&!confirm('¿Estás seguro de finalizar esta reparación? No se podrá editar.')) return;
     try {
         await api('/reparaciones/cambiar-estado',{method:'PUT',body:{id_reparacion:idRep,estado}});
         window.showNotification(`Estado cambiado a "${estado}".`,'success');
@@ -770,16 +752,13 @@ window.ceCambiar = async function(idRep,estado) {
 };
 
 // ══════════════════════════════════════════════════════════
-// HELPER: aplicar clases mech-form-group a inputs/selects del modal
-// (para que hereden los estilos del CSS sin depender de mech-form-label/input)
+// HELPER
 // ══════════════════════════════════════════════════════════
 function applyFormStyles(modalId) {
     const m = document.getElementById(modalId);
     if (!m) return;
     m.querySelectorAll('.mech-form-group input, .mech-form-group select, .mech-form-group textarea')
-     .forEach(el => {
-        // Ya los maneja el CSS de .mech-form-group — nada que hacer
-    });
+     .forEach(() => {});
 }
 
 // ══════════════════════════════════════════════════════════

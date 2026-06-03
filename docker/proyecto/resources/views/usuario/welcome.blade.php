@@ -140,7 +140,7 @@
                             <h2 class="xray-info-title" id="xray-info-title">Neumáticos</h2>
                             <p class="xray-info-desc" id="xray-info-desc">Trabajamos con todas las marcas del mercado y realizamos cambios de neumáticos de todo tipo de vehículos: turismos, 4x4 y furgonetas. Reparación y alineación.</p>
                         </div>
-                        <a href="{{ route ('login')}}" class="btn-primary" style="margin-top:auto; width:100%; justify-content:center;">Consultar precio</a>
+                        <a href="{{ route ('cita')}}" class="btn-primary" style="margin-top:auto; width:100%; justify-content:center;">Consultar precio</a>
                     </div>
                 </div>
 
@@ -504,7 +504,7 @@
         const item = button.parentElement;
         const content = button.nextElementSibling;
         const icon = button.querySelector('.faq-icon i');
-        
+
         // Cerrar otros
         document.querySelectorAll('.faq-item').forEach(otherItem => {
             if (otherItem !== item && otherItem.classList.contains('active')) {
@@ -513,7 +513,7 @@
                 otherItem.querySelector('.faq-icon i').className = 'ti ti-plus';
             }
         });
-        
+
         // Alternar el actual
         if (item.classList.contains('active')) {
             item.classList.remove('active');
@@ -544,21 +544,21 @@
             if (res.success && res.data && res.data.length > 0) {
                 const grid = document.getElementById('stock-grid');
                 grid.innerHTML = ''; // Clear fallback cards
-                
+
                 // Show up to 3 cars on homepage
                 const carsToShow = res.data.slice(0, 3);
-                
+
                 carsToShow.forEach((car, index) => {
-                    const imgSource = car.imagen && car.imagen.startsWith('http') 
-                        ? car.imagen 
+                    const imgSource = car.imagen && car.imagen.startsWith('http')
+                        ? car.imagen
                         : (car.imagen ? `/storage/${car.imagen}` : null);
-                        
+
                     const priceFormatted = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(car.precio);
                     const kmFormatted = new Intl.NumberFormat('es-ES').format(car.km);
-                    
+
                     const card = document.createElement('div');
                     card.className = `stock-card animate-up ${index > 0 ? 'delay-' + index : ''}`;
-                    
+
                     let topContent = '';
                     if (imgSource) {
                         topContent = `<img src="${imgSource}" alt="${car.marca} ${car.modelo}">`;
@@ -575,9 +575,9 @@
                             </svg>
                         `;
                     }
-                    
+
                     const buyRoute = `/compra?car=${encodeURIComponent(car.marca + ' ' + car.modelo)}&price=${car.precio}&brand=${encodeURIComponent(car.marca)}&year=${car.anio_matriculacion || 2021}&km=${car.km}`;
-                    
+
                     card.innerHTML = `
                         <div class="stock-card-top">
                             ${topContent}
@@ -586,8 +586,8 @@
                             <span class="stock-brand">${car.marca}</span>
                             <h3 class="stock-model">${car.modelo}</h3>
                             <div class="stock-meta">
-                                ${car.anio_matriculacion || 2021} 
-                                <span style="opacity:0.5">•</span> 
+                                ${car.anio_matriculacion || 2021}
+                                <span style="opacity:0.5">•</span>
                                 ${kmFormatted} km
                                 ${car.motorizacion ? `<span style="opacity:0.5">•</span> ${car.motorizacion}` : ''}
                             </div>
@@ -598,7 +598,7 @@
                             </div>
                         </div>
                     `;
-                    
+
                     grid.appendChild(card);
                     window.observer.observe(card);
                 });

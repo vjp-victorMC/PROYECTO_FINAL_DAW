@@ -541,7 +541,7 @@ async function openVehRepModal(id) {
                 <button class="btn btn-primary" onclick="asignarMecanicoApi(${c.ultima_reparacion?.id_reparacion ?? c.ultima_reparacion?.id ?? id}, document.getElementById('${selId}').value)">Asignar mecánico</button>
             </div>`;
         } else if (estadoKey === 'finalizada') {
-            accionesHtml = `<button class="btn btn-success" onclick="cobrarReparacionApi(${c.ultima_reparacion?.id_reparacion ?? c.ultima_reparacion?.id ?? id})">Cobrar y sacar del garaje</button>`;
+            accionesHtml = `<button class="btn btn-success" onclick="cobrarReparacionApi(${c.ultima_reparacion?.id_reparacion ?? c.ultima_reparacion?.id ?? id})"> Cobrar y sacar del garaje </button>`;
         }
 
         document.getElementById('veh-modal-body').innerHTML = `
@@ -603,6 +603,26 @@ async function asignarMecanicoApi(id_reparacion, id_mecanico) {
             alert('Error: ' + (res.message || 'Respuesta inesperada'));
         }
     } catch (e) { alert('Error al asignar mecánico: ' + e.message); }
+}
+
+async function cobrarReparacionApi(id_reparacion) {
+    if (!id_reparacion) return alert('No se encontró la reparación.');
+    if (!confirm('¿Confirmar cobro de la reparación? El vehículo saldrá del taller y se registrará el ingreso.')) return;
+    try {
+        const res = await apiFetch('/reparacion/cobrar', {
+            method: 'POST',
+            body: JSON.stringify({ id_reparacion: parseInt(id_reparacion) })
+        });
+        if (res.status === 'success') {
+            alert('Reparación cobrada correctamente. Vehículo retirado del taller.');
+            closeVehModal();
+            await loadReparaciones();
+        } else {
+            alert('Error: ' + (res.message || 'Respuesta inesperada'));
+        }
+    } catch(e) {
+        alert('Error al cobrar: ' + e.message);
+    }
 }
 
 // ============================================================
@@ -738,8 +758,9 @@ async function loadPiezas() {
         document.getElementById('kpi-sin-stock').textContent    = sinStockRes.total_sin_stock ?? 0;
         document.getElementById('kpi-stock-bajo').textContent   = bajoRes.count ?? 0;
 
-        const valorInv = piezas.reduce((a, p) => a + (parseFloat(p.precio_compra) * parseInt(p.cantidad_disponible || 0)), 0);
-        document.getElementById('kpi-valor-inv').textContent = '€' + valorInv.toLocaleString('es-ES', { minimumFractionDigits: 0 });
+        const saldoResp = await apiFetch('/saldo-taller');
+        const saldo = saldoResp && saldoResp.saldo ? saldoResp.saldo : 0;
+        document.getElementById('kpi-saldo-taller').textContent = '€' + saldo.toLocaleString('es-ES', { minimumFractionDigits: 0 });
 
         renderPiezas();
     } catch(e) { console.error('loadPiezas:', e); }

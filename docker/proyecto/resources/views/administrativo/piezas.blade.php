@@ -5,7 +5,7 @@
         <div class="kpi"><span class="kpi-label">Piezas en catálogo</span><span class="kpi-value" id="kpi-piezas-total">—</span></div>
         <div class="kpi"><span class="kpi-label">Sin stock</span><span class="kpi-value" style="color:#f87171" id="kpi-sin-stock">—</span><span class="kpi-delta down">Requiere pedido</span></div>
         <div class="kpi"><span class="kpi-label">Stock bajo (mín.)</span><span class="kpi-value" style="color:#fbbf24" id="kpi-stock-bajo">—</span><span class="kpi-delta warn">Por debajo del mínimo</span></div>
-        <div class="kpi"><span class="kpi-label">Valor inventario</span><span class="kpi-value" id="kpi-valor-inv">—</span><span class="kpi-delta">Precio compra</span></div>
+        <div class="kpi"><span class="kpi-label">Saldo taller</span><span class="kpi-value" id="kpi-saldo-taller">—</span></div>
     </div>
 
     <div class="card card-last">

@@ -129,86 +129,80 @@ class ReparacionController extends Controller
 
     public function cobrarReparacion(Request $request)
     {
-        // 1. Validar que se reciba el ID de la reparación obligatoriamente
         $validator = Validator::make($request->all(), [
             'id_reparacion' => 'required|exists:reparaciones,id_reparacion',
         ]);
 
         if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'errors' => $validator->errors()], 400);
+        }
+
+        $reparacion = Reparacion::find($request->id_reparacion);
+
+        // Solo se puede cobrar si está finalizada
+        if ($reparacion->estado !== 'finalizada') {
             return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
+                'status'  => 'error',
+                'message' => 'Solo se pueden cobrar reparaciones finalizadas. Estado actual: ' . $reparacion->estado
             ], 400);
         }
 
-        // 2. Buscar la reparación
-        $reparacion = Reparacion::find($request->id_reparacion);
-
-        // 3. Control de errores: Evitar cobrar algo ya terminado o sin coste
-        if ($reparacion->estado === 'finalizado') {
+        // Si el coche ya no está en el garaje, ya fue cobrada
+        $coche = Coche::find($reparacion->id_coche);
+        if ($coche && $coche->en_garaje == 0) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Esta reparación ya ha sido cobrada y finalizada anteriormente.'
+                'status'  => 'error',
+                'message' => 'Esta reparación ya ha sido cobrada anteriormente.'
             ], 400);
         }
 
         if ($reparacion->coste_total_reparacion <= 0) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'No se puede cobrar una reparación con coste total de 0.00. Actualiza los costes primero.'
+                'status'  => 'error',
+                'message' => 'No se puede cobrar una reparación con coste total de 0.00.'
             ], 400);
         }
 
-        // 4. Ejecutar operaciones encadenadas de forma segura
         try {
-            $resultado = DB::transaction(function () use ($reparacion) {
-                // A. Actualizar estado de la reparación y registrar fecha de salida
+            $resultado = DB::transaction(function () use ($reparacion, $coche) {
+                // ✅ Solo actualizar fecha_salida, NO tocar el estado
                 $reparacion->update([
-                    'estado'       => 'finalizado',
                     'fecha_salida' => now(),
                 ]);
 
-                // B. Sacar el coche del taller (en_garaje = 0)
-                $coche = Coche::find($reparacion->id_coche);
+                // Sacar el coche del taller
                 if ($coche) {
                     $coche->update(['en_garaje' => 0]);
                 }
 
-                // C. Registrar el ingreso en la tabla de contabilidad
-                // Nota: Asegúrate de que el modelo Contabilidad esté importado o usa \App\Models\Contabilidad
                 $ingreso = \App\Models\Contabilidad::create([
                     'tipo'       => 'ingreso',
                     'cantidad'   => $reparacion->coste_total_reparacion,
-                    'concepto'   => "Cobro de reparación #" . $reparacion->id_reparacion . " - Matrícula: " . ($coche->matricula ?? 'N/A'),
-                    'id_usuario' => $reparacion->id_mecanico, // Se asocia al mecánico que la realizó si existe
+                    'concepto'   => "Cobro reparación #" . $reparacion->id_reparacion . " - " . ($coche->matricula ?? 'N/A'),
+                    'id_usuario' => $reparacion->id_mecanico,
                     'fecha'      => now(),
                 ]);
 
-                return [
-                    'reparacion' => $reparacion,
-                    'coche'      => $coche,
-                    'ingreso'    => $ingreso
-                ];
-        });
+                return ['reparacion' => $reparacion, 'coche' => $coche, 'ingreso' => $ingreso];
+            });
 
-            // 5. Respuesta de éxito
             return response()->json([
                 'status'  => 'success',
-                'message' => 'Reparación cobrada con éxito. Vehículo retirado del taller e ingreso contabilizado.',
+                'message' => 'Reparación cobrada. Vehículo retirado del taller e ingreso contabilizado.',
                 'data'    => [
-                    'id_reparacion'  => $resultado['reparacion']->id_reparacion,
-                    'nuevo_estado'   => $resultado['reparacion']->estado,
-                    'fecha_salida'   => $resultado['reparacion']->fecha_salida,
-                    'total_cobrado'  => $resultado['reparacion']->coste_total_reparacion,
-                    'coche_en_garaje'=> $resultado['coche']->en_garaje,
-                    'id_contabilidad'=> $resultado['ingreso']->id
+                    'id_reparacion'   => $resultado['reparacion']->id_reparacion,
+                    'estado'          => $resultado['reparacion']->estado,
+                    'fecha_salida'    => $resultado['reparacion']->fecha_salida,
+                    'total_cobrado'   => $resultado['reparacion']->coste_total_reparacion,
+                    'coche_en_garaje' => $resultado['coche']->en_garaje,
+                    'id_contabilidad' => $resultado['ingreso']->id,
                 ]
             ], 200);
 
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Hubo un error al procesar el cobro: ' . $e->getMessage()
+                'message' => 'Error al procesar el cobro: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -242,7 +236,7 @@ class ReparacionController extends Controller
         $reparacion = Reparacion::find($request->id_reparacion);
 
         // 4. Control de estado: Evitar modificar reparaciones ya finalizadas
-        if ($reparacion->estado === 'finalizado') {
+        if ($reparacion->estado === 'finalizada') {
             return response()->json([
                 'status' => 'error',
                 'message' => 'No se puede asignar un mecánico a una reparación que ya está finalizada y cobrada.'
@@ -252,7 +246,6 @@ class ReparacionController extends Controller
         // 5. Asignar el mecánico y pasar el estado a 'en proceso'
         $reparacion->update([
             'id_mecanico' => $mecanico->id_usuario,
-            'estado'      => 'en proceso'
         ]);
 
         // 6. Respuesta de éxito
@@ -361,7 +354,7 @@ class ReparacionController extends Controller
             $reparacion = Reparacion::find($request->id_reparacion);
 
             // Control de errores: Evitar modificar una reparación ya finalizada
-            if ($reparacion->estado === 'finalizado') {
+            if ($reparacion->estado === 'finalizada') {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'No se pueden añadir horas a una reparación ya finalizada y cobrada.'
@@ -478,10 +471,9 @@ class ReparacionController extends Controller
     // Cambiar el estado de una reparación de forma dinámica
     public function cambiarEstado(Request $request)
     {
-        // 1. Validar los datos de entrada (estados permitidos en tu taller)
         $validator = Validator::make($request->all(), [
             'id_reparacion' => 'required|exists:reparaciones,id_reparacion',
-            'estado'        => 'required|string|in:pendiente,en proceso,finalizado',
+            'estado'        => 'required|string|in:pendiente,en proceso,finalizada',
         ]);
 
         if ($validator->fails()) {
@@ -492,68 +484,37 @@ class ReparacionController extends Controller
         }
 
         try {
-            // 2. Buscar la reparación
-            $reparacion = Reparacion::find($request->id_reparacion);
+            $reparacion  = Reparacion::find($request->id_reparacion);
             $nuevoEstado = $request->input('estado');
 
-            // Control de seguridad: si ya está finalizada, no se debería alterar su flujo normal
-            if ($reparacion->estado === 'finalizado') {
+            // Bloqueo total: reparación finalizada no se toca
+            if ($reparacion->estado === 'finalizada') {
                 return response()->json([
-                    'status' => 'error',
-                    'message' => 'Esta reparación ya está finalizada y no se puede modificar su estado.'
+                    'status'  => 'error',
+                    'message' => 'Esta reparación ya está finalizada y no se puede modificar.'
                 ], 400);
             }
 
-            // 3. Caso Especial: Si el nuevo estado es 'finalizado', ejecutamos lógica de cobro y salida
-            if ($nuevoEstado === 'finalizado') {
-                if ($reparacion->coste_total_reparacion <= 0) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'No se puede finalizar una reparación con coste total de 0.00. Añade horas o piezas primero.'
-                    ], 400);
-                }
-
-                $resultado = DB::transaction(function () use ($reparacion) {
-                    // A. Actualizar reparación
-                    $reparacion->update([
-                        'estado'       => 'finalizado',
-                        'fecha_salida' => now(),
-                    ]);
-
-                    // B. Sacar coche del taller
-                    $coche = Coche::find($reparacion->id_coche);
-                    if ($coche) {
-                        $coche->update(['en_garaje' => 0]);
-                    }
-
-                    // C. Registrar ingreso en contabilidad
-                    $ingreso = \App\Models\Contabilidad::create([
-                        'tipo'       => 'ingreso',
-                        'cantidad'   => $reparacion->coste_total_reparacion,
-                        'concepto'   => "Cobro automático por finalización de reparación #" . $reparacion->id_reparacion,
-                        'id_usuario' => $reparacion->id_mecanico,
-                        'fecha'      => now(),
-                    ]);
-
-                    return $reparacion;
-                });
-
+            // Solo se puede finalizar desde 'en proceso'
+            if ($nuevoEstado === 'finalizada' && $reparacion->estado !== 'en proceso') {
                 return response()->json([
-                    'status'  => 'success',
-                    'message' => 'Reparación finalizada, coche retirado del taller e ingreso contabilizado.',
-                    'data'    => $resultado
-                ], 200);
+                    'status'  => 'error',
+                    'message' => 'Solo se puede finalizar una reparación que esté en proceso.'
+                ], 400);
             }
 
-            // 4. Caso Común: Cambiar a 'pendiente' o 'en proceso'
-            $reparacion->update(['estado' => $nuevoEstado]);
+            $reparacion->update([
+                'estado'       => $nuevoEstado,
+                'fecha_salida' => $nuevoEstado === 'finalizada' ? now() : $reparacion->fecha_salida,
+            ]);
 
             return response()->json([
                 'status'  => 'success',
-                'message' => "El estado de la reparación ha cambiado a '{$nuevoEstado}' correctamente.",
+                'message' => "Estado actualizado a '{$nuevoEstado}' correctamente.",
                 'data'    => [
                     'id_reparacion' => $reparacion->id_reparacion,
-                    'nuevo_estado'  => $reparacion->estado
+                    'nuevo_estado'  => $reparacion->estado,
+                    'fecha_salida'  => $reparacion->fecha_salida,
                 ]
             ], 200);
 

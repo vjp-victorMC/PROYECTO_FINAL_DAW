@@ -14,6 +14,7 @@ use App\Http\Controllers\PiezaController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ReparacionController;
 use App\Http\Controllers\ReparacionPiezaController;
+use App\Http\Controllers\SaldoTallerController;
 
 // =============================
 // 1. USUARIOS Y AUTENTICACIÓN
@@ -64,15 +65,15 @@ Route::post('/reparacion/asignar-mecanico', [ReparacionController::class, 'asign
 Route::post('/reparacion/cobrar', [ReparacionController::class, 'cobrarReparacion']);
 Route::get('/reparacion/estado', [ReparacionController::class, 'getEstadoReparacion']);
 Route::get('/admin/coches/para-pagar', [CocheController::class, 'getCochesParaPagar']);
-Route::get('/reparaciones/conteo-estados', [ReparacionController::class, 'getReparacionesCountPorEstado']); //Victor
+Route::get('/reparaciones/conteo-estados', [ReparacionController::class, 'getReparacionesCountPorEstado']);
 Route::get('/admin/reparaciones/en-proceso/count', [ReparacionController::class, 'getReparacionesEnProcesoCount']);
 Route::get('/admin/coches/garaje', [CocheController::class, 'getCochesEnGaraje']);
 Route::post('/admin/reparaciones', [ReparacionController::class, 'setNewReparacion']);
-Route::post('/reparaciones/add-pieza', [ReparacionPiezaController::class, 'addPiezaAReparacion']); //Victor
-Route::put('/reparaciones/cambiar-estado', [ReparacionController::class, 'cambiarEstado']);  //Victor
-Route::get('/reparaciones/mecanico/{id_mecanico}', [ReparacionController::class, 'getReparacionesPorMecanico']); //Victor
-Route::get('/reparaciones/{id_reparacion}/piezas', [ReparacionController::class, 'getPiezasPorReparacion']);  //Victor
-Route::post('/reparaciones/add-horas', [ReparacionController::class, 'addHorasTrabajo']); //Victor
+Route::post('/reparaciones/add-pieza', [ReparacionPiezaController::class, 'addPiezaAReparacion']);
+Route::put('/reparaciones/cambiar-estado', [ReparacionController::class, 'cambiarEstado']);
+Route::get('/reparaciones/mecanico/{id_mecanico}', [ReparacionController::class, 'getReparacionesPorMecanico']);
+Route::get('/reparaciones/{id_reparacion}/piezas', [ReparacionController::class, 'getPiezasPorReparacion']);
+Route::post('/reparaciones/add-horas', [ReparacionController::class, 'addHorasTrabajo']);
 
 // =============================
 // 5. CONTABILIDAD Y DASHBOARD
@@ -94,8 +95,9 @@ Route::get('/proveedores', [ProveedorController::class, 'index']);
 Route::get('/proveedores/{id_proveedor}', [ProveedorController::class, 'show']);
 Route::put('/proveedores/{id_proveedor}', [ProveedorController::class, 'update']);
 Route::delete('/proveedores/{id_proveedor}', [ProveedorController::class, 'destroy']);
-Route::get('/piezas', [PiezaController::class, 'getTodasLasPiezas']);  //Victor
+Route::get('/piezas', [PiezaController::class, 'getTodasLasPiezas']);
 Route::get('/proveedores/{id_proveedor}/piezas', [ProveedorController::class, 'getPiezasByProveedor']);
+Route::get('/saldo-taller', [SaldoTallerController::class, 'obtenerSaldo']);
 
 // =============================
 // 7. RUTAS PRIVADAS (AUTENTICADAS)
