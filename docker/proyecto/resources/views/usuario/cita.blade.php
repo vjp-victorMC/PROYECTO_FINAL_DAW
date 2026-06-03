@@ -18,7 +18,7 @@
                 <input type="tel" value="{{ $user->telefono ?? '' }}" readonly placeholder="Teléfono WhatsApp">
                 <div style="display:grid; grid-template-columns: 1fr; gap:10px;">
                     <select id="matricula-select" name="matricula" required>
-                        <option value="">Selecciona tu coche...</option>
+                        <option style="color: black;" value="">Selecciona tu coche...</option>
                     </select>
                 </div>
                 <input type="text" name="asunto" maxlength="150" required placeholder="Asunto">
@@ -38,10 +38,11 @@
                 const res = await fetch(`/api/usuario/cars/${userId}`);
                 if (res.ok) {
                     const coches = await res.json();
-                    coches.forEach(coche => {
+                    coches.forEach(coche => { 
                         const opt = document.createElement('option');
                         opt.value = coche.matricula;
                         opt.textContent = `${coche.matricula} - ${coche.modelo}`;
+                        opt.style.color = 'black';
                         select.appendChild(opt);
                     });
                 }

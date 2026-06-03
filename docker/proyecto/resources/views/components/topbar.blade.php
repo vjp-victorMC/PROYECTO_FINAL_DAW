@@ -52,7 +52,7 @@
         <i class="ti ti-menu-2"></i>
       </button>
     </div>
-    <a href="#cita" class="am-cita">Pedir cita</a>
+    <a href="{{ route ('cita')}}" class="am-cita">Pedir cita</a>
   </div>
 
   <nav class="am-mobile-menu" id="mobileMenu">
@@ -79,6 +79,6 @@
       @endauth
     </div>
 
-    <a href="#cita" class="am-cita-mob">Pedir cita</a>
+    <a href="{{ route ('cita')}}" class="am-cita-mob">Pedir cita</a>
   </nav>
 </div>
