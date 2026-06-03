@@ -35,9 +35,21 @@
                 <h2>Gestión de vehículos<br>y reparaciones</h2>
                 <p>Panel operativo para registrar entrada de vehículos, diagnosticar y registrar avance en tiempo real.</p>
                 <div class="mech-hero-stats">
-                    <div class="mech-hero-stat"><strong id="hero-active">0</strong><span>Activas</span></div>
-                    <div class="mech-hero-stat"><strong id="hero-pending">0</strong><span>Pendientes</span></div>
-                    <div class="mech-hero-stat"><strong id="hero-ready">0</strong><span>Para entrega</span></div>
+                    <article class="mech-hero-stat">
+                        <strong id="count-pending">0</strong>
+                        <span>Estado: Pendiente</span>
+                        <p class="mech-small-muted" style="margin-top:8px;">Reparaciones sin iniciar</p>
+                    </article>
+                    <article class="mech-hero-stat">
+                        <strong id="count-inprogress">0</strong>
+                        <span>Estado: En proceso</span>
+                        <p class="mech-small-muted" style="margin-top:8px;">Reparaciones iniciadas</p>
+                    </article>
+                    <article class="mech-hero-stat">
+                        <strong id="count-finished">0</strong>
+                        <span>Estado: Finalizada</span>
+                        <p class="mech-small-muted" style="margin-top:8px;">Listas para entrega</p>
+                    </article>
                 </div>
             </article>
 
@@ -49,10 +61,6 @@
                     </div>
                 </div>
                 <div class="mech-actions-grid">
-                    <button class="mech-action-btn" data-action="meter-coche">
-                        <i class="ti ti-car-garage"></i>
-                        <span>Meter coche</span>
-                    </button>
                     <button class="mech-action-btn" data-action="reparaciones-asignadas">
                         <i class="ti ti-file-check"></i>
                         <span>Reparaciones</span>
@@ -71,54 +79,6 @@
                     </button>
                 </div>
             </aside>
-        </section>
-
-        {{-- KPIs --}}
-        <section class="mech-kpi-grid">
-            <article class="mech-panel">
-                <div class="mech-kpi-top">
-                    <div>
-                        <h3>Estado: Pendiente</h3>
-                        <p>Reparaciones sin iniciar</p>
-                    </div>
-                    <div class="mech-kpi-icon"><i class="ti ti-alert-circle"></i></div>
-                </div>
-                <div class="mech-kpi-value" id="count-pending">0</div>
-                <div class="mech-small-muted">Esperando inicio</div>
-            </article>
-            <article class="mech-panel">
-                <div class="mech-kpi-top">
-                    <div>
-                        <h3>Estado: En proceso</h3>
-                        <p>Reparaciones iniciadas</p>
-                    </div>
-                    <div class="mech-kpi-icon"><i class="ti ti-player-play"></i></div>
-                </div>
-                <div class="mech-kpi-value" id="count-inprogress">0</div>
-                <div class="mech-small-muted">Trabajo activo</div>
-            </article>
-            <article class="mech-panel">
-                <div class="mech-kpi-top">
-                    <div>
-                        <h3>Estado: Finalizada</h3>
-                        <p>Listas para entrega</p>
-                    </div>
-                    <div class="mech-kpi-icon"><i class="ti ti-check"></i></div>
-                </div>
-                <div class="mech-kpi-value" id="count-finished">0</div>
-                <div class="mech-small-muted">Esperando recogida</div>
-            </article>
-            <article class="mech-panel">
-                <div class="mech-kpi-top">
-                    <div>
-                        <h3>Piezas pendientes</h3>
-                        <p>Solicitadas, no llegadas</p>
-                    </div>
-                    <div class="mech-kpi-icon"><i class="ti ti-package-x"></i></div>
-                </div>
-                <div class="mech-kpi-value" id="count-pending-parts">0</div>
-                <div class="mech-small-muted">Bloquean trabajos</div>
-            </article>
         </section>
 
         {{-- Tabla + detalle --}}
