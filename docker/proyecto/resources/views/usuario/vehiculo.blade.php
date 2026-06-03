@@ -23,7 +23,7 @@
 
             <!-- Columna Izquierda: Formulario -->
             <div class="vehiculo-form-block">
-                <form class="vehiculo-form" action="#" method="POST" id="add-vehicle-form" enctype="multipart/form-data">
+                <form class="vehiculo-form" action="#" method="POST" id="add-vehicle-form">
                     @csrf
 
                     <!-- Campo oculto para id_usuario (se intenta obtener del usuario autenticado) -->
@@ -132,16 +132,19 @@
                     <div class="form-section-card">
                         <div class="form-section-header">
                             <i class="ti ti-photo" aria-hidden="true"></i>
-                            <h3>Fotografía del Vehículo</h3>
+                            <h3>Imagen del vehículo</h3>
                         </div>
-                        <p class="section-sub" style="margin-bottom: 16px; font-size:12.5px;">Sube una imagen de tu coche. Si no tienes una, le asignaremos una silueta estándar en tu garaje virtual.</p>
+                        <p class="section-sub" style="margin-bottom: 16px; font-size:12.5px;">Introduce la URL de la imagen de tu coche. Es opcional; si no la pones, usaremos una silueta estándar en tu garaje virtual.</p>
 
                         <div class="image-upload-wrapper" id="upload-wrapper">
-                            <input type="file" id="v-imagen" name="imagen" accept="image/*">
+                            <div class="form-group" style="width:100%; text-align:left; gap: 10px; display:flex; flex-direction:column;">
+                                <label for="v-imagen" style="font-size:12px; color:#475569; font-weight:700; letter-spacing:0.4px;">URL de imagen</label>
+                                <input type="url" id="v-imagen" name="imagen" placeholder="https://example.com/tu-coche.jpg">
+                            </div>
                             <div class="upload-placeholder" id="upload-placeholder">
-                                <i class="ti ti-cloud-upload" aria-hidden="true"></i>
-                                <span>Selecciona o arrastra una foto</span>
-                                <p>Formatos aceptados: JPG, PNG, WEBP (Máx. 5MB)</p>
+                                <i class="ti ti-link" aria-hidden="true"></i>
+                                <span>Pega una URL válida</span>
+                                <p>Formato público accesible y seguro.</p>
                             </div>
                             <div class="preview-container" id="preview-container">
                                 <img src="" alt="Vista previa" id="img-thumb">
@@ -324,38 +327,43 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Control del file input y la previsualización de imagen
-    inputImagen.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                // Ocultar SVG y mostrar previsualización de imagen cargada
-                carSilhouette.style.display = 'none';
-                
-                // Si ya existe una imagen previa dentro del contenedor visual, la actualizamos. Si no, la creamos
-                let visualImg = document.getElementById('visual-loaded-img');
-                if (!visualImg) {
-                    visualImg = document.createElement('img');
-                    visualImg.id = 'visual-loaded-img';
-                    visualImg.style.width = '120px';
-                    visualImg.style.height = '75px';
-                    visualImg.style.borderRadius = '6px';
-                    visualImg.style.objectFit = 'cover';
-                    visualImg.style.border = '1px solid rgba(255,255,255,0.15)';
-                    visualImg.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
-                    carSvgContainer.appendChild(visualImg);
-                }
-                visualImg.src = event.target.result;
-                visualImg.style.display = 'block';
+    // Control del input URL y la previsualización de imagen
+    inputImagen.addEventListener('change', function() {
+        const url = this.value.trim();
 
-                // Actualizar miniatura del Dropzone
-                imgThumb.src = event.target.result;
-                uploadPlaceholder.style.display = 'none';
-                previewContainer.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
+        if (!url) {
+            previewContainer.style.display = 'none';
+            uploadPlaceholder.style.display = 'flex';
+            imgThumb.src = '';
+            carSilhouette.style.display = 'block';
+            const visualImg = document.getElementById('visual-loaded-img');
+            if (visualImg) {
+                visualImg.remove();
+            }
+            return;
         }
+
+        carSilhouette.style.display = 'none';
+
+        let visualImg = document.getElementById('visual-loaded-img');
+        if (!visualImg) {
+            visualImg = document.createElement('img');
+            visualImg.id = 'visual-loaded-img';
+            visualImg.style.width = '120px';
+            visualImg.style.height = '75px';
+            visualImg.style.borderRadius = '6px';
+            visualImg.style.objectFit = 'cover';
+            visualImg.style.border = '1px solid rgba(255,255,255,0.15)';
+            visualImg.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
+            carSvgContainer.appendChild(visualImg);
+        }
+        visualImg.src = url;
+        visualImg.style.display = 'block';
+
+        // Actualizar miniatura del campo
+        imgThumb.src = url;
+        uploadPlaceholder.style.display = 'none';
+        previewContainer.style.display = 'block';
     });
 
     // Eliminar miniatura y restaurar SVG
